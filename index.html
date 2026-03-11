@@ -6,6 +6,25 @@
     <title>IA SELLERS - Ofertas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body class="bg-slate-900 text-white font-sans min-h-screen">
     <div class="container mx-auto p-6 max-w-6xl">
@@ -15,7 +34,7 @@
                 <i class="fas fa-robot mr-3"></i>Buscador de Ofertas IA
             </h1>
             <div class="mt-4 md:mt-0 flex items-center space-x-4">
-                <span class="text-slate-400 text-sm font-mono"></span>
+                <span class="text-slate-400 text-sm font-mono">Projeto SandxCDD</span>
                 <div id="status" class="bg-green-500/20 text-green-400 border border-green-500 text-xs px-3 py-1 rounded-full animate-pulse font-bold tracking-widest">
                     ● LIVE: MONITORANDO OS GIGANTES DO ATACADO
                 </div>
@@ -62,14 +81,12 @@
             const feed = document.getElementById('feed-ofertas');
             const btnBuscar = document.getElementById('btn-buscar');
             
-            // 1. Trava de Segurança: Não busca vazio
             if(!produtoInput) {
                 alert("Por favor, digite o nome de um produto para a IA procurar.");
                 document.getElementById('produto').focus();
                 return;
             }
 
-            // 2. Feedback Visual de Processamento (Efeito SandxCDD de busca profunda)
             btnBuscar.disabled = true;
             btnBuscar.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Processando...';
             btnBuscar.classList.add('opacity-75', 'cursor-not-allowed');
@@ -80,77 +97,91 @@
                     <div class="relative z-10">
                         <i class="fas fa-radar fa-spin text-5xl text-cyan-400 mb-4 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]"></i>
                         <p class="text-cyan-300 font-bold text-xl uppercase tracking-widest">Iniciando Infiltração nos Atacadistas</p>
-                        <p class="text-slate-400 text-sm mt-3 font-mono">Contornando WAFs | Analisando HTML/JSON Ocultos | Extraindo via Gemini V8</p>
+                        <p class="text-slate-400 text-sm mt-3 font-mono">Analisando alvos simultâneos. Aguarde até 20 segundos...</p>
                     </div>
                 </div>
             `;
             
             try {
-                // 3. Conexão com o seu Cloudflare Worker (O Cérebro)
+                // Adicionada proteção de tempo para a varredura pesada não quebrar
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 35000); 
+
                 const urlDoRobo = `https://ia-sellers.gpartnerllc.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
                 
-                const resposta = await fetch(urlDoRobo);
+                const resposta = await fetch(urlDoRobo, { signal: controller.signal });
+                clearTimeout(id);
                 const dados = await resposta.json();
                 
-                // 4. Limpa a tela de loading
                 feed.innerHTML = "";
                 btnBuscar.disabled = false;
                 btnBuscar.innerHTML = '<i class="fas fa-bolt mr-2 text-yellow-300"></i> Ativar Varredura IA';
                 btnBuscar.classList.remove('opacity-75', 'cursor-not-allowed');
                 
-                // 5. Tratamento de Erro Inteligente (WAF Bloqueado, Chave Inválida, etc)
                 if (dados.erro) {
                     feed.innerHTML = `
-                        <div class="col-span-1 md:col-span-2 lg:col-span-3 p-8 bg-orange-950/40 border-l-4 border-orange-500 rounded-xl shadow-lg relative overflow-hidden">
-                            <div class="flex items-start">
-                                <i class="fas fa-shield-alt text-4xl text-orange-400 mr-4"></i>
-                                <div>
-                                    <h3 class="font-bold text-xl text-orange-300 mb-2">Relatório de Bloqueio da IA</h3>
-                                    <p class="text-slate-300 font-mono text-sm leading-relaxed">${dados.erro}</p>
-                                    <p class="text-xs text-slate-500 mt-4">Ação recomendada: Tente pesquisar novamente em 5 segundos. O algoritmo tentará uma nova rota.</p>
-                                </div>
-                            </div>
+                        <div class="col-span-1 md:col-span-2 lg:col-span-3 p-8 bg-orange-950/40 border-l-4 border-orange-500 rounded-xl shadow-lg">
+                            <h3 class="font-bold text-xl text-orange-300 mb-2">Aviso da IA</h3>
+                            <p class="text-slate-300 font-mono text-sm">${dados.erro}</p>
                         </div>
                     `;
                     return;
                 }
 
-                // 6. Sucesso! Desenha a Oferta na Tela
-                adicionarOferta(
-                    dados.loja || "Origem Desconhecida", 
-                    dados.nome || produtoInput, 
-                    dados.preco || "Preço não extraído", 
-                    dados.link || "#"
-                );
+                // O SEGREDO AQUI: O código agora sabe que é uma LISTA e desenha todos lado a lado
+                if (Array.isArray(dados) && dados.length > 0) {
+                    dados.forEach((oferta, index) => {
+                        // Se for o item 0 (o primeiro da lista ordenada), é o melhor preço
+                        const isMelhorPreco = index === 0;
+                        adicionarOferta(
+                            oferta.loja || "Origem Desconhecida", 
+                            oferta.nome || produtoInput, 
+                            oferta.preco || "Não extraído", 
+                            oferta.link || "#",
+                            isMelhorPreco
+                        );
+                    });
+                } else {
+                    // Prevenção extra
+                    adicionarOferta(dados.loja, dados.nome, dados.preco, dados.link, true);
+                }
                 
             } catch (erro) {
-                // 7. Falha Crítica (Internet caiu ou Cloudflare fora do ar)
                 feed.innerHTML = "";
                 btnBuscar.disabled = false;
                 btnBuscar.innerHTML = '<i class="fas fa-bolt mr-2 text-yellow-300"></i> Ativar Varredura IA';
                 btnBuscar.classList.remove('opacity-75', 'cursor-not-allowed');
 
+                let msgErro = erro.name === 'AbortError' ? "Tempo limite excedido. O Google bloqueou a varredura por lentidão. Tente novamente." : erro.message;
+
                 feed.innerHTML = `
                     <div class="col-span-1 md:col-span-2 lg:col-span-3 bg-red-950/30 p-8 border border-red-800 rounded-2xl text-center">
                         <i class="fas fa-network-wired text-4xl text-red-500 mb-4"></i>
-                        <p class="text-red-400 font-bold text-xl uppercase tracking-wider">Falha de Conexão Mestre</p>
-                        <p class="text-slate-400 mt-2 text-sm">Não foi possível alcançar o servidor da IA no Cloudflare.</p>
-                        <p class="text-slate-600 mt-2 text-xs font-mono bg-black/20 p-2 rounded inline-block">${erro.message}</p>
+                        <p class="text-red-400 font-bold text-xl uppercase tracking-wider">Falha de Conexão</p>
+                        <p class="text-slate-600 mt-2 text-xs font-mono">${msgErro}</p>
                     </div>
                 `;
             }
         }
 
-        // Função de Design do Card de Entrega (KPI)
-        function adicionarOferta(loja, produto, preco, link) {
+        // Função ajustada para receber 'isMelhorPreco' e destacar o vencedor
+        function adicionarOferta(loja, produto, preco, link, isMelhorPreco) {
             const feed = document.getElementById('feed-ofertas');
             
-            // Garantir que o preço exiba bem, mesmo se a IA trouxer um texto sujo
             const precoFormatado = preco.toString().replace('R$', '').trim();
             
+            // Destaca a borda de Amarelo se for o melhor preço, ou Ciano se for os outros
+            const corBorda = isMelhorPreco ? 'border-yellow-400 scale-[1.02]' : 'border-cyan-500';
+            const corTextoPreco = isMelhorPreco ? 'text-yellow-400' : 'text-green-400';
+            
             const card = `
-                <div class="bg-slate-800 p-6 rounded-2xl border-t-4 border-cyan-500 shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:-translate-y-2 transition-transform duration-300 relative group">
+                <div class="bg-slate-800 p-6 rounded-2xl border-t-4 ${corBorda} shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:-translate-y-2 transition-transform duration-300 relative group flex flex-col justify-between">
                     
+                    ${isMelhorPreco ? `
+                    <div class="absolute -top-4 left-4 bg-yellow-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-[0_0_15px_rgba(250,204,21,0.6)]">
+                        <i class="fas fa-trophy mr-1"></i> Melhor Preço SandxCDD
+                    </div>` : ''}
+
                     <div class="absolute -top-3 right-4 bg-slate-900 border border-slate-700 text-slate-400 text-[10px] px-2 py-1 rounded-full uppercase tracking-wider group-hover:border-cyan-500 group-hover:text-cyan-400 transition-colors">
                         <i class="fas fa-check-double mr-1 text-green-500"></i> IA Validada
                     </div>
@@ -163,8 +194,8 @@
                     
                     <div class="mt-6 flex items-end justify-between border-t border-slate-700 pt-4">
                         <div>
-                            <span class="text-xs text-slate-500 uppercase tracking-widest block mb-1">Melhor Preço</span>
-                            <span class="text-green-400 font-black text-2xl tracking-tighter">R$ ${precoFormatado}</span>
+                            <span class="text-xs text-slate-500 uppercase tracking-widest block mb-1">Valor Encontrado</span>
+                            <span class="${corTextoPreco} font-black text-2xl tracking-tighter">R$ ${precoFormatado}</span>
                         </div>
                         <a href="${link}" target="_blank" class="bg-slate-700 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors shadow-md flex items-center">
                             Ver <i class="fas fa-external-link-alt ml-2 text-xs"></i>
@@ -173,8 +204,9 @@
                 </div>
             `;
             
-            // Coloca sempre a oferta mais recente no topo do feed
-            feed.insertAdjacentHTML('afterbegin', card);
+            // Alterei de 'afterbegin' para 'beforeend'. Como o Cloudflare envia do mais barato para o mais caro,
+            // 'beforeend' garante que o mais barato fique como o primeiro card da esquerda para a direita.
+            feed.insertAdjacentHTML('beforeend', card);
         }
     </script>
 </body>
