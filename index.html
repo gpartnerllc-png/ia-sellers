@@ -60,8 +60,7 @@
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Ofertas dos Atacados
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent">
-                
-            </h1>
+                </h1>
             <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
                 Comparação de preços. Insira o nome produto.
             </p>
@@ -99,16 +98,24 @@
             btnBuscar.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
             feed.innerHTML = '';
             statusContainer.classList.remove('hidden');
+            
+            // Texto ajustado para informar que a busca de 4 lojas demora um pouco
             statusContainer.innerHTML = `
                 <div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm">
-                    <i class="fas fa-radar fa-spin text-xl"></i> Varrendo múltiplos atacadistas em paralelo...
+                    <i class="fas fa-radar fa-spin text-xl"></i> Vasculhando atacadistas (pode levar até 15 segundos)...
                 </div>
             `;
             
             try {
-                // Chama o seu Cloudflare Worker
+                // Aumentando o timeout da requisição no Frontend para não quebrar a busca paralela
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 segundos de tolerância máxima
+
                 const urlDoRobo = `https://ia-sellers.gpartnerllc.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
-                const resposta = await fetch(urlDoRobo);
+                
+                const resposta = await fetch(urlDoRobo, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
                 const dados = await resposta.json();
                 
                 // Restaura o botão
@@ -118,32 +125,40 @@
                 
                 if (dados.erro) throw new Error(dados.erro);
 
-                // Se o Worker retornar a Lista, desenha os cards
+                // Se o Worker retornar a Lista, desenha os cards (MANTIDO INTACTO)
                 if (Array.isArray(dados) && dados.length > 0) {
                     dados.forEach((oferta, index) => {
                         const isMelhorPreco = index === 0; // O primeiro da lista é o mais barato
                         desenharCard(oferta.loja, oferta.nome, oferta.preco, oferta.link, isMelhorPreco, index);
                     });
                 } else {
-                    throw new Error("Nenhuma oferta localizada nas lojas consultadas.");
+                    throw new Error("Nenhuma oferta localizada nas lojas consultadas no momento.");
                 }
                 
             } catch (erro) {
                 btnBuscar.disabled = false;
                 btnBuscar.innerHTML = 'Auditar';
+                statusContainer.classList.remove('hidden');
+                
+                // Melhoria visual para erro de Timeout
+                const mensagemErro = erro.name === 'AbortError' 
+                    ? "A rede demorou muito a responder. Tente pesquisar novamente." 
+                    : erro.message;
+
                 statusContainer.innerHTML = `
                     <div class="inline-block glass-panel border-red-500/30 text-red-400 px-6 py-4 rounded-xl text-sm font-mono">
-                        <i class="fas fa-exclamation-triangle mr-2"></i> Falha na auditoria: ${erro.message}
+                        <i class="fas fa-exclamation-triangle mr-2"></i> ${mensagemErro}
                     </div>
                 `;
             }
         }
 
+        // FUNÇÃO DE DESENHAR O CARD (MANTIDA INTACTA COM O SEU DESIGN)
         function desenharCard(loja, produto, preco, link, isMelhorPreco, index) {
             const feed = document.getElementById('feed-ofertas');
             const delay = index * 100; // Efeito cascata na animação
 
-            // Formatação segura do preço caso o Worker não envie formatado
+            // Formatação segura do preço
             let precoVisual = preco;
             if (typeof preco === 'number') {
                 precoVisual = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
