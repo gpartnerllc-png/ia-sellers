@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>IA SELLERS - Monitor de Ofertas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-white font-sans">
+    <div class="container mx-auto p-6">
+        <header class="flex justify-between items-center mb-10 border-b border-slate-700 pb-5">
+            <h1 class="text-3xl font-bold text-cyan-400"><i class="fas fa-robot mr-3"></i>Buscador Inteligente IA</h1>
+            <div id="status" class="bg-green-500 text-xs px-3 py-1 rounded-full animate-pulse">LIVE: MONITORANDO 18+ LOJAS</div>
+        </header>
+
+        <section class="bg-slate-800 p-6 rounded-xl shadow-2xl mb-10 border border-slate-700">
+            <h2 class="text-xl mb-4 text-cyan-200">Cadastrar Novo Alerta de Preço</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="produto" placeholder="Produto (Ex: Arroz, iPhone, Pneu)" class="bg-slate-700 p-3 rounded border border-slate-600 focus:outline-none focus:border-cyan-400">
+                <input type="number" id="preco_alvo" placeholder="Preço Máximo (R$)" class="bg-slate-700 p-3 rounded border border-slate-600 focus:outline-none focus:border-cyan-400">
+                <button onclick="ativarIA()" class="bg-cyan-600 hover:bg-cyan-500 transition p-3 rounded font-bold uppercase tracking-wider">Ativar IA de Busca</button>
+            </div>
+        </section>
+
+        <h2 class="text-2xl mb-6 font-semibold"><i class="fas fa-bolt text-yellow-400 mr-2"></i>Ofertas Encontradas Agora</h2>
+        <div id="feed-ofertas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="animate-pulse bg-slate-800 h-40 rounded-xl border border-slate-700"></div>
+            <div class="animate-pulse bg-slate-800 h-40 rounded-xl border border-slate-700"></div>
+            <div class="animate-pulse bg-slate-800 h-40 rounded-xl border border-slate-700"></div>
+        </div>
+    </div>
+
+    <script>
+        // Simulação de recebimento via WebSocket (IA Viva)
+        function adicionarOferta(loja, produto, preco, link) {
+            const feed = document.getElementById('feed-ofertas');
+            const card = `
+                <div class="bg-slate-800 p-5 rounded-xl border-l-4 border-cyan-400 shadow-lg hover:scale-105 transition-transform">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-cyan-400 uppercase">${loja}</span>
+                        <span class="text-green-400 font-bold">R$ ${preco}</span>
+                    </div>
+                    <h3 class="text-lg mt-2 font-medium">${produto}</h3>
+                    <a href="${link}" target="_blank" class="inline-block mt-4 text-sm text-slate-400 hover:text-white underline text-xs">Ver no site oficial</a>
+                </div>
+            `;
+            feed.insertAdjacentHTML('afterbegin', card);
+        }
+    </script>
+</body>
+</html>

@@ -1,2 +1,0 @@
-# ia-sellers
-ofertas Lojas
