@@ -73,7 +73,7 @@
                    class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-lg placeholder-gray-600">
             <button onclick="ativarIA()" id="btn-buscar" 
                     class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(8,145,178,0.5)]">
-                Buscar Preços
+                Buscar
             </button>
         </div>
 
@@ -113,7 +113,7 @@
                 
                 // Restaura o botão
                 btnBuscar.disabled = false;
-                btnBuscar.innerHTML = 'Auditar';
+                btnBuscar.innerHTML = 'Buscar Ofertas';
                 statusContainer.classList.add('hidden');
                 
                 if (dados.erro) throw new Error(dados.erro);
@@ -130,10 +130,10 @@
                 
             } catch (erro) {
                 btnBuscar.disabled = false;
-                btnBuscar.innerHTML = 'Auditar';
+                btnBuscar.innerHTML = 'Buscar Ofertas';
                 statusContainer.innerHTML = `
                     <div class="inline-block glass-panel border-red-500/30 text-red-400 px-6 py-4 rounded-xl text-sm font-mono">
-                        <i class="fas fa-exclamation-triangle mr-2"></i> Falha na auditoria: ${erro.message}
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Falha na busca: ${erro.message}
                     </div>
                 `;
             }
@@ -162,7 +162,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">${loja}</span>
-                            <span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded"><i class="fas fa-check"></i> Auditado</span>
+                            <span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded"><i class="fas fa-check"></i> Ofertas Válida</span>
                         </div>
                         <h3 class="text-lg font-medium text-white leading-tight mb-6 line-clamp-3">${produto}</h3>
                     </div>
