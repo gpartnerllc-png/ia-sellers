@@ -3,41 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA | Comparador de Elite</title>
+    <title>IA | Comparador de Elite - MERCADO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        darkBg: '#050505',
-                        glassBg: 'rgba(20, 20, 20, 0.7)',
-                    },
-                    animation: {
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                        'slide-in-right': 'slideInRight 0.3s ease-out forwards'
-                    },
-                    keyframes: {
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        slideInRight: {
-                            '0%': { transform: 'translateX(100%)' },
-                            '100%': { transform: 'translateX(0)' }
-                        }
-                    }
-                }
-            }
+            theme: { extend: { colors: { darkBg: '#050505', glassBg: 'rgba(20, 20, 20, 0.7)' } } }
         }
     </script>
     <style>
         body { background-color: #050505; color: #ededed; font-family: 'Inter', sans-serif; }
         .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .bg-grid {
@@ -50,6 +27,7 @@
     </style>
 </head>
 <body class="bg-darkBg min-h-screen bg-grid relative overflow-x-hidden flex flex-col items-center pt-16">
+
     <div class="absolute top-[-10%] left-[20%] w-[600px] h-[600px] bg-cyan-900/30 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
     <button onclick="toggleCarrinho()" class="fixed top-6 right-6 z-50 glass-panel p-4 rounded-full text-cyan-400 hover:text-white hover:bg-cyan-600/20 transition-all shadow-[0_0_15px_rgba(8,145,178,0.3)]">
@@ -64,9 +42,6 @@
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Sistema B2B x C
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white">Auditoria e Compras</h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto font-light">
-                Pesquise, compare e adicione à sacola os melhores preços do mercado.
-            </p>
         </header>
 
         <div class="glass-panel p-2 rounded-2xl flex items-center shadow-2xl max-w-3xl mx-auto mb-16 relative hover:border-cyan-500/50 transition-colors duration-300">
@@ -87,6 +62,7 @@
             <button onclick="toggleCarrinho()" class="text-gray-400 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
         </div>
         <div id="itens-carrinho" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        
         <div class="p-6 border-t border-white/10 bg-black/80">
             <div class="flex justify-between items-center mb-6">
                 <span class="text-gray-400 uppercase tracking-widest text-sm">Total a Pagar</span>
@@ -96,6 +72,11 @@
                 <input type="text" id="cliente-nome" placeholder="Nome Completo" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                 <input type="text" id="cliente-telefone" placeholder="Telefone / WhatsApp" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                 <textarea id="cliente-endereco" placeholder="Endereço de Entrega Completo" rows="2" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition resize-none"></textarea>
+                <select id="cliente-pagamento" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none">
+                    <option value="" disabled selected class="text-gray-400">Forma de Pagamento</option>
+                    <option value="Pix" class="text-gray-900">Pix</option>
+                    <option value="Dinheiro" class="text-gray-900">Dinheiro</option>
+                </select>
             </div>
             <button id="btn-finalizar" onclick="iniciarCheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed">
                 Adicione itens para comprar
@@ -106,21 +87,11 @@
     <script>
         let sacola = [];
 
-        function formatarMoeda(valor) {
-            return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function toggleCarrinho() {
-            document.getElementById('painel-carrinho').classList.toggle('translate-x-full');
-        }
+        function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+        function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
         function adicionarAoCarrinho(nome, loja, preco) {
-            preco = parseFloat(preco);
-            if (isNaN(preco)) return;
-            // Escapar aspas para não quebrar o HTML/JS
-            nome = nome.replace(/'/g, "\\'").replace(/"/g, '\\"');
-            loja = loja.replace(/'/g, "\\'").replace(/"/g, '\\"');
-            sacola.push({ nome, loja, preco });
+            sacola.push({ nome, loja, preco: parseFloat(preco) });
             atualizarInterfaceCarrinho();
             document.getElementById('painel-carrinho').classList.remove('translate-x-full');
         }
@@ -151,10 +122,7 @@
                 container.innerHTML = '<div class="text-gray-500 text-center mt-10">Sua sacola está vazia.</div>';
                 totalEl.textContent = 'R$ 0,00';
                 btn.disabled = true;
-                btn.className = btn.className.replace('bg-cyan-600', 'bg-gray-600')
-                                             .replace('hover:bg-cyan-500', '')
-                                             .replace('text-white', 'text-gray-300');
-                btn.classList.add('cursor-not-allowed');
+                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl uppercase tracking-widest cursor-not-allowed";
                 btn.textContent = 'Adicione itens para comprar';
                 form.style.display = 'none';
                 return;
@@ -162,17 +130,14 @@
 
             form.style.display = 'block';
             btn.disabled = false;
-            btn.className = btn.className.replace('bg-gray-600', 'bg-cyan-600')
-                                         .replace('cursor-not-allowed', '')
-                                         .replace('text-gray-300', 'text-white');
-            btn.classList.add('hover:bg-cyan-500');
-            btn.textContent = 'Prosseguir para Pagamento Seguros';
+            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest";
+            btn.textContent = 'Fechar Pedido no WhatsApp';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
-                    <div class="glass-panel p-4 rounded-xl flex justify-between items-center relative overflow-hidden">
+                    <div class="glass-panel p-4 rounded-xl flex justify-between items-center relative overflow-hidden mb-2">
                         <div class="absolute left-0 top-0 h-full w-1 bg-cyan-500"></div>
-                        <div class="flex-1 min-w-0">
+                        <div class="flex-1 min-w-0 pl-3">
                             <p class="text-xs text-cyan-400 font-mono mb-1">${item.loja}</p>
                             <h4 class="text-sm font-medium text-white truncate">${item.nome}</h4>
                             <p class="text-white font-bold mt-1">${formatarMoeda(item.preco)}</p>
@@ -182,7 +147,6 @@
                         </button>
                     </div>`;
             });
-
             totalEl.textContent = formatarMoeda(total);
         }
 
@@ -190,26 +154,35 @@
             const nome = document.getElementById('cliente-nome').value.trim();
             const tel = document.getElementById('cliente-telefone').value.trim();
             const end = document.getElementById('cliente-endereco').value.trim();
+            const pag = document.getElementById('cliente-pagamento').value;
 
-            if (!nome || !tel || !end) {
-                alert("Para a sua segurança e emissão da NF, preencha nome, telefone e endereço.");
+            if (!nome || !tel || !end || !pag) {
+                alert("Preencha todos os dados e a forma de pagamento.");
                 return;
             }
 
-            alert(`Processando o pedido de ${nome}...\nRedirecionando para o Gateway Criptografado SandxCDD.`);
-            // Aqui futuramente: window.location = "https://seu-gateway.com/checkout?dados=...";
-            // Por enquanto limpa (comente se não quiser limpar após alert)
+            let resumo = `🚨 *NOVO PEDIDO* 🚨\n👤 ${nome}\n📱 ${tel}\n📍 ${end}\n💳 Pagamento: ${pag}\n\n🛒 *ITENS:*\n`;
+            let total = 0;
+            sacola.forEach(item => {
+                resumo += `• ${item.nome} - R$ ${item.preco.toFixed(2)}\n`;
+                total += item.preco;
+            });
+            resumo += `\n💰 *TOTAL:* R$ ${total.toFixed(2)}\n`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(resumo)}`, '_blank');
+            
             sacola = [];
             document.getElementById('cliente-nome').value = '';
             document.getElementById('cliente-telefone').value = '';
             document.getElementById('cliente-endereco').value = '';
+            document.getElementById('cliente-pagamento').value = '';
             atualizarInterfaceCarrinho();
             toggleCarrinho();
         }
 
         async function ativarIA() {
-            const query = document.getElementById('produto').value.trim();
-            if (!query) return;
+            const produtoInput = document.getElementById('produto').value.trim();
+            if (!produtoInput) return;
 
             const feed = document.getElementById('feed-ofertas');
             const status = document.getElementById('status-container');
@@ -219,21 +192,19 @@
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Buscando...';
             feed.innerHTML = '';
             status.classList.remove('hidden');
-            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Varrendo múltiplos atacadistas em paralelo...</div>`;
+            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Conectando ao Servidor Cloudflare...</div>`;
 
             try {
-                // ================================================
-                // TROQUE AQUI PELA URL REAL DO SEU WORKER!
-                const url = `https://ia-sellers.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}`;
-                // ================================================
-
-                const ctrl = new AbortController();
-                const timeoutId = setTimeout(() => ctrl.abort(), 15000);
-
-                const res = await fetch(url, { signal: ctrl.signal });
-                clearTimeout(timeoutId);
-
-                if (!res.ok) throw new Error(`Servidor retornou ${res.status}`);
+                // =========================================================================
+                // ↓↓↓ COLOQUE O LINK DO SEU NOVO WORKER AQUI ENTRE AS CRASES ↓↓↓
+                // =========================================================================
+                const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
+                
+                const res = await fetch(urlDoRobo);
+                
+                if (!res.ok) {
+                    throw new Error(`Falha de Conexão. Status HTTP: ${res.status}. O link do Cloudflare está incorreto ou bloqueado.`);
+                }
 
                 const data = await res.json();
 
@@ -241,62 +212,46 @@
                 btn.innerHTML = 'Buscar';
                 status.classList.add('hidden');
 
-                if (data.erro) throw new Error(data.erro);
-                if (!Array.isArray(data) || data.length === 0) throw new Error('Nenhuma oferta localizada.');
-
-                // Ordena por preço (menor primeiro)
-                data.sort((a, b) => parseFloat(a.preco || Infinity) - parseFloat(b.preco || Infinity));
+                if (!Array.isArray(data) || data.length === 0) throw new Error('Nenhuma oferta retornada.');
 
                 data.forEach((oferta, i) => {
                     const precoNum = parseFloat(oferta.preco) || 0;
-                    const isMelhor = i === 0 && precoNum > 0;
-                    desenharCard(
-                        oferta.loja || 'Loja Desconhecida',
-                        oferta.nome || query,
-                        precoNum,
-                        oferta.link || '#',
-                        isMelhor,
-                        i
-                    );
+                    desenharCard(oferta.loja || 'Loja', oferta.nome || produtoInput, precoNum, oferta.link || '#', i === 0, i);
                 });
 
             } catch (err) {
-                let msg = err.message;
-                if (err.name === 'AbortError') msg = 'Tempo esgotado (75s). Tente um termo mais específico.';
                 btn.disabled = false;
                 btn.innerHTML = 'Buscar';
-                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 bg-red-900/20 text-red-300 px-6 py-5 rounded-xl text-sm font-mono max-w-lg mx-auto"><i class="fas fa-exclamation-triangle mr-2"></i> Falha: ${msg}<br><span class="text-xs opacity-80 mt-1 block">(Ex: "Arroz Camil 5kg", "Óleo Liza 900ml")</span></div>`;
+                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 text-red-300 px-6 py-5 rounded-xl text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> ${err.message}</div>`;
             }
         }
 
         function desenharCard(loja, produto, preco, link, isMelhorPreco, index) {
             const feed = document.getElementById('feed-ofertas');
-            const delay = index * 120;
+            const delay = index * 100;
             const precoFormatado = preco > 0 ? formatarMoeda(preco) : 'Consultar';
-            const eOfertaOculta = preco <= 0.01 || precoFormatado === 'Consultar';
+            
+            const nomeEsc = produto.replace(/'/g, "").replace(/"/g, "");
+            const lojaEsc = loja.replace(/'/g, "").replace(/"/g, "");
+            const eOfertaOculta = preco <= 0.01;
 
-            // Escapar para onclick seguro
-            const nomeEsc = produto.replace(/'/g, "\\'").replace(/"/g, '\\"');
-            const lojaEsc = loja.replace(/'/g, "\\'").replace(/"/g, '\\"');
-
-            const botaoAcao = eOfertaOculta
+            const botaoAcao = eOfertaOculta 
                 ? `<a href="${link}" target="_blank" class="w-full text-center bg-white/10 hover:bg-white/20 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider"><i class="fas fa-external-link-alt mr-2"></i> Ver no Site</a>`
                 : `<button onclick="adicionarAoCarrinho('${nomeEsc}', '${lojaEsc}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
-
+            
             const cardHTML = `
-                <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300 animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(8,145,178,0.15)] scale-[1.02]' : ''}" style="animation-delay: ${delay}ms;">
-                    ${isMelhorPreco && !eOfertaOculta ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-[0_0_10px_rgba(6,182,212,0.8)]"><i class="fas fa-trophy mr-1"></i> Melhor Preço</div>` : ''}
+                <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 scale-[1.02]' : ''}" style="animation-delay: ${delay}ms;">
+                    ${isMelhorPreco && !eOfertaOculta ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço</div>` : ''}
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">${loja}</span>
-                            ${eOfertaOculta ? '<span class="text-yellow-400 text-xs bg-yellow-400/10 px-2 py-1 rounded"><i class="fas fa-eye"></i> Validação Manual</span>' : '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded"><i class="fas fa-check"></i> Em Estoque</span>'}
                         </div>
-                        <h3 class="text-lg font-medium text-white leading-tight mb-6 line-clamp-3">${produto}</h3>
+                        <h3 class="text-lg font-medium text-white mb-6 line-clamp-3">${produto}</h3>
                     </div>
                     <div class="flex flex-col mt-auto border-t border-white/5 pt-4 gap-4">
                         <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">${eOfertaOculta ? 'Preço no Encarte/Site' : 'Preço Atual'}</span>
-                            <span class="text-3xl font-bold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'} tracking-tighter">${precoFormatado}</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Preço</span>
+                            <span class="text-3xl font-bold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'}">${precoFormatado}</span>
                         </div>
                         ${botaoAcao}
                     </div>
