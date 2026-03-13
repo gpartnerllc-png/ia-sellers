@@ -257,7 +257,7 @@
                 // Você apagou o 'ia-sellers' no seu Cloudflare. Troque o link abaixo pela URL
                 // do Worker NOVO que você acabou de criar. Sem isso, a tela não vai funcionar.
                 // =================================================================================
-                const urlDoRobo = `https://COLE-AQUI-SEU-LINK-NOVO.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
+                const urlDoRobo = `https://ia-sellers.gpartnerllc.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
                 
                 const resposta = await fetch(urlDoRobo);
                 const textoBruto = await resposta.text();
