@@ -174,7 +174,7 @@
             btnFinalizar.classList.replace('bg-gray-600', 'bg-cyan-600');
             btnFinalizar.classList.replace('cursor-not-allowed', 'hover:bg-cyan-500');
             btnFinalizar.classList.replace('text-gray-300', 'text-white');
-            btnFinalizar.innerText = 'Fechar Pedido (Seguro)';
+            btnFinalizar.innerText = 'Fechar Pedido Via WhatsApp';
 
             sacola.forEach((item, index) => {
                 total += item.preco;
@@ -196,7 +196,6 @@
             totalElement.innerText = formatarMoeda(total);
         }
 
-        // A ÚNICA ALTERAÇÃO FOI AQUI: Mandar o pedido sem quebrar a tela
         function iniciarCheckout() {
             const nome = document.getElementById('cliente-nome').value;
             const tel = document.getElementById('cliente-telefone').value;
@@ -223,16 +222,12 @@
 
             resumoPedido += `\n💰 *TOTAL A PAGAR:* R$ ${total.toFixed(2)}\n`;
 
-            // Envia de forma segura sem usar API Key na URL
             const textoCodificado = encodeURIComponent(resumoPedido);
-            
-            // Você pode colocar seu numero aqui depois da barra se for usar WhatsApp: https://wa.me/556199999999?text=
-            const linkEnvioSeguro = `https://wa.me/?text=${textoCodificado}`; 
+            const linkSeguro = `https://wa.me/?text=${textoCodificado}`;
 
             alert(`Pedido finalizado!\nO sistema abrirá a comunicação segura para o fechamento.`);
-            window.open(linkEnvioSeguro, '_blank');
+            window.open(linkSeguro, '_blank');
             
-            // Limpa o carrinho
             sacola = [];
             document.getElementById('cliente-nome').value = '';
             document.getElementById('cliente-telefone').value = '';
@@ -257,7 +252,12 @@
             statusContainer.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Varrendo os atacadistas em paralelo...</div>`;
             
             try {
-                const urlDoRobo = `https://ia-sellers.gpartnerllc.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
+                // =================================================================================
+                // ⚠️ ATENÇÃO EXTREMA AQUI: 
+                // Você apagou o 'ia-sellers' no seu Cloudflare. Troque o link abaixo pela URL
+                // do Worker NOVO que você acabou de criar. Sem isso, a tela não vai funcionar.
+                // =================================================================================
+                const urlDoRobo = `https://COLE-AQUI-SEU-LINK-NOVO.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
                 
                 const resposta = await fetch(urlDoRobo);
                 const textoBruto = await resposta.text();
@@ -266,7 +266,7 @@
                 try {
                     dados = JSON.parse(textoBruto);
                 } catch (erroParse) {
-                    throw new Error("O servidor do Cloudflare demorou muito e derrubou a conexão. Faça uma busca mais rápida.");
+                    throw new Error("O servidor do Cloudflare demorou muito e derrubou a conexão. Faça uma busca mais rápida (Ex: Arroz Camil).");
                 }
                 
                 btnBuscar.disabled = false;
@@ -290,16 +290,18 @@
             }
         }
 
-        // A linha que não tem erro de replace.
         function desenharCard(loja, produto, preco, link, isMelhorPreco, index) {
             const feed = document.getElementById('feed-ofertas');
             const delay = index * 100;
             const precoFormatado = typeof preco === 'number' ? formatarMoeda(preco) : `R$ ${preco}`;
             
+            // FILTRO DE SEGURANÇA: Tira as aspas do nome para o HTML não colapsar ao desenhar o botão da sacola
+            const nomeProdutoLimpo = produto.replace(/['"]/g, "");
+
             const eOfertaOculta = preco === 0.01;
             const botaoAcao = eOfertaOculta 
                 ? `<a href="${link}" target="_blank" class="w-full text-center bg-white/10 hover:bg-white/20 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider"><i class="fas fa-external-link-alt mr-2"></i> Ver no Site</a>`
-                : `<button onclick="adicionarAoCarrinho('${produto}', '${loja}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
+                : `<button onclick="adicionarAoCarrinho('${nomeProdutoLimpo}', '${loja}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
             
             const cardHTML = `
                 <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300 animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(8,145,178,0.15)] scale-[1.02]' : ''}" style="animation-delay: ${delay}ms;">
