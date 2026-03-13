@@ -237,56 +237,82 @@
             toggleCarrinho();
         }
 
+        // ==========================================
+        // CÓDIGO DA IA ATUALIZADO PELO USUÁRIO
+        // ==========================================
         async function ativarIA() {
             const produtoInput = document.getElementById('produto').value.trim();
+            if (!produtoInput) return;
+
             const feed = document.getElementById('feed-ofertas');
             const statusContainer = document.getElementById('status-container');
             const btnBuscar = document.getElementById('btn-buscar');
-            
-            if(!produtoInput) return;
 
             btnBuscar.disabled = true;
-            btnBuscar.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btnBuscar.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Buscando...';
             feed.innerHTML = '';
             statusContainer.classList.remove('hidden');
-            statusContainer.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Varrendo os atacadistas em paralelo...</div>`;
-            
+            statusContainer.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm">
+                <i class="fas fa-radar fa-spin text-xl"></i> Buscando melhores preços...
+            </div>`;
+
             try {
-                // =================================================================================
-                // ⚠️ ATENÇÃO EXTREMA AQUI: 
-                // Você apagou o 'ia-sellers' no seu Cloudflare. Troque o link abaixo pela URL
-                // do Worker NOVO que você acabou de criar. Sem isso, a tela não vai funcionar.
-                // =================================================================================
+                // Link do seu Worker configurado
                 const urlDoRobo = `https://ia-sellers.gpartnerllc.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
-                
-                const resposta = await fetch(urlDoRobo);
-                const textoBruto = await resposta.text();
-                
-                let dados;
-                try {
-                    dados = JSON.parse(textoBruto);
-                } catch (erroParse) {
-                    throw new Error("O servidor do Cloudflare demorou muito e derrubou a conexão. Faça uma busca mais rápida (Ex: Arroz Camil).");
+
+                // Adiciona timeout de 12 segundos para a página não ficar travada
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+                const resposta = await fetch(urlDoRobo, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (!resposta.ok) {
+                    throw new Error(`Servidor respondeu ${resposta.status} – ${resposta.statusText}`);
                 }
-                
+
+                const contentType = resposta.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Resposta inválida (não é JSON)");
+                }
+
+                const dados = await resposta.json();
+
                 btnBuscar.disabled = false;
                 btnBuscar.innerHTML = 'Buscar';
                 statusContainer.classList.add('hidden');
 
-                if (dados.erro) throw new Error(dados.erro);
-
-                if (Array.isArray(dados) && dados.length > 0) {
-                    dados.forEach((oferta, index) => {
-                        const isMelhorPreco = index === 0;
-                        desenharCard(oferta.loja, oferta.nome, oferta.preco, oferta.link, isMelhorPreco, index);
-                    });
-                } else {
-                    throw new Error("Nenhuma oferta localizada. O servidor pode estar bloqueado.");
+                if (dados.erro) {
+                    throw new Error(dados.erro);
                 }
+
+                if (!Array.isArray(dados) || dados.length === 0) {
+                    throw new Error("Nenhuma oferta encontrada para este produto.");
+                }
+
+                // Ordena por preço (caso o backend não venha ordenado)
+                dados.sort((a, b) => parseFloat(a.preco) - parseFloat(b.preco));
+
+                dados.forEach((oferta, index) => {
+                    const isMelhorPreco = index === 0;
+                    // Garante que preco seja número
+                    const precoNumerico = parseFloat(oferta.preco) || 0;
+                    desenharCard(oferta.loja, oferta.nome, precoNumerico, oferta.link || "#", isMelhorPreco, index);
+                });
+
             } catch (erro) {
+                let msg = erro.message;
+                if (erro.name === 'AbortError') {
+                    msg = "Tempo esgotado. Tente um produto mais específico ou tente novamente.";
+                }
                 btnBuscar.disabled = false;
                 btnBuscar.innerHTML = 'Buscar';
-                statusContainer.innerHTML = `<div class="inline-block glass-panel border-red-500/30 text-red-400 px-6 py-4 rounded-xl text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> Falha: ${erro.message}</div>`;
+                statusContainer.innerHTML = `
+                    <div class="inline-block glass-panel border-red-500/40 bg-red-950/30 text-red-300 px-6 py-5 rounded-xl text-sm font-mono leading-relaxed">
+                        <i class="fas fa-exclamation-circle mr-2 text-lg"></i>
+                        <strong>Erro:</strong> ${msg}<br>
+                        <span class="text-xs opacity-80 mt-1 block">(Tente ex: "Arroz Camil 5kg" ou "Leite Italac 1L")</span>
+                    </div>`;
             }
         }
 
