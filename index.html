@@ -211,7 +211,7 @@
             }
 
             // Constrói o Resumo do Pedido para o Robô do Telegram ler
-            let resumoPedido = `🚨 *NOVO PEDIDO - SANDXCDD* 🚨\n\n`;
+            let resumoPedido = `🚨 *NOVO PEDIDO - Mercado* 🚨\n\n`;
             resumoPedido += `👤 *Cliente:* ${nome}\n`;
             resumoPedido += `📱 *Telefone:* ${tel}\n`;
             resumoPedido += `📍 *Endereço:* ${end}\n`;
@@ -230,7 +230,7 @@
             const textoCodificado = encodeURIComponent(resumoPedido);
             
             // ATENÇÃO: Troque "NOME_DO_SEU_BOT" pelo @username do seu bot do Telegram
-            const linkTelegram = `https://t.me/NOME_DO_SEU_BOT?text=${textoCodificado}`;
+            const linkTelegram = `https://t.me/8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k?text=${textoCodificado}`;
 
             alert(`Pedido finalizado!\nRedirecionando para o canal criptografado do Telegram.`);
             
