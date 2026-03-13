@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA | Comparador de Elite - MERCADO</title>
+    <title>Sistema B2B SandxCDD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
@@ -30,14 +30,17 @@
     <div class="w-full max-w-6xl px-6 relative z-10">
         <header class="text-center mb-16">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-panel text-xs text-cyan-400 font-mono mb-6 uppercase tracking-widest border-cyan-500/30">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Sistema B2B x C
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Sistema B2B SandxCDD
             </div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white">Auditoria e Compras</h1>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white">Central de Cotação</h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto font-light">
+                Auditoria de preços, montagem de sacola e envio de pedido direto para a central.
+            </p>
         </header>
 
         <div class="glass-panel p-2 rounded-2xl flex items-center shadow-2xl max-w-3xl mx-auto mb-16 relative hover:border-cyan-500/50 transition-colors duration-300">
             <i class="fas fa-search text-gray-500 ml-4 text-xl"></i>
-            <input type="text" id="produto" placeholder="Ex: Arroz 5kg Camil" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-lg placeholder-gray-600">
+            <input type="text" id="produto" placeholder="Ex: Feijão Carioca 1kg" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-lg placeholder-gray-600">
             <button onclick="ativarIA()" id="btn-buscar" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(8,145,178,0.5)] min-w-[140px]">
                 Buscar
             </button>
@@ -55,20 +58,20 @@
         <div id="itens-carrinho" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
         <div class="p-6 border-t border-white/10 bg-black/80">
             <div class="flex justify-between items-center mb-6">
-                <span class="text-gray-400 uppercase tracking-widest text-sm">Total a Pagar</span>
+                <span class="text-gray-400 uppercase tracking-widest text-sm">Total do Pedido</span>
                 <span id="total-carrinho" class="text-3xl font-bold text-cyan-400">R$ 0,00</span>
             </div>
             <div class="space-y-3 mb-6" id="form-checkout" style="display: none;">
-                <input type="text" id="cliente-nome" placeholder="Nome Completo" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
+                <input type="text" id="cliente-nome" placeholder="Nome Completo do Cliente" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                 <input type="text" id="cliente-telefone" placeholder="Telefone / WhatsApp" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                 <textarea id="cliente-endereco" placeholder="Endereço de Entrega Completo" rows="2" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition resize-none"></textarea>
                 <select id="cliente-pagamento" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none">
                     <option value="" disabled selected class="text-gray-400">Forma de Pagamento</option>
-                    <option value="Pix" class="text-gray-900">Pix</option>
+                    <option value="Pix" class="text-gray-900">Pagamento via Pix</option>
                     <option value="Dinheiro" class="text-gray-900">Dinheiro na Entrega</option>
                 </select>
             </div>
-            <button id="btn-finalizar" onclick="iniciarCheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed">
+            <button id="btn-finalizar" onclick="iniciarCheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2">
                 Adicione itens para comprar
             </button>
         </div>
@@ -112,16 +115,16 @@
                 container.innerHTML = '<div class="text-gray-500 text-center mt-10">Sua sacola está vazia.</div>';
                 totalEl.textContent = 'R$ 0,00';
                 btn.disabled = true;
-                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl uppercase tracking-widest cursor-not-allowed";
-                btn.textContent = 'Adicione itens para comprar';
+                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2";
+                btn.innerHTML = 'Adicione itens para comprar';
                 form.style.display = 'none';
                 return;
             }
 
             form.style.display = 'block';
             btn.disabled = false;
-            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest";
-            btn.textContent = 'Fechar Pedido no WhatsApp';
+            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2";
+            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Enviar Pedido B2B';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
@@ -140,40 +143,77 @@
             totalEl.textContent = formatarMoeda(total);
         }
 
-        function iniciarCheckout() {
+        // ==============================================================
+        // INTEGRAÇÃO OFICIAL API TELEGRAM
+        // ==============================================================
+        async function iniciarCheckout() {
             const nome = document.getElementById('cliente-nome').value.trim();
             const tel = document.getElementById('cliente-telefone').value.trim();
             const end = document.getElementById('cliente-endereco').value.trim();
             const pag = document.getElementById('cliente-pagamento').value;
+            const btn = document.getElementById('btn-finalizar');
 
             if (!nome || !tel || !end || !pag) {
-                alert("Preencha todos os dados e a forma de pagamento.");
+                alert("Preencha todos os dados do cliente para gerar a ordem.");
                 return;
             }
 
-            let resumo = `🚨 *NOVO PEDIDO - SANDXCDD* 🚨\n👤 ${nome}\n📱 ${tel}\n📍 ${end}\n💳 Pagamento: ${pag}\n\n🛒 *ITENS:*\n`;
+            // Animação de processamento no botão
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processando...';
+
+            let resumo = `🚨 *NOVO PEDIDO B2B - SANDXCDD* 🚨\n\n`;
+            resumo += `👤 *Cliente:* ${nome}\n`;
+            resumo += `📱 *Telefone:* ${tel}\n`;
+            resumo += `📍 *Endereço:* ${end}\n`;
+            resumo += `💳 *Pagamento:* ${pag}\n\n`;
+            resumo += `🛒 *ITENS DA SACOLA:*\n`;
+
             let total = 0;
             sacola.forEach(item => {
                 resumo += `• ${item.nome} (${item.loja}) - R$ ${item.preco.toFixed(2)}\n`;
                 total += item.preco;
             });
-            resumo += `\n💰 *TOTAL:* R$ ${total.toFixed(2)}\n`;
+            resumo += `\n💰 *VALOR TOTAL:* R$ ${total.toFixed(2)}\n`;
 
-            window.open(`https://wa.me/?text=${encodeURIComponent(resumo)}`, '_blank');
-            
-            sacola = [];
-            document.getElementById('cliente-nome').value = '';
-            document.getElementById('cliente-telefone').value = '';
-            document.getElementById('cliente-endereco').value = '';
-            document.getElementById('cliente-pagamento').value = '';
-            atualizarInterfaceCarrinho();
-            toggleCarrinho();
+            // Dados do seu Bot do Telegram
+            const botToken = "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k";
+            const chatId = "1703808186";
+            const urlTelegram = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            try {
+                // Dispara o pedido diretamente para o Telegram via API
+                const response = await fetch(urlTelegram, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: resumo,
+                        parse_mode: "Markdown"
+                    })
+                });
+
+                if (!response.ok) throw new Error("Erro de comunicação com o Telegram");
+
+                // Alerta de Sucesso
+                alert("✅ Pedido enviado com sucesso para a central de expedição!");
+
+                // Limpeza completa do carrinho
+                sacola = [];
+                document.getElementById('cliente-nome').value = '';
+                document.getElementById('cliente-telefone').value = '';
+                document.getElementById('cliente-endereco').value = '';
+                document.getElementById('cliente-pagamento').value = '';
+                atualizarInterfaceCarrinho();
+                toggleCarrinho();
+
+            } catch (error) {
+                alert("❌ Erro ao enviar o pedido. Tente novamente.");
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Enviar Pedido B2B';
+            }
         }
 
-        // ==============================================================
-        // NOVA INTELIGÊNCIA DO HTML: O FALLBACK DIRETO
-        // Nunca mais vai dar erro vermelho, se a rede cair ele monta os links
-        // ==============================================================
         async function ativarIA() {
             const query = document.getElementById('produto').value.trim();
             if (!query) return;
@@ -183,88 +223,73 @@
             const btn = document.getElementById('btn-buscar');
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Buscando...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Auditando Mercados...';
             feed.innerHTML = '';
             status.classList.remove('hidden');
-            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Conectando ao Servidor...</div>`;
-
-            // Construção dos LINKS EXATOS informados por você (para busca ao vivo)
-            const queryCodificada = encodeURIComponent(query);
-            const linksOficiaisMercados = [
-                { loja: "Carrefour", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://mercado.carrefour.com.br/${queryCodificada}` },
-                { loja: "Pão de Açúcar", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.paodeacucar.com/${queryCodificada}` },
-                { loja: "Bretas", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.bretas.com.br/${queryCodificada}` },
-                { loja: "Atacadão", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.atacadao.com.br/${queryCodificada}` },
-                { loja: "Sam's Club", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.samsclub.com.br/${queryCodificada}` },
-                { loja: "Tatico", nome: `Acessar encarte digital`, preco: 0.01, link: `https://taticobaratotododia.com.br/bsb/ofertas/` }
-            ];
+            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> A IA está analisando os preços em tempo real...</div>`;
 
             try {
-                const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${queryCodificada}`;
+                const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}`;
                 
-                // AbortController para não deixar a tela travada infinitamente
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 12000);
+                const timeoutId = setTimeout(() => controller.abort(), 18000);
 
                 const res = await fetch(urlDoRobo, { signal: controller.signal });
                 clearTimeout(timeoutId);
-                
-                if (!res.ok) throw new Error(`Servidor Offline ou Timeout`);
+
+                if (!res.ok) throw new Error(`Falha na API (Status HTTP: ${res.status})`);
 
                 const data = await res.json();
-                if (data.erro || !Array.isArray(data) || data.length === 0) throw new Error('Erro de IA');
 
                 btn.disabled = false;
                 btn.innerHTML = 'Buscar';
                 status.classList.add('hidden');
 
+                if (data.erro) throw new Error(data.erro);
+                if (!Array.isArray(data) || data.length === 0) throw new Error('A IA não conseguiu estruturar as ofertas.');
+
                 data.forEach((oferta, i) => {
                     const precoNum = parseFloat(oferta.preco) || 0;
-                    desenharCard(oferta.loja || 'Loja', oferta.nome || query, precoNum, oferta.link || '#', i === 0, i);
+                    if(oferta.loja === "⚠️ ALERTA") {
+                         throw new Error(oferta.nome);
+                    } else {
+                         desenharCard(oferta.loja, oferta.nome, precoNum, i === 0);
+                    }
                 });
 
             } catch (err) {
-                // ==========================================================
-                // MAGIA AQUI: O erro parou. Se falhar, ele renderiza os LINKS AO VIVO.
-                // ==========================================================
                 btn.disabled = false;
                 btn.innerHTML = 'Buscar';
+                let msg = err.message;
+                if (err.name === 'AbortError') msg = "O servidor demorou muito para conectar. Tente novamente.";
                 
-                status.innerHTML = `<div class="inline-block glass-panel border-cyan-500/30 text-cyan-300 px-6 py-4 rounded-xl text-sm font-mono"><i class="fas fa-bolt mr-2"></i> Exibindo acessos diretos aos mercados.</div>`;
-                
-                // Desenha os cards apontando direto pro site usando os seus links mapeados
-                linksOficiaisMercados.forEach((oferta, i) => {
-                    desenharCard(oferta.loja, oferta.nome, oferta.preco, oferta.link, false, i);
-                });
+                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 bg-red-900/20 text-red-300 px-6 py-5 rounded-xl text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> Falha no Motor de Busca: ${msg}</div>`;
             }
         }
 
-        function desenharCard(loja, produto, preco, link, isMelhorPreco, index) {
+        function desenharCard(loja, produto, preco, isMelhorPreco) {
             const feed = document.getElementById('feed-ofertas');
-            const delay = index * 100;
-            const precoFormatado = preco > 0 ? formatarMoeda(preco) : 'Consultar';
+            const precoFormatado = formatarMoeda(preco);
             
             const nomeEsc = produto.replace(/'/g, "").replace(/"/g, "");
             const lojaEsc = loja.replace(/'/g, "").replace(/"/g, "");
-            const eOfertaOculta = preco <= 0.01 || precoFormatado === 'Consultar';
 
-            // O botão foi protegido: se for "Consultar", ele vira um link para fora do seu site.
-            const botaoAcao = eOfertaOculta 
-                ? `<a href="${link}" target="_blank" class="w-full text-center bg-white/10 hover:bg-white/20 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider"><i class="fas fa-external-link-alt mr-2"></i> Ver no Site</a>`
-                : `<button onclick="adicionarAoCarrinho('${nomeEsc}', '${lojaEsc}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
+            // Botão 100% focado no modelo B2B (Adicionar Sacola)
+            const botaoAcao = `<button onclick="adicionarAoCarrinho('${nomeEsc}', '${lojaEsc}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
             
             const cardHTML = `
-                <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 scale-[1.02]' : ''}" style="animation-delay: ${delay}ms;">
-                    ${isMelhorPreco && !eOfertaOculta ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço</div>` : ''}
+                <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(8,145,178,0.15)] scale-[1.02]' : ''}">
+                    ${isMelhorPreco ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço B2B</div>` : ''}
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">${loja}</span>
+                            <span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded"><i class="fas fa-check"></i> Auditado</span>
                         </div>
                         <h3 class="text-lg font-medium text-white mb-6 line-clamp-3">${produto}</h3>
                     </div>
                     <div class="flex flex-col mt-auto border-t border-white/5 pt-4 gap-4">
                         <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Preço</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Preço Atualizado</span>
                             <span class="text-3xl font-bold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'}">${precoFormatado}</span>
                         </div>
                         ${botaoAcao}
