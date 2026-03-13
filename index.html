@@ -38,7 +38,7 @@
     <div class="w-full max-w-6xl px-6 relative z-10">
         <header class="text-center mb-16">
             <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel text-xs text-cyan-400 font-mono mb-6 uppercase tracking-widest border-cyan-500/30 bg-black/40">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Mercado IA B2B
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Mercado IA
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">Ofertas e Cotação</h1>
             <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light">
@@ -168,7 +168,7 @@
             form.style.display = 'block';
             btn.disabled = false;
             btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2";
-            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Enviar Pedido B2B';
+            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Enviar Pedido';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
@@ -211,7 +211,7 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processando...';
 
-            let resumo = `🚨 *NOVO PEDIDO B2B - MERCADO IA* 🚨\n\n`;
+            let resumo = `🚨 *NOVO PEDIDO - MERCADO IA* 🚨\n\n`;
             resumo += `👤 *Cliente:* ${nome}\n`;
             resumo += `📱 *Telefone:* ${tel}\n`;
             resumo += `📍 *Endereço:* ${rua}, Nº ${numero}\n`;
@@ -244,7 +244,7 @@
 
                 if (!response.ok) throw new Error("Erro de comunicação com o Telegram");
 
-                alert("✅ Pedido B2B despachado com sucesso para a central de expedição!");
+                alert("✅ Pedido despachado com sucesso para a central de expedição!");
 
                 // Limpeza completa do carrinho
                 sacola = [];
@@ -264,7 +264,7 @@
             } catch (error) {
                 alert("❌ Erro ao enviar o pedido. Verifique a conexão.");
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Enviar Pedido B2B';
+                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Enviar Pedido';
             }
         }
 
@@ -280,7 +280,7 @@
             const btn = document.getElementById('btn-buscar');
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Auditando Mercados...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Auditando Mercados';
             feed.innerHTML = '';
             status.classList.remove('hidden');
             status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> A IA está analisando os preços em tempo real...</div>`;
@@ -335,7 +335,7 @@
             
             const cardHTML = `
                 <div class="glass-panel bg-black/60 p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(8,145,178,0.15)] scale-[1.02]' : ''}">
-                    ${isMelhorPreco ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço B2B</div>` : ''}
+                    ${isMelhorPreco ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço</div>` : ''}
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest drop-shadow">${loja}</span>
