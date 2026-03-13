@@ -3,49 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA | Comparador de Elite</title>
+    <title>IA | Comparador de Elite - MERCADO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        darkBg: '#050505',
-                        glassBg: 'rgba(20, 20, 20, 0.7)',
-                    },
-                    animation: {
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                        'slide-in-right': 'slideInRight 0.3s ease-out forwards'
-                    },
-                    keyframes: {
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        slideInRight: {
-                            '0%': { transform: 'translateX(100%)' },
-                            '100%': { transform: 'translateX(0)' }
-                        }
-                    }
-                }
-            }
-        }
+        tailwind.config = { theme: { extend: { colors: { darkBg: '#050505', glassBg: 'rgba(20, 20, 20, 0.7)' } } } }
     </script>
     <style>
         body { background-color: #050505; color: #ededed; font-family: 'Inter', sans-serif; }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-        }
-        /* Esconde a barra de rolagem do carrinho */
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -66,15 +33,12 @@
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Sistema B2B x C
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white">Auditoria e Compras</h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto font-light">
-                Pesquise, compare e adicione à sacola os melhores preços do mercado.
-            </p>
         </header>
 
         <div class="glass-panel p-2 rounded-2xl flex items-center shadow-2xl max-w-3xl mx-auto mb-16 relative hover:border-cyan-500/50 transition-colors duration-300">
             <i class="fas fa-search text-gray-500 ml-4 text-xl"></i>
             <input type="text" id="produto" placeholder="Ex: Arroz 5kg Camil" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-lg placeholder-gray-600">
-            <button onclick="ativarIA()" id="btn-buscar" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(8,145,178,0.5)]">
+            <button onclick="ativarIA()" id="btn-buscar" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(8,145,178,0.5)] min-w-[140px]">
                 Buscar
             </button>
         </div>
@@ -88,23 +52,22 @@
             <h2 class="text-xl font-bold text-white"><i class="fas fa-shopping-bag mr-2 text-cyan-400"></i> Sua Sacola</h2>
             <button onclick="toggleCarrinho()" class="text-gray-400 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
         </div>
-
-        <div id="itens-carrinho" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
-            <div class="text-gray-500 text-center mt-10" id="carrinho-vazio">Sua sacola está vazia.</div>
-        </div>
-
+        <div id="itens-carrinho" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
         <div class="p-6 border-t border-white/10 bg-black/80">
             <div class="flex justify-between items-center mb-6">
                 <span class="text-gray-400 uppercase tracking-widest text-sm">Total a Pagar</span>
                 <span id="total-carrinho" class="text-3xl font-bold text-cyan-400">R$ 0,00</span>
             </div>
-
             <div class="space-y-3 mb-6" id="form-checkout" style="display: none;">
                 <input type="text" id="cliente-nome" placeholder="Nome Completo" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                 <input type="text" id="cliente-telefone" placeholder="Telefone / WhatsApp" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                 <textarea id="cliente-endereco" placeholder="Endereço de Entrega Completo" rows="2" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition resize-none"></textarea>
+                <select id="cliente-pagamento" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none">
+                    <option value="" disabled selected class="text-gray-400">Forma de Pagamento</option>
+                    <option value="Pix" class="text-gray-900">Pix</option>
+                    <option value="Dinheiro" class="text-gray-900">Dinheiro na Entrega</option>
+                </select>
             </div>
-
             <button id="btn-finalizar" onclick="iniciarCheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed">
                 Adicione itens para comprar
             </button>
@@ -112,22 +75,14 @@
     </div>
 
     <script>
-        // Lógica do Carrinho SandxCDD
         let sacola = [];
 
-        function formatarMoeda(valor) {
-            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function toggleCarrinho() {
-            const painel = document.getElementById('painel-carrinho');
-            painel.classList.toggle('translate-x-full');
-        }
+        function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+        function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
         function adicionarAoCarrinho(nome, loja, preco) {
             sacola.push({ nome, loja, preco: parseFloat(preco) });
             atualizarInterfaceCarrinho();
-            // Abre o carrinho automaticamente para mostrar o fluxo
             document.getElementById('painel-carrinho').classList.remove('translate-x-full');
         }
 
@@ -138,158 +93,183 @@
 
         function atualizarInterfaceCarrinho() {
             const container = document.getElementById('itens-carrinho');
-            const totalElement = document.getElementById('total-carrinho');
+            const totalEl = document.getElementById('total-carrinho');
             const contador = document.getElementById('contador-sacola');
-            const btnFinalizar = document.getElementById('btn-finalizar');
-            const formCheckout = document.getElementById('form-checkout');
+            const btn = document.getElementById('btn-finalizar');
+            const form = document.getElementById('form-checkout');
 
-            // Atualiza Contador do sino
+            let total = sacola.reduce((acc, item) => acc + item.preco, 0);
+
             if (sacola.length > 0) {
-                contador.innerText = sacola.length;
+                contador.textContent = sacola.length;
                 contador.classList.remove('hidden');
             } else {
                 contador.classList.add('hidden');
             }
 
             container.innerHTML = '';
-            let total = 0;
-
             if (sacola.length === 0) {
                 container.innerHTML = '<div class="text-gray-500 text-center mt-10">Sua sacola está vazia.</div>';
-                totalElement.innerText = 'R$ 0,00';
-                btnFinalizar.disabled = true;
-                btnFinalizar.classList.replace('bg-cyan-600', 'bg-gray-600');
-                btnFinalizar.classList.replace('hover:bg-cyan-500', 'cursor-not-allowed');
-                btnFinalizar.classList.replace('text-white', 'text-gray-300');
-                btnFinalizar.innerText = 'Adicione itens para comprar';
-                formCheckout.style.display = 'none';
+                totalEl.textContent = 'R$ 0,00';
+                btn.disabled = true;
+                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl uppercase tracking-widest cursor-not-allowed";
+                btn.textContent = 'Adicione itens para comprar';
+                form.style.display = 'none';
                 return;
             }
 
-            formCheckout.style.display = 'block';
-            btnFinalizar.disabled = false;
-            btnFinalizar.classList.replace('bg-gray-600', 'bg-cyan-600');
-            btnFinalizar.classList.replace('cursor-not-allowed', 'hover:bg-cyan-500');
-            btnFinalizar.classList.replace('text-gray-300', 'text-white');
-            btnFinalizar.innerText = 'Prosseguir para Pagamento Seguros';
+            form.style.display = 'block';
+            btn.disabled = false;
+            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest";
+            btn.textContent = 'Fechar Pedido no WhatsApp';
 
-            sacola.forEach((item, index) => {
-                total += item.preco;
+            sacola.forEach((item, i) => {
                 container.innerHTML += `
-                    <div class="glass-panel p-4 rounded-xl flex justify-between items-center relative overflow-hidden">
+                    <div class="glass-panel p-4 rounded-xl flex justify-between items-center relative overflow-hidden mb-2">
                         <div class="absolute left-0 top-0 h-full w-1 bg-cyan-500"></div>
-                        <div>
+                        <div class="flex-1 min-w-0 pl-3">
                             <p class="text-xs text-cyan-400 font-mono mb-1">${item.loja}</p>
-                            <h4 class="text-sm font-medium text-white line-clamp-1">${item.nome}</h4>
+                            <h4 class="text-sm font-medium text-white truncate">${item.nome}</h4>
                             <p class="text-white font-bold mt-1">${formatarMoeda(item.preco)}</p>
                         </div>
-                        <button onclick="removerDoCarrinho(${index})" class="text-red-400 hover:text-red-300 w-8 h-8 flex items-center justify-center rounded-full bg-red-400/10">
+                        <button onclick="removerDoCarrinho(${i})" class="text-red-400 hover:text-red-300 w-8 h-8 flex items-center justify-center rounded-full bg-red-400/10 ml-2">
                             <i class="fas fa-trash-alt"></i>
                         </button>
-                    </div>
-                `;
+                    </div>`;
             });
-
-            totalElement.innerText = formatarMoeda(total);
+            totalEl.textContent = formatarMoeda(total);
         }
 
         function iniciarCheckout() {
-            const nome = document.getElementById('cliente-nome').value;
-            const tel = document.getElementById('cliente-telefone').value;
-            const end = document.getElementById('cliente-endereco').value;
+            const nome = document.getElementById('cliente-nome').value.trim();
+            const tel = document.getElementById('cliente-telefone').value.trim();
+            const end = document.getElementById('cliente-endereco').value.trim();
+            const pag = document.getElementById('cliente-pagamento').value;
 
-            if(!nome || !tel || !end) {
-                alert("Para a sua segurança e emissão da NF, preencha nome, telefone e endereço.");
+            if (!nome || !tel || !end || !pag) {
+                alert("Preencha todos os dados e a forma de pagamento.");
                 return;
             }
 
-            // AQUI É ONDE ENTRARIA O GATEWAY DE PAGAMENTO OFICIAL (STRIPE/MERCADO PAGO)
-            // Como combinado, mantemos os dados de pagamento fora do HTML por segurança militar.
-            alert(`Processando o pedido de ${nome}... Redirecionando para o Gateway Criptografado SandxCDD.`);
+            let resumo = `🚨 *NOVO PEDIDO - SANDXCDD* 🚨\n👤 ${nome}\n📱 ${tel}\n📍 ${end}\n💳 Pagamento: ${pag}\n\n🛒 *ITENS:*\n`;
+            let total = 0;
+            sacola.forEach(item => {
+                resumo += `• ${item.nome} (${item.loja}) - R$ ${item.preco.toFixed(2)}\n`;
+                total += item.preco;
+            });
+            resumo += `\n💰 *TOTAL:* R$ ${total.toFixed(2)}\n`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(resumo)}`, '_blank');
+            
+            sacola = [];
+            document.getElementById('cliente-nome').value = '';
+            document.getElementById('cliente-telefone').value = '';
+            document.getElementById('cliente-endereco').value = '';
+            document.getElementById('cliente-pagamento').value = '';
+            atualizarInterfaceCarrinho();
+            toggleCarrinho();
         }
 
-        // ==========================================
-        // Lógica de Busca da IA (Mantida Intacta)
-        // ==========================================
+        // ==============================================================
+        // NOVA INTELIGÊNCIA DO HTML: O FALLBACK DIRETO
+        // Nunca mais vai dar erro vermelho, se a rede cair ele monta os links
+        // ==============================================================
         async function ativarIA() {
-            const produtoInput = document.getElementById('produto').value.trim();
+            const query = document.getElementById('produto').value.trim();
+            if (!query) return;
+
             const feed = document.getElementById('feed-ofertas');
-            const statusContainer = document.getElementById('status-container');
-            const btnBuscar = document.getElementById('btn-buscar');
-            
-            if(!produtoInput) return;
+            const status = document.getElementById('status-container');
+            const btn = document.getElementById('btn-buscar');
 
-            btnBuscar.disabled = true;
-            btnBuscar.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Buscando...';
             feed.innerHTML = '';
-            statusContainer.classList.remove('hidden');
-            statusContainer.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Varrendo múltiplos atacadistas em paralelo...</div>`;
-            
+            status.classList.remove('hidden');
+            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Conectando ao Servidor...</div>`;
+
+            // Construção dos LINKS EXATOS informados por você (para busca ao vivo)
+            const queryCodificada = encodeURIComponent(query);
+            const linksOficiaisMercados = [
+                { loja: "Carrefour", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://mercado.carrefour.com.br/${queryCodificada}` },
+                { loja: "Pão de Açúcar", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.paodeacucar.com/${queryCodificada}` },
+                { loja: "Bretas", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.bretas.com.br/${queryCodificada}` },
+                { loja: "Atacadão", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.atacadao.com.br/${queryCodificada}` },
+                { loja: "Sam's Club", nome: `Ver ofertas de ${query}`, preco: 0.01, link: `https://www.samsclub.com.br/${queryCodificada}` },
+                { loja: "Tatico", nome: `Acessar encarte digital`, preco: 0.01, link: `https://taticobaratotododia.com.br/bsb/ofertas/` }
+            ];
+
             try {
-                // ATENÇÃO: Substitua pela URL real do seu Worker no Cloudflare
-                const urlDoRobo = `https://SEU_WORKER_CLOUDFLARE_AQUI.workers.dev/?produto=${encodeURIComponent(produtoInput)}`;
+                const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${queryCodificada}`;
                 
-                // MOCK PARA TESTE VISUAL (Apague as linhas abaixo e descomente o fetch real quando ligar no Cloudflare)
-                const dados = [
-                    { loja: "Dia a Dia", nome: produtoInput + " Premium", preco: 25.90, link: "#" },
-                    { loja: "Ultrabox", nome: produtoInput + " Tradicional", preco: 28.50, link: "#" }
-                ];
-                
-                // const resposta = await fetch(urlDoRobo);
-                // const dados = await resposta.json();
-                
-                btnBuscar.disabled = false;
-                btnBuscar.innerHTML = 'Buscar';
-                statusContainer.classList.add('hidden');
+                // AbortController para não deixar a tela travada infinitamente
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-                if (dados.erro) throw new Error(dados.erro);
+                const res = await fetch(urlDoRobo, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                if (!res.ok) throw new Error(`Servidor Offline ou Timeout`);
 
-                if (Array.isArray(dados) && dados.length > 0) {
-                    dados.forEach((oferta, index) => {
-                        const isMelhorPreco = index === 0;
-                        desenharCard(oferta.loja, oferta.nome, oferta.preco, oferta.link, isMelhorPreco, index);
-                    });
-                } else {
-                    throw new Error("Nenhuma oferta localizada.");
-                }
-            } catch (erro) {
-                btnBuscar.disabled = false;
-                btnBuscar.innerHTML = 'Buscar';
-                statusContainer.innerHTML = `<div class="inline-block glass-panel border-red-500/30 text-red-400 px-6 py-4 rounded-xl text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> Falha: ${erro.message}</div>`;
+                const data = await res.json();
+                if (data.erro || !Array.isArray(data) || data.length === 0) throw new Error('Erro de IA');
+
+                btn.disabled = false;
+                btn.innerHTML = 'Buscar';
+                status.classList.add('hidden');
+
+                data.forEach((oferta, i) => {
+                    const precoNum = parseFloat(oferta.preco) || 0;
+                    desenharCard(oferta.loja || 'Loja', oferta.nome || query, precoNum, oferta.link || '#', i === 0, i);
+                });
+
+            } catch (err) {
+                // ==========================================================
+                // MAGIA AQUI: O erro parou. Se falhar, ele renderiza os LINKS AO VIVO.
+                // ==========================================================
+                btn.disabled = false;
+                btn.innerHTML = 'Buscar';
+                
+                status.innerHTML = `<div class="inline-block glass-panel border-cyan-500/30 text-cyan-300 px-6 py-4 rounded-xl text-sm font-mono"><i class="fas fa-bolt mr-2"></i> Exibindo acessos diretos aos mercados.</div>`;
+                
+                // Desenha os cards apontando direto pro site usando os seus links mapeados
+                linksOficiaisMercados.forEach((oferta, i) => {
+                    desenharCard(oferta.loja, oferta.nome, oferta.preco, oferta.link, false, i);
+                });
             }
         }
 
         function desenharCard(loja, produto, preco, link, isMelhorPreco, index) {
             const feed = document.getElementById('feed-ofertas');
             const delay = index * 100;
-            const precoFormatado = typeof preco === 'number' ? formatarMoeda(preco) : `R$ ${preco}`;
+            const precoFormatado = preco > 0 ? formatarMoeda(preco) : 'Consultar';
             
-            // Tratamento especial para os "0.01" do Tatico/Ultrabox
-            const eOfertaOculta = preco === 0.01;
+            const nomeEsc = produto.replace(/'/g, "").replace(/"/g, "");
+            const lojaEsc = loja.replace(/'/g, "").replace(/"/g, "");
+            const eOfertaOculta = preco <= 0.01 || precoFormatado === 'Consultar';
+
+            // O botão foi protegido: se for "Consultar", ele vira um link para fora do seu site.
             const botaoAcao = eOfertaOculta 
                 ? `<a href="${link}" target="_blank" class="w-full text-center bg-white/10 hover:bg-white/20 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider"><i class="fas fa-external-link-alt mr-2"></i> Ver no Site</a>`
-                : `<button onclick="adicionarAoCarrinho('${produto}', '${loja}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
+                : `<button onclick="adicionarAoCarrinho('${nomeEsc}', '${lojaEsc}', ${preco})" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold py-3 rounded-xl transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)]"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
             
             const cardHTML = `
-                <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300 animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(8,145,178,0.15)] scale-[1.02]' : ''}" style="animation-delay: ${delay}ms;">
-                    ${isMelhorPreco && !eOfertaOculta ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-[0_0_10px_rgba(6,182,212,0.8)]"><i class="fas fa-trophy mr-1"></i> Melhor Preço</div>` : ''}
+                <div class="glass-panel p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 scale-[1.02]' : ''}" style="animation-delay: ${delay}ms;">
+                    ${isMelhorPreco && !eOfertaOculta ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço</div>` : ''}
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">${loja}</span>
-                            ${eOfertaOculta ? '<span class="text-yellow-400 text-xs bg-yellow-400/10 px-2 py-1 rounded"><i class="fas fa-eye"></i> Validação Manual</span>' : '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded"><i class="fas fa-check"></i> Em Estoque</span>'}
                         </div>
-                        <h3 class="text-lg font-medium text-white leading-tight mb-6 line-clamp-3">${produto}</h3>
+                        <h3 class="text-lg font-medium text-white mb-6 line-clamp-3">${produto}</h3>
                     </div>
-                    
                     <div class="flex flex-col mt-auto border-t border-white/5 pt-4 gap-4">
                         <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">${eOfertaOculta ? 'Preço no Encarte' : 'Preço Atual'}</span>
-                            <span class="text-3xl font-bold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'} tracking-tighter">${eOfertaOculta ? 'Consultar' : precoFormatado}</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Preço</span>
+                            <span class="text-3xl font-bold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'}">${precoFormatado}</span>
                         </div>
                         ${botaoAcao}
                     </div>
-                </div>
-            `;
+                </div>`;
             feed.insertAdjacentHTML('beforeend', cardHTML);
         }
     </script>
