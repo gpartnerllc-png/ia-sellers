@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mercado IA</title>
+    <title>Mercado IA | Marketplace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="https://mail.google.com/favicon.ico" type="image/x-icon" />
@@ -41,15 +41,15 @@
     <div id="tela-login" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md transition-opacity duration-500">
         <div class="glass-panel bg-black/60 p-10 rounded-2xl w-full max-w-md shadow-[0_0_40px_rgba(8,145,178,0.2)] border-cyan-500/30">
             <div class="text-center mb-8">
-                <i class="fas fa-fingerprint text-5xl text-cyan-400 mb-4"></i>
-                <h2 class="text-3xl font-bold text-white">Acesso Operacional</h2>
-                <p class="text-gray-400 text-sm mt-2">Identifique a sua loja para operar o sistema.</p>
+                <i class="fas fa-user-circle text-5xl text-cyan-400 mb-4"></i>
+                <h2 class="text-3xl font-bold text-white">Bem-vindo(a)</h2>
+                <p class="text-gray-400 text-sm mt-2">Cadastre-se rapidamente para acessar as ofertas dos mercados e fazer seus pedidos.</p>
             </div>
             <div class="space-y-4">
-                <input type="text" id="login-usuario" placeholder="ID da Loja (ex: admin, atacadao01)" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition">
-                <input type="password" id="login-senha" placeholder="Senha de Acesso" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition">
-                <button onclick="fazerLogin()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest mt-4">
-                    Entrar no Sistema
+                <input type="text" id="login-nome" placeholder="Seu Nome Completo" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition">
+                <input type="tel" id="login-telefone" placeholder="Seu WhatsApp (com DDD)" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition">
+                <button onclick="fazerCadastroCliente()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest mt-4 shadow-[0_0_15px_rgba(8,145,178,0.5)]">
+                    Acessar Supermercados
                 </button>
             </div>
         </div>
@@ -57,8 +57,9 @@
 
     <div id="app-principal" class="w-full flex-col items-center pt-16 hidden">
         
-        <button onclick="fazerLogout()" class="fixed top-6 left-6 z-50 glass-panel p-3 px-5 rounded-full text-gray-400 hover:text-red-400 hover:bg-red-900/20 transition-all text-sm font-bold flex items-center gap-2">
-            <i class="fas fa-sign-out-alt"></i> Sair da <span id="nome-loja-header">Loja</span>
+        <button onclick="fazerLogout()" class="fixed top-6 left-6 z-50 glass-panel p-3 px-5 rounded-full text-gray-300 hover:text-red-400 hover:bg-red-900/20 transition-all text-sm font-bold flex items-center gap-2 border-white/10">
+            <i class="fas fa-user"></i> <span id="display-nome-cliente">Cliente</span>
+            <i class="fas fa-sign-out-alt ml-2 opacity-50"></i>
         </button>
 
         <button onclick="toggleCarrinho()" class="fixed top-6 right-6 z-50 glass-panel p-4 rounded-full text-cyan-400 hover:text-white hover:bg-cyan-600/30 transition-all shadow-[0_0_15px_rgba(8,145,178,0.4)]">
@@ -70,17 +71,17 @@
         <div class="w-full max-w-6xl px-6 relative z-10 mx-auto">
             <header class="text-center mb-16">
                 <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel text-xs text-cyan-400 font-mono mb-6 uppercase tracking-widest border-cyan-500/30 bg-black/40">
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Terminal Operacional: <span id="display-nome-loja" class="text-white font-bold ml-1">Carregando...</span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Mercado IA Delivery
                 </div>
                 <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">Ofertas e Cotação</h1>
                 <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light">
-                    Montamos sua Sexta Básica e Enviamos os Pedidos Direto para sua Casa.
+                    Escolha as ofertas, monte sua sacola e os atacadistas parceiros entregam na sua porta.
                 </p>
             </header>
 
             <div class="glass-panel p-2 rounded-2xl flex items-center shadow-2xl max-w-3xl mx-auto mb-16 relative hover:border-cyan-500/50 transition-colors duration-300 bg-black/60">
                 <i class="fas fa-search text-gray-400 ml-4 text-xl"></i>
-                <input type="text" id="produto" placeholder="Ex: Feijão Carioca 1kg" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-lg placeholder-gray-500 focus:ring-0">
+                <input type="text" id="produto" placeholder="Ex: Cerveja Heineken Lata" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-lg placeholder-gray-500 focus:ring-0">
                 <button onclick="ativarIA()" id="btn-buscar" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(8,145,178,0.5)] min-w-[140px]">
                     Buscar
                 </button>
@@ -105,9 +106,10 @@
             </div>
             
             <div class="space-y-3 mb-6" id="form-checkout" style="display: none;">
-                <input type="text" id="cliente-nome" placeholder="Nome Completo do Cliente" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
-                <input type="text" id="cliente-telefone" placeholder="Telefone / WhatsApp" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
+                <input type="text" id="cliente-nome" readonly class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-gray-400 outline-none cursor-not-allowed">
+                <input type="text" id="cliente-telefone" readonly class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-gray-400 outline-none cursor-not-allowed">
                 
+                <p class="text-cyan-400 text-xs uppercase tracking-widest mt-2 font-bold mb-1">Endereço de Entrega</p>
                 <div class="flex gap-2">
                     <input type="text" id="cliente-cep" placeholder="CEP" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
                     <input type="text" id="cliente-rua" placeholder="Rua / Avenida" class="w-2/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition">
@@ -119,13 +121,14 @@
                 </div>
 
                 <select id="cliente-pagamento" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none">
-                    <option value="" disabled selected class="text-gray-400">Forma de Pagamento</option>
-                    <option value="Pix" class="text-gray-900">Pagamento via Pix</option>
-                    <option value="Dinheiro" class="text-gray-900">Dinheiro na Entrega</option>
+                    <option value="" disabled selected class="text-gray-400">Forma de Pagamento na Entrega</option>
+                    <option value="Pix" class="text-gray-900">Pix (Para o entregador)</option>
+                    <option value="Dinheiro" class="text-gray-900">Dinheiro</option>
+                    <option value="Cartão" class="text-gray-900">Cartão de Crédito/Débito</option>
                 </select>
             </div>
 
-            <button id="btn-finalizar" onclick="iniciarCheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2">
+            <button id="btn-finalizar" onclick="iniciarCheckoutMarketplace()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)]">
                 Adicione itens para comprar
             </button>
         </div>
@@ -133,88 +136,63 @@
 
     <script>
         // ==============================================================
-        // 1. BANCO DE DADOS DE LOJAS (ARQUITETURA MULTI-TENANT)
-        // Aqui você cadastra os seus clientes. Cada um tem seu próprio Telegram.
+        // 1. GERENCIAMENTO DA SESSÃO DO CLIENTE
         // ==============================================================
-        const clientesSaaS = {
-            "admin": { 
-                senha: "323619", 
-                nomeExibicao: "Central Mestre", 
-                botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", 
-                chatId: "1703808186" 
-            },
-            "atacadao01": { 
-                senha: "senhaatacadao", 
-                nomeExibicao: "Atacadão - Filial Centro", 
-                botToken: "TOKEN_DO_BOT_DO_ATACADAO_AQUI", // Exemplo de outro bot
-                chatId: "CHAT_ID_DO_GERENTE_DO_ATACADAO" 
-            },
-            "tatico_sul": { 
-                senha: "senhatatico", 
-                nomeExibicao: "Tatico - Unidade Sul", 
-                botToken: "TOKEN_DO_BOT_DO_TATICO_AQUI", 
-                chatId: "CHAT_ID_DO_TATICO" 
-            }
-            // Pode adicionar quantas lojas quiser aqui!
-        };
+        let clienteLogado = null;
 
-        // ==============================================================
-        // 2. SISTEMA DE LOGIN E SESSÃO
-        // ==============================================================
-        let dadosLojaAtual = null;
-
-        // Verifica se o usuário já fez login antes ao carregar a página
         window.onload = function() {
-            const sessao = localStorage.getItem("mercadoIA_sessao");
+            const sessao = localStorage.getItem("mercadoIA_cliente");
             if (sessao) {
-                dadosLojaAtual = JSON.parse(sessao);
-                liberarSistema();
+                clienteLogado = JSON.parse(sessao);
+                liberarAcessoCliente();
             }
         };
 
-        function fazerLogin() {
-            const usuario = document.getElementById('login-usuario').value.trim();
-            const senha = document.getElementById('login-senha').value.trim();
+        function fazerCadastroCliente() {
+            const nome = document.getElementById('login-nome').value.trim();
+            const tel = document.getElementById('login-telefone').value.trim();
 
-            if (clientesSaaS[usuario] && clientesSaaS[usuario].senha === senha) {
-                // Login com Sucesso
-                dadosLojaAtual = clientesSaaS[usuario];
-                // Salva no navegador para ele não precisar logar toda hora
-                localStorage.setItem("mercadoIA_sessao", JSON.stringify(dadosLojaAtual));
-                liberarSistema();
-            } else {
-                alert("❌ Acesso Negado. ID da loja ou senha incorretos.");
+            if (nome.length < 3 || tel.length < 8) {
+                alert("⚠️ Por favor, insira seu nome completo e um número de WhatsApp válido.");
+                return;
             }
+
+            clienteLogado = { nome: nome, telefone: tel };
+            localStorage.setItem("mercadoIA_cliente", JSON.stringify(clienteLogado));
+            liberarAcessoCliente();
         }
 
         function fazerLogout() {
-            localStorage.removeItem("mercadoIA_sessao");
-            dadosLojaAtual = null;
+            localStorage.removeItem("mercadoIA_cliente");
+            clienteLogado = null;
             document.getElementById('app-principal').classList.remove('flex');
             document.getElementById('app-principal').classList.add('hidden');
             document.getElementById('tela-login').classList.remove('hidden');
-            document.getElementById('login-senha').value = '';
+            document.getElementById('login-nome').value = '';
+            document.getElementById('login-telefone').value = '';
         }
 
-        function liberarSistema() {
-            // Esconde o login e mostra o sistema
+        function liberarAcessoCliente() {
             document.getElementById('tela-login').classList.add('hidden');
             document.getElementById('app-principal').classList.remove('hidden');
             document.getElementById('app-principal').classList.add('flex');
             
-            // Personaliza a tela com o nome da loja logada
-            document.getElementById('display-nome-loja').innerText = dadosLojaAtual.nomeExibicao;
-            document.getElementById('nome-loja-header').innerText = dadosLojaAtual.nomeExibicao.split(' ')[0]; // Pega só o primeiro nome pro botão de sair
+            // Personaliza o portal
+            const primeiroNome = clienteLogado.nome.split(' ')[0];
+            document.getElementById('display-nome-cliente').innerText = `Olá, ${primeiroNome}`;
+            
+            // Preenche os dados do carrinho automaticamente (readonly)
+            document.getElementById('cliente-nome').value = clienteLogado.nome;
+            document.getElementById('cliente-telefone').value = clienteLogado.telefone;
         }
 
         // ==============================================================
-        // LÓGICA DO CARRINHO (MANTIDA INTACTA)
+        // LÓGICA DO CARRINHO
         // ==============================================================
         let sacola = [];
         let timerSacola;
 
         function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
-        
         function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
         document.getElementById("produto").addEventListener("keypress", function(event) {
@@ -224,6 +202,7 @@
         function adicionarAoCarrinho(nome, loja, preco) {
             sacola.push({ nome, loja, preco: parseFloat(preco) });
             atualizarInterfaceCarrinho();
+            
             const painel = document.getElementById('painel-carrinho');
             painel.classList.remove('translate-x-full');
             if (timerSacola) clearTimeout(timerSacola);
@@ -265,7 +244,7 @@
             form.style.display = 'block';
             btn.disabled = false;
             btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2";
-            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Pedido';
+            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Compras';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
@@ -285,11 +264,23 @@
         }
 
         // ==============================================================
-        // 3. CHECKOUT DINÂMICO (Usa os dados do usuário logado)
+        // 2. CHECKOUT INTELIGENTE (ROTEAMENTO MARKETPLACE)
+        // O sistema lê a sacola, divide os pedidos e manda para os mercados corretos.
         // ==============================================================
-        async function iniciarCheckout() {
-            const nome = document.getElementById('cliente-nome').value.trim();
-            const tel = document.getElementById('cliente-telefone').value.trim();
+        
+        // Dicionário de configuração dos Robôs do Telegram de cada Supermercado Parceiro
+        // NOTA: Para testes, coloquei o SEU token/chat em todos. Assim, se você pedir 1 do Carrefour e 1 do Atacadão, vai chegar 2 mensagens diferentes no seu celular!
+        const telegramDosMercados = {
+            "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+            "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+            "Bretas": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+            "Pão de Açúcar": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+            "Sam's Club": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+            "Tatico": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+            "Dia a Dia": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
+        };
+
+        async function iniciarCheckoutMarketplace() {
             const cep = document.getElementById('cliente-cep').value.trim();
             const rua = document.getElementById('cliente-rua').value.trim();
             const numero = document.getElementById('cliente-numero').value.trim();
@@ -297,53 +288,63 @@
             const pag = document.getElementById('cliente-pagamento').value;
             const btn = document.getElementById('btn-finalizar');
 
-            if (!nome || !tel || !cep || !rua || !numero || !pag) {
-                alert("Preencha todos os dados obrigatórios do cliente.");
+            if (!cep || !rua || !numero || !pag) {
+                alert("Preencha todos os dados do endereço de entrega.");
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processando...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Roteando Pedidos...';
 
-            let resumo = `🚨 *NOVO PEDIDO: ${dadosLojaAtual.nomeExibicao.toUpperCase()}* 🚨\n\n`;
-            resumo += `👤 *Cliente:* ${nome}\n`;
-            resumo += `📱 *Telefone:* ${tel}\n`;
-            resumo += `📍 *Endereço:* ${rua}, Nº ${numero}\n`;
-            if (bairro) resumo += `🏘️ *Bairro/Compl:* ${bairro}\n`;
-            resumo += `📮 *CEP:* ${cep}\n`;
-            resumo += `💳 *Pagamento:* ${pag}\n\n`;
-            resumo += `🛒 *ITENS DA SACOLA:*\n`;
-
-            let total = 0;
+            // PASSO A: Agrupa os itens da sacola por Loja
+            const pedidosPorLoja = {};
             sacola.forEach(item => {
-                resumo += `• ${item.nome} (${item.loja}) - R$ ${item.preco.toFixed(2)}\n`;
-                total += item.preco;
+                if (!pedidosPorLoja[item.loja]) {
+                    pedidosPorLoja[item.loja] = [];
+                }
+                pedidosPorLoja[item.loja].push(item);
             });
-            resumo += `\n💰 *VALOR TOTAL:* R$ ${total.toFixed(2)}\n`;
 
-            // A MÁGICA DO SaaS ESTÁ AQUI: Ele não usa mais chave fixa, usa a chave de quem fez o login!
-            const botToken = dadosLojaAtual.botToken;
-            const chatId = dadosLojaAtual.chatId;
-            const urlTelegram = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Entrega:* ${rua}, Nº ${numero}\n🏘️ *Bairro:* ${bairro}\n📮 *CEP:* ${cep}\n💳 *Forma de Pagto:* ${pag}\n\n`;
 
             try {
-                const response = await fetch(urlTelegram, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: resumo,
-                        parse_mode: "Markdown"
-                    })
+                // PASSO B: Envia uma requisição separada para o gerente de cada loja
+                const promessasDeEnvio = Object.keys(pedidosPorLoja).map(async (nomeDaLoja) => {
+                    const itensDestaLoja = pedidosPorLoja[nomeDaLoja];
+                    let totalDestaLoja = 0;
+                    
+                    let resumoLoja = `🚨 *NOVA SOLICITAÇÃO DE DELIVERY - ${nomeDaLoja.toUpperCase()}* 🚨\n\n`;
+                    resumoLoja += cabecalhoEndereco;
+                    resumoLoja += `🛒 *PRODUTOS SOLICITADOS NA SUA UNIDADE:*\n`;
+
+                    itensDestaLoja.forEach(produto => {
+                        resumoLoja += `• ${produto.nome} - R$ ${produto.preco.toFixed(2)}\n`;
+                        totalDestaLoja += produto.preco;
+                    });
+                    resumoLoja += `\n💰 *VALOR A RECEBER:* R$ ${totalDestaLoja.toFixed(2)}\n`;
+
+                    // Pega as credenciais da loja ou cai no admin se não achar
+                    const credenciais = telegramDosMercados[nomeDaLoja] || telegramDosMercados["Atacadão"];
+                    const urlTelegram = `https://api.telegram.org/bot${credenciais.botToken}/sendMessage`;
+
+                    return fetch(urlTelegram, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: credenciais.chatId,
+                            text: resumoLoja,
+                            parse_mode: "Markdown"
+                        })
+                    });
                 });
 
-                if (!response.ok) throw new Error("Erro de comunicação com o Telegram");
+                // Aguarda todos os Telegrams serem despachados ao mesmo tempo
+                await Promise.all(promessasDeEnvio);
 
-                alert("✅ Pedido despachado com sucesso para a central: " + dadosLojaAtual.nomeExibicao);
+                alert("✅ Sucesso! Seus pedidos foram roteados e enviados diretamente para os atacadistas escolhidos. Aguarde a entrega na sua residência.");
 
+                // Limpeza completa
                 sacola = [];
-                document.getElementById('cliente-nome').value = '';
-                document.getElementById('cliente-telefone').value = '';
                 document.getElementById('cliente-cep').value = '';
                 document.getElementById('cliente-rua').value = '';
                 document.getElementById('cliente-numero').value = '';
@@ -354,9 +355,9 @@
                 document.getElementById('painel-carrinho').classList.add('translate-x-full');
 
             } catch (error) {
-                alert("❌ Erro ao enviar o pedido. Verifique as chaves do Telegram da loja.");
+                alert("❌ Ocorreu um erro ao despachar os pedidos. Tente novamente.");
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Pedido';
+                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Compras';
             }
         }
 
@@ -372,10 +373,10 @@
             const btn = document.getElementById('btn-buscar');
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Auditando Mercados';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Buscando no Atacado';
             feed.innerHTML = '';
             status.classList.remove('hidden');
-            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> A IA está analisando os preços em tempo real...</div>`;
+            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Lendo estoques das lojas da sua região...</div>`;
 
             try {
                 const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}`;
@@ -405,8 +406,8 @@
                 btn.disabled = false;
                 btn.innerHTML = 'Buscar';
                 let msg = err.message;
-                if (err.name === 'AbortError') msg = "O servidor demorou muito para conectar. Tente novamente.";
-                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 bg-red-900/20 text-red-300 px-6 py-5 rounded-xl text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> Falha: ${msg}</div>`;
+                if (err.name === 'AbortError') msg = "A busca demorou muito. Tente novamente.";
+                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 bg-red-900/20 text-red-300 px-6 py-5 rounded-xl text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> ${msg}</div>`;
             }
         }
 
@@ -424,13 +425,13 @@
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest drop-shadow">${loja}</span>
-                            <span class="text-green-400 text-xs bg-green-400/20 px-2 py-1 rounded backdrop-blur-sm"><i class="fas fa-check"></i> Auditado</span>
+                            <span class="text-green-400 text-xs bg-green-400/20 px-2 py-1 rounded backdrop-blur-sm"><i class="fas fa-store"></i> Em Estoque</span>
                         </div>
                         <h3 class="text-lg font-medium text-white mb-6 line-clamp-3 drop-shadow-md">${produto}</h3>
                     </div>
                     <div class="flex flex-col mt-auto border-t border-white/10 pt-4 gap-4">
                         <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-300 uppercase tracking-widest mb-1 drop-shadow">Preço Atualizado</span>
+                            <span class="text-[10px] text-gray-300 uppercase tracking-widest mb-1 drop-shadow">Preço na Loja</span>
                             <span class="text-3xl font-bold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'} drop-shadow-lg">${precoFormatado}</span>
                         </div>
                         ${botaoAcao}
@@ -439,7 +440,7 @@
             feed.insertAdjacentHTML('beforeend', cardHTML);
         }
 
-        // ESCUDO B2B (Anti Cópia)
+        // ESCUDO B2B (Militar - Anti Cópia)
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.onkeydown = function(e) {
             if (e.keyCode === 123) return false;
