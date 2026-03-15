@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mercado IA | Marketplace</title>
+    <title>Mercado IA | Marketplace Nacional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="icon" href="https://mail.google.com/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="https://www.compresacola.com.br/wp-content/uploads/2021/05/cropped-favicon-32x32.png" sizes="32x32" />
     <script>
         tailwind.config = { theme: { extend: { colors: { darkBg: '#050505', glassBg: 'rgba(20, 20, 20, 0.7)' } } } }
     </script>
@@ -23,12 +23,7 @@
             -ms-user-select: none;
             user-select: none;
         }
-        input, textarea, select, button {
-            -webkit-user-select: auto;
-            -moz-user-select: auto;
-            -ms-user-select: auto;
-            user-select: auto;
-        }
+        input, textarea, select, button { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -41,13 +36,21 @@
     <div id="tela-login" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md transition-opacity duration-500">
         <div class="glass-panel bg-black/60 p-10 rounded-2xl w-full max-w-md shadow-[0_0_40px_rgba(8,145,178,0.2)] border-cyan-500/30 mx-4">
             <div class="text-center mb-8">
-                <i class="fas fa-user-circle text-5xl text-cyan-400 mb-4"></i>
-                <h2 class="text-3xl font-bold text-white">Bem-vindo(a)</h2>
-                <p class="text-gray-400 text-sm mt-2">Cadastre-se rapidamente para acessar as ofertas dos mercados e fazer seus pedidos.</p>
+                <i class="fas fa-map-marker-alt text-5xl text-cyan-400 mb-4"></i>
+                <h2 class="text-3xl font-bold text-white">Mercado Local</h2>
+                <p class="text-gray-400 text-sm mt-2">Escolha sua região para ver os mercados disponíveis.</p>
             </div>
             <div class="space-y-4">
                 <input type="text" id="login-nome" placeholder="Seu Nome Completo" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition">
                 <input type="tel" id="login-telefone" placeholder="Seu WhatsApp (com DDD)" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition">
+                
+                <select id="login-regiao" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-gray-300 outline-none focus:border-cyan-500 transition appearance-none">
+                    <option value="" disabled selected>Selecione sua Cidade/Região</option>
+                    <option value="brasilia" class="bg-black text-white">Brasília - DF</option>
+                    <option value="aguas_lindas" class="bg-black text-white">Águas Lindas - GO</option>
+                    <option value="maracai" class="bg-black text-white">Maracaí - SP</option>
+                </select>
+
                 <button onclick="fazerCadastroCliente()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest mt-4 shadow-[0_0_15px_rgba(8,145,178,0.5)]">
                     Acessar Supermercados
                 </button>
@@ -58,40 +61,36 @@
     <div id="app-principal" class="w-full flex-col items-center hidden">
         
         <nav class="fixed top-0 left-0 w-full z-40 glass-panel bg-[#050505]/95 border-b border-white/10 px-4 py-3 flex justify-between items-center shadow-lg">
-            
             <button onclick="fazerLogout()" class="flex items-center gap-3 text-gray-300 hover:text-red-400 transition-colors group">
                 <div class="bg-white/5 group-hover:bg-red-500/20 p-2 rounded-full transition-colors"><i class="fas fa-sign-out-alt"></i></div>
                 <div class="flex flex-col text-left">
                     <span id="display-nome-cliente" class="text-xs md:text-sm font-bold text-cyan-400 leading-tight">Olá, Cliente</span>
-                    <span class="text-[10px] uppercase tracking-widest opacity-60">Trocar Usuário</span>
+                    <span id="display-regiao" class="text-[10px] uppercase tracking-widest opacity-80 text-yellow-500"><i class="fas fa-map-pin"></i> Região</span>
                 </div>
             </button>
-
             <div class="hidden sm:flex flex-col items-center justify-center">
                 <span class="text-white font-extrabold tracking-widest text-lg flex items-center gap-2 drop-shadow-md">
                     <i class="fas fa-shopping-basket text-cyan-500"></i> MERCADO IA
                 </span>
             </div>
-
             <button onclick="toggleCarrinho()" class="relative flex items-center gap-2 p-2 text-cyan-400 hover:text-white transition-colors bg-white/5 hover:bg-cyan-600/30 rounded-xl border border-white/5">
                 <i class="fas fa-shopping-bag text-xl md:text-2xl"></i>
                 <span class="hidden md:inline text-sm font-bold uppercase tracking-wider pr-1">Sacola</span>
                 <span id="contador-sacola" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden shadow-md border border-[#050505]">0</span>
             </button>
-
         </nav>
 
         <div class="w-full max-w-6xl px-6 relative z-10 mx-auto mt-28">
             <header class="text-center mb-12">
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">Mercado IA | Marketplace Delivery</h1>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">Mercado IA | Marketplace Nacional Delivery</h1>
                 <p class="text-gray-300 text-base md:text-lg max-w-2xl mx-auto font-light">
-                    Escolha as ofertas, monte sua sacola e os atacadistas parceiros entregam na sua porta.
+                    Escolha as ofertas, monte sua sacola e os atacadistas da sua cidade entregam na sua porta.
                 </p>
             </header>
 
-            <div class="glass-panel p-2 rounded-2xl flex items-center shadow-2xl max-w-3xl mx-auto mb-12 relative hover:border-cyan-500/50 transition-colors duration-300 bg-black/60">
+            <div class="glass-panel p-2 rounded-2xl flex items-center shadow-2xl max-w-3xl mx-auto mb-12 relative bg-black/60 hover:border-cyan-500/50 transition-colors duration-300">
                 <i class="fas fa-search text-gray-400 ml-4 text-xl"></i>
-                <input type="text" id="produto" placeholder="O que você precisa hoje? (Ex: Leite)" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-base md:text-lg placeholder-gray-500 focus:ring-0">
+                <input type="text" id="produto" placeholder="O que você precisa hoje? (Ex: Arroz 5kg)" class="w-full bg-transparent border-none outline-none text-white px-4 py-4 text-base md:text-lg placeholder-gray-500 focus:ring-0">
                 <button onclick="ativarIA()" id="btn-buscar" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-6 md:px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(8,145,178,0.5)] min-w-[100px] md:min-w-[140px]">
                     Buscar
                 </button>
@@ -146,9 +145,15 @@
 
     <script>
         // ==============================================================
-        // 1. GERENCIAMENTO DA SESSÃO DO CLIENTE
+        // GERENCIAMENTO DA SESSÃO DO CLIENTE
         // ==============================================================
         let clienteLogado = null;
+
+        const nomesRegioes = {
+            "brasilia": "Brasília - DF",
+            "aguas_lindas": "Águas Lindas - GO",
+            "maracai": "Maracaí - SP"
+        };
 
         window.onload = function() {
             const sessao = localStorage.getItem("mercadoIA_cliente");
@@ -161,13 +166,14 @@
         function fazerCadastroCliente() {
             const nome = document.getElementById('login-nome').value.trim();
             const tel = document.getElementById('login-telefone').value.trim();
+            const regiao = document.getElementById('login-regiao').value;
 
-            if (nome.length < 3 || tel.length < 8) {
-                alert("⚠️ Por favor, insira seu nome completo e um número de WhatsApp válido.");
+            if (nome.length < 3 || tel.length < 8 || !regiao) {
+                alert("⚠️ Preencha nome, WhatsApp e Selecione sua Cidade.");
                 return;
             }
 
-            clienteLogado = { nome: nome, telefone: tel };
+            clienteLogado = { nome: nome, telefone: tel, regiao: regiao };
             localStorage.setItem("mercadoIA_cliente", JSON.stringify(clienteLogado));
             liberarAcessoCliente();
         }
@@ -180,6 +186,7 @@
             document.getElementById('tela-login').classList.remove('hidden');
             document.getElementById('login-nome').value = '';
             document.getElementById('login-telefone').value = '';
+            document.getElementById('login-regiao').value = '';
         }
 
         function liberarAcessoCliente() {
@@ -189,6 +196,7 @@
             
             const primeiroNome = clienteLogado.nome.split(' ')[0];
             document.getElementById('display-nome-cliente').innerText = `Olá, ${primeiroNome}`;
+            document.getElementById('display-regiao').innerHTML = `<i class="fas fa-map-pin"></i> ${nomesRegioes[clienteLogado.regiao]}`;
             
             document.getElementById('cliente-nome').value = clienteLogado.nome;
             document.getElementById('cliente-telefone').value = clienteLogado.telefone;
@@ -210,7 +218,6 @@
         function adicionarAoCarrinho(nome, loja, preco) {
             sacola.push({ nome, loja, preco: parseFloat(preco) });
             atualizarInterfaceCarrinho();
-            
             const painel = document.getElementById('painel-carrinho');
             painel.classList.remove('translate-x-full');
             if (timerSacola) clearTimeout(timerSacola);
@@ -252,7 +259,7 @@
             form.style.display = 'block';
             btn.disabled = false;
             btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2";
-            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Compras';
+            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Pedidos';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
@@ -272,16 +279,23 @@
         }
 
         // ==============================================================
-        // 2. CHECKOUT INTELIGENTE (ROTEAMENTO MARKETPLACE)
+        // CENTRAL DE ROTEAMENTO (O Telegram recebe por Região e Loja)
+        // Aqui você coloca o Bot de cada gerente local!
         // ==============================================================
-        const telegramDosMercados = {
-            "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-            "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-            "Bretas": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-            "Pão de Açúcar": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-            "Sam's Club": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-            "Tatico": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-            "Dia a Dia": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
+        const franquiasTelegram = {
+            "brasilia": {
+                "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+                "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+                "Tatico": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
+            },
+            "aguas_lindas": {
+                "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+                "Dia a Dia": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
+            },
+            "maracai": {
+                "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
+                "Mercado Avenida": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
+            }
         };
 
         async function iniciarCheckoutMarketplace() {
@@ -298,7 +312,7 @@
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Roteando Pedidos...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Despachando...';
 
             const pedidosPorLoja = {};
             sacola.forEach(item => {
@@ -306,7 +320,7 @@
                 pedidosPorLoja[item.loja].push(item);
             });
 
-            const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Entrega:* ${rua}, Nº ${numero}\n🏘️ *Bairro:* ${bairro}\n📮 *CEP:* ${cep}\n💳 *Forma de Pagto:* ${pag}\n\n`;
+            const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Praça:* ${nomesRegioes[clienteLogado.regiao]}\n📍 *Entrega:* ${rua}, Nº ${numero}\n🏘️ *Bairro:* ${bairro}\n📮 *CEP:* ${cep}\n💳 *Forma de Pagto:* ${pag}\n\n`;
 
             try {
                 const promessasDeEnvio = Object.keys(pedidosPorLoja).map(async (nomeDaLoja) => {
@@ -323,7 +337,10 @@
                     });
                     resumoLoja += `\n💰 *VALOR A RECEBER:* R$ ${totalDestaLoja.toFixed(2)}\n`;
 
-                    const credenciais = telegramDosMercados[nomeDaLoja] || telegramDosMercados["Atacadão"];
+                    // Pega a credencial da região do cliente e da loja específica (Se não achar, usa um fallback de emergência)
+                    let credenciais = franquiasTelegram[clienteLogado.regiao][nomeDaLoja];
+                    if (!credenciais) credenciais = { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" };
+
                     const urlTelegram = `https://api.telegram.org/bot${credenciais.botToken}/sendMessage`;
 
                     return fetch(urlTelegram, {
@@ -335,7 +352,7 @@
 
                 await Promise.all(promessasDeEnvio);
 
-                alert("✅ Sucesso! Seus pedidos foram roteados e enviados diretamente para os atacadistas escolhidos. Aguarde a entrega na sua residência.");
+                alert("✅ Pedidos enviados! Os atacadistas da sua região já receberam a ordem de entrega.");
 
                 sacola = [];
                 document.getElementById('cliente-cep').value = '';
@@ -348,14 +365,14 @@
                 document.getElementById('painel-carrinho').classList.add('translate-x-full');
 
             } catch (error) {
-                alert("❌ Ocorreu um erro ao despachar os pedidos. Tente novamente.");
+                alert("❌ Ocorreu um erro na rede. Tente finalizar novamente.");
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Compras';
+                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Pedidos';
             }
         }
 
         // ==============================================================
-        // INTEGRAÇÃO CLOUDFLARE E UI
+        // INTEGRAÇÃO CLOUDFLARE (AVISA AO SERVIDOR QUAL É A REGIÃO)
         // ==============================================================
         async function ativarIA() {
             const query = document.getElementById('produto').value.trim();
@@ -366,13 +383,15 @@
             const btn = document.getElementById('btn-buscar');
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Buscando...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Lendo Estoques...';
             feed.innerHTML = '';
             status.classList.remove('hidden');
-            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Lendo estoques das lojas da sua região...</div>`;
+            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-sm"><i class="fas fa-radar fa-spin text-xl"></i> Varrendo mercados da região de ${nomesRegioes[clienteLogado.regiao]}...</div>`;
 
             try {
-                const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}`;
+                // A MÁGICA AQUI: Manda pro servidor qual a região escolhida pelo cliente!
+                const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}&regiao=${encodeURIComponent(clienteLogado.regiao)}`;
+                
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 18000);
 
@@ -387,7 +406,7 @@
                 status.classList.add('hidden');
 
                 if (data.erro) throw new Error(data.erro);
-                if (!Array.isArray(data) || data.length === 0) throw new Error('A IA não conseguiu estruturar as ofertas.');
+                if (!Array.isArray(data) || data.length === 0) throw new Error('Sem estoque.');
 
                 data.forEach((oferta, i) => {
                     const precoNum = parseFloat(oferta.preco) || 0;
@@ -414,7 +433,7 @@
             
             const cardHTML = `
                 <div class="glass-panel bg-black/60 p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(8,145,178,0.15)] scale-[1.02]' : ''}">
-                    ${isMelhorPreco ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço</div>` : ''}
+                    ${isMelhorPreco ? `<div class="absolute -top-3 left-6 bg-cyan-500 text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Melhor Preço Local</div>` : ''}
                     <div>
                         <div class="flex justify-between items-start mb-4 mt-2">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest drop-shadow">${loja}</span>
@@ -433,7 +452,7 @@
             feed.insertAdjacentHTML('beforeend', cardHTML);
         }
 
-        // ESCUDO B2B (Militar - Anti Cópia)
+        // ESCUDO B2B
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.onkeydown = function(e) {
             if (e.keyCode === 123) return false;
