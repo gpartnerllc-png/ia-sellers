@@ -3,33 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <title>Mercado IA | Marketplace Nacional</title>
+    <title>Mercado IA | SandxCDD Ômni-Logística</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="https://mail.google.com/favicon.ico" type="image/x-icon" />
-    
     <script>
         tailwind.config = { theme: { extend: { colors: { darkBg: '#050505', glassBg: 'rgba(20, 20, 20, 0.7)' } } } }
     </script>
     <style>
         body { 
-            color: #ededed; 
-            font-family: 'Inter', sans-serif;
+            color: #ededed; font-family: 'Inter', sans-serif;
             background-image: linear-gradient(rgba(5, 5, 5, 0.50), rgba(5, 5, 5, 0.75)), url('https://images.unsplash.com/photo-1587293852726-70cdb56c2866?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            overscroll-behavior-x: none;
+            background-size: cover; background-position: center; background-attachment: fixed;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; overscroll-behavior-x: none;
         }
         input, textarea, select, button { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
         .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes radar-ping { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
+        .animate-radar { animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
     </style>
 </head>
 <body class="min-h-screen relative overflow-x-hidden flex flex-col items-center">
@@ -46,14 +40,12 @@
             <div class="space-y-4">
                 <input type="text" id="login-nome" placeholder="Seu Nome Completo" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition text-sm md:text-base">
                 <input type="tel" id="login-telefone" placeholder="Seu WhatsApp (com DDD)" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:border-cyan-500 transition text-sm md:text-base">
-                
                 <select id="login-regiao" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-gray-300 outline-none focus:border-cyan-500 transition appearance-none text-sm md:text-base">
                     <option value="" disabled selected>Selecione sua Cidade/Região</option>
                     <option value="brasilia" class="bg-black text-white">Brasília - DF</option>
                     <option value="aguas_lindas" class="bg-black text-white">Águas Lindas - GO</option>
                     <option value="maracai" class="bg-black text-white">Maracaí - SP</option>
                 </select>
-
                 <button onclick="fazerCadastroCliente()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest mt-4 shadow-[0_0_15px_rgba(8,145,178,0.5)] text-sm md:text-base">
                     Acessar Supermercados
                 </button>
@@ -62,7 +54,6 @@
     </div>
 
     <div id="app-principal" class="w-full flex-col items-center hidden">
-        
         <div class="fixed top-0 left-0 w-full z-40 glass-panel bg-[#050505]/98 border-b border-white/10 shadow-2xl flex flex-col pb-4">
             <nav class="w-full px-4 py-2 md:py-3 flex justify-between items-center">
                 <button onclick="fazerLogout()" class="flex items-center gap-2 md:gap-3 text-gray-300 hover:text-red-400 transition-colors group">
@@ -72,7 +63,6 @@
                         <span id="display-regiao" class="text-[9px] md:text-[10px] uppercase tracking-widest opacity-80 text-yellow-500 truncate max-w-[100px] md:max-w-[150px]"><i class="fas fa-map-pin"></i> Região</span>
                     </div>
                 </button>
-
                 <button onclick="toggleCarrinho()" class="relative flex items-center gap-2 p-2 md:px-4 text-cyan-400 hover:text-white transition-colors bg-white/5 hover:bg-cyan-600/30 rounded-xl border border-white/5">
                     <i class="fas fa-shopping-bag text-lg md:text-xl"></i>
                     <span class="hidden md:inline text-sm font-bold uppercase tracking-wider pr-1">Sacola</span>
@@ -82,11 +72,9 @@
 
             <div class="w-full max-w-4xl mx-auto px-4 pt-1 flex flex-col items-center">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-1 md:mb-2 text-white drop-shadow-lg text-center leading-tight">
-                    Mercado IA | Marketplace Nacional
+                    Mercado IA | Marketplace
                 </h1>
-                <p class="text-gray-300 text-[10px] sm:text-xs md:text-sm max-w-2xl text-center font-light leading-snug mb-3 md:mb-4">
-                    Escolha as ofertas, monte sua sacola e os atacadistas da sua cidade entregam na sua porta.
-                </p>
+                <p class="text-cyan-500 text-[9px] md:text-[10px] uppercase tracking-widest font-bold mb-3">Powered by SandxCDD Ômni-Logística®</p>
 
                 <div class="w-full glass-panel p-1.5 md:p-2 rounded-xl flex items-center bg-[#0a0a0a]/90 border border-cyan-500/40 shadow-inner">
                     <i class="fas fa-search text-gray-400 ml-3 text-base md:text-lg"></i>
@@ -112,14 +100,13 @@
         <div id="itens-carrinho" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 no-scrollbar"></div>
         
         <div class="p-4 md:p-6 border-t border-white/10 bg-black/80">
-            
             <div class="space-y-1 mb-4 border-b border-white/5 pb-4">
                 <div class="flex justify-between items-center text-gray-400 text-xs md:text-sm">
                     <span>Subtotal</span>
                     <span id="subtotal-carrinho">R$ 0,00</span>
                 </div>
                 <div class="flex justify-between items-center text-gray-400 text-xs md:text-sm">
-                    <span class="flex items-center gap-1"><i class="fas fa-motorcycle text-cyan-500"></i> Taxa de Entrega (Rotas)</span>
+                    <span class="flex items-center gap-1"><i class="fas fa-robot text-cyan-500"></i> Despacho Ômni-Logística</span>
                     <span id="frete-carrinho" class="text-yellow-500 font-bold">A Calcular</span>
                 </div>
                 <div class="flex justify-between items-center mt-2 pt-2 border-t border-white/5">
@@ -129,223 +116,204 @@
             </div>
             
             <div class="space-y-2 md:space-y-3 mb-4 md:mb-6" id="form-checkout" style="display: none;">
-                <input type="text" id="cliente-nome" readonly class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-gray-500 outline-none cursor-not-allowed text-sm">
-                <input type="text" id="cliente-telefone" readonly class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-gray-500 outline-none cursor-not-allowed text-sm">
-                
-                <div class="flex justify-between items-center mt-2 mb-1">
-                    <p class="text-cyan-400 text-[10px] md:text-xs uppercase tracking-widest font-bold ml-1">Endereço de Entrega</p>
-                    <span id="status-gps" class="text-[9px] text-green-400 hidden"><i class="fas fa-satellite-dish animate-pulse"></i> Rota Estabelecida</span>
+                <div class="flex justify-between items-center mt-1 mb-1 bg-black/50 p-2 rounded border border-cyan-500/30">
+                    <p class="text-cyan-400 text-[10px] md:text-xs uppercase tracking-widest font-bold flex items-center gap-2"><i class="fas fa-satellite"></i> Geo-Posicionamento</p>
+                    <span id="status-gps" class="text-[9px] text-gray-500">Aguardando CEP...</span>
                 </div>
 
                 <div class="flex gap-2">
-                    <input type="text" id="cliente-cep" placeholder="CEP (Apenas Números)" onkeyup="buscarCEP(this.value)" maxlength="9" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition text-sm">
+                    <input type="text" id="cliente-cep" placeholder="CEP" onkeyup="buscarCEP_RTK(this.value)" maxlength="9" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition text-sm">
                     <input type="text" id="cliente-rua" placeholder="Rua / Av." class="w-2/3 bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-300 outline-none focus:border-cyan-500 transition text-sm">
                 </div>
-                
                 <div class="flex gap-2">
-                    <input type="text" id="cliente-numero" placeholder="Nº" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition text-sm">
+                    <input type="text" id="cliente-numero" placeholder="Nº (Lote)" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition text-sm">
                     <input type="text" id="cliente-bairro" placeholder="Bairro / Compl." class="w-2/3 bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-300 outline-none focus:border-cyan-500 transition text-sm">
                 </div>
 
-                <select id="cliente-pagamento" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none mt-2 text-sm">
-                    <option value="" disabled selected class="text-gray-400">Forma de Pagamento</option>
-                    <option value="Pix" class="text-gray-900">Pix (Entregador)</option>
-                    <option value="Dinheiro" class="text-gray-900">Dinheiro</option>
-                    <option value="Cartão" class="text-gray-900">Cartão</option>
+                <p class="text-gray-400 text-[10px] uppercase tracking-widest mt-3 mb-1 ml-1"><i class="fas fa-lock text-green-400"></i> Pagamento Seguro In-App</p>
+                <select id="cliente-pagamento" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none text-sm">
+                    <option value="" disabled selected class="text-gray-400">Selecione a Forma de Pagamento</option>
+                    <option value="Google Pay" class="text-gray-900">Google Pay / Carteira Digital</option>
+                    <option value="Apple Pay" class="text-gray-900">Apple Pay</option>
+                    <option value="Cartão de Crédito Final 4521" class="text-gray-900">Cartão de Crédito Salvo (*** 4521)</option>
                 </select>
             </div>
 
-            <button id="btn-finalizar" onclick="iniciarCheckoutMarketplace()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-3 md:py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)] text-sm md:text-base">
+            <button id="btn-finalizar" onclick="processarPagamentoECheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-3 md:py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)] text-sm md:text-base">
                 Adicione itens para comprar
             </button>
         </div>
     </div>
 
+    <div id="modal-tracking" class="fixed inset-0 z-[200] hidden bg-[#050505] flex-col items-center justify-start p-4 transition-opacity duration-500 overflow-y-auto pb-10">
+        
+        <div class="w-full max-w-lg mt-6 text-center">
+            <h2 class="text-2xl font-bold text-white mb-1">Status da Entrega</h2>
+            <p class="text-cyan-400 text-xs font-mono uppercase tracking-widest mb-8">Status: <span id="track-status-text" class="text-white">Processando Pagamento...</span></p>
+
+            <div class="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
+                <div id="radar-pulse" class="absolute inset-0 bg-cyan-500/20 rounded-full animate-radar"></div>
+                <div class="absolute inset-4 border border-cyan-500/30 rounded-full"></div>
+                <div class="absolute inset-10 border border-cyan-500/50 rounded-full flex items-center justify-center bg-[#0a0a0a]">
+                    <i id="track-icon" class="fas fa-shield-alt text-4xl text-cyan-400"></i>
+                </div>
+            </div>
+
+            <div class="w-full bg-white/10 rounded-full h-2 mb-4 overflow-hidden">
+                <div id="track-progress-bar" class="bg-cyan-500 h-2 rounded-full transition-all duration-1000" style="width: 5%"></div>
+            </div>
+
+            <div id="driver-card" class="hidden w-full bg-[#0a0a0a] border border-cyan-500/30 rounded-xl p-4 mt-2 mb-6 text-left transform transition-all duration-500 translate-y-4 opacity-0 shadow-[0_0_20px_rgba(8,145,178,0.15)]">
+                <p class="text-[10px] text-cyan-500 uppercase tracking-widest font-bold mb-3 border-b border-white/10 pb-2"><i class="fas fa-id-card"></i> Identificação SandxCDD</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full bg-cyan-900/30 flex items-center justify-center border border-cyan-500/50 shadow-inner" id="driver-avatar">
+                        <i class="fas fa-motorcycle text-2xl text-cyan-400"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-white font-bold text-sm md:text-base flex items-center gap-2" id="driver-name">Carregando... <i class="fas fa-check-circle text-green-500 text-xs"></i></h4>
+                        <p class="text-gray-400 text-xs mt-0.5" id="driver-vehicle">Veículo e Placa</p>
+                        <p class="text-gray-500 text-[10px] font-mono mt-1 bg-white/5 inline-block px-2 py-0.5 rounded" id="driver-doc">CNPJ: Consultando...</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="bg-yellow-500/20 border border-yellow-500/30 px-2 py-1 rounded-lg text-xs font-bold text-yellow-400 flex items-center gap-1 shadow-inner">
+                            <i class="fas fa-star"></i> 4.9
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl text-left bg-black/50 border border-white/5">
+                <ul id="track-log" class="space-y-3 text-xs md:text-sm text-gray-400 font-mono">
+                    <li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway antifraude...</li>
+                </ul>
+            </div>
+            
+            <button onclick="fecharRastreamento()" id="btn-fechar-track" class="hidden w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl mt-6 transition-all uppercase tracking-widest text-sm shadow-[0_0_15px_rgba(8,145,178,0.5)]">
+                Nova Compra
+            </button>
+        </div>
+    </div>
+
     <script>
-        // ==============================================================
-        // VARIÁVEIS GLOBAIS (Agora inclui o Frete Dinâmico)
-        // ==============================================================
         let clienteLogado = null;
         let sacola = [];
         let timerSacola;
-        let valorFreteGlobal = 0.00; // Começa zerado até botar o CEP
+        let valorFreteGlobal = 0.00; 
+        let pesoSacolaGlobal = 0.0;
+        let coordenadasRTK = { lat: "", lng: "" };
 
-        // ==============================================================
-        // INTEGRAÇÃO DE ROTEAMENTO (VIA CEP + FRETE UBER)
-        // ==============================================================
-        async function buscarCEP(cep) {
-            cep = cep.replace(/\D/g, ''); // Limpa tudo que não for número
-            
-            // Coloca o tracinho no input visualmente
-            if(cep.length > 5) {
-                document.getElementById('cliente-cep').value = cep.replace(/^(\d{5})(\d)/, "$1-$2");
-            }
-
-            // Quando der 8 números, dispara a Inteligência de Rota
-            if (cep.length === 8) {
-                document.getElementById('cliente-rua').value = "Buscando GPS...";
-                document.getElementById('cliente-bairro').value = "Calculando rota...";
-                
-                try {
-                    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                    const dados = await resposta.json();
-
-                    if (dados.erro) throw new Error();
-
-                    // Preenche automático
-                    document.getElementById('cliente-rua').value = dados.logradouro + (dados.localidade ? ' - ' + dados.localidade + '/' + dados.uf : '');
-                    document.getElementById('cliente-bairro').value = dados.bairro;
-                    
-                    // Pula pro campo número automaticamente
-                    document.getElementById('cliente-numero').focus();
-                    
-                    // CALCULA O FRETE (Simulação de Algoritmo de Distância Uber/Google)
-                    // Você pode alterar o custo base de R$ 1.50 por km aqui.
-                    const custoPorKm = 1.50; 
-                    const kmSimulado = (Math.random() * 12 + 2).toFixed(1); // Simula uma distância entre 2km e 14km
-                    valorFreteGlobal = parseFloat((kmSimulado * custoPorKm).toFixed(2));
-
-                    // Atualiza UI
-                    document.getElementById('status-gps').innerText = `📍 Rota: ${kmSimulado} km (R$ ${valorFreteGlobal.toFixed(2)})`;
-                    document.getElementById('status-gps').classList.remove('hidden');
-                    
-                    atualizarInterfaceCarrinho(); // Recalcula o Total Final
-                    
-                } catch (erro) {
-                    document.getElementById('cliente-rua').value = "";
-                    document.getElementById('cliente-bairro').value = "";
-                    document.getElementById('status-gps').classList.add('hidden');
-                    alert("CEP não localizado pelo radar nacional.");
-                }
-            } else {
-                // Se apagar o CEP, zera o frete
-                valorFreteGlobal = 0.00;
-                document.getElementById('status-gps').classList.add('hidden');
-                atualizarInterfaceCarrinho();
-            }
-        }
-
-
-        // ==============================================================
-        // GERENCIAMENTO DA SESSÃO DO CLIENTE
-        // ==============================================================
-        const nomesRegioes = {
-            "brasilia": "Brasília - DF",
-            "aguas_lindas": "Águas Lindas - GO",
-            "maracai": "Maracaí - SP"
-        };
+        const nomesRegioes = { "brasilia": "Brasília - DF", "aguas_lindas": "Águas Lindas - GO", "maracai": "Maracaí - SP" };
 
         window.onload = function() {
             const sessao = localStorage.getItem("mercadoIA_cliente");
-            if (sessao) {
-                clienteLogado = JSON.parse(sessao);
-                liberarAcessoCliente();
-            }
+            if (sessao) { clienteLogado = JSON.parse(sessao); liberarAcessoCliente(); }
         };
 
         function fazerCadastroCliente() {
             const nome = document.getElementById('login-nome').value.trim();
             const tel = document.getElementById('login-telefone').value.trim();
             const regiao = document.getElementById('login-regiao').value;
-
-            if (nome.length < 3 || tel.length < 8 || !regiao) {
-                alert("⚠️ Preencha nome, WhatsApp e Selecione sua Região.");
-                return;
-            }
-
+            if (nome.length < 3 || tel.length < 8 || !regiao) { alert("⚠️ Preencha nome, WhatsApp e Selecione sua Região."); return; }
             clienteLogado = { nome: nome, telefone: tel, regiao: regiao };
             localStorage.setItem("mercadoIA_cliente", JSON.stringify(clienteLogado));
             liberarAcessoCliente();
         }
 
         function fazerLogout() {
-            localStorage.removeItem("mercadoIA_cliente");
-            clienteLogado = null;
-            document.getElementById('app-principal').classList.remove('flex');
-            document.getElementById('app-principal').classList.add('hidden');
+            localStorage.removeItem("mercadoIA_cliente"); clienteLogado = null;
+            document.getElementById('app-principal').classList.remove('flex'); document.getElementById('app-principal').classList.add('hidden');
             document.getElementById('tela-login').classList.remove('hidden');
-            document.getElementById('login-nome').value = '';
-            document.getElementById('login-telefone').value = '';
-            document.getElementById('login-regiao').value = '';
         }
 
         function liberarAcessoCliente() {
             document.getElementById('tela-login').classList.add('hidden');
-            document.getElementById('app-principal').classList.remove('hidden');
-            document.getElementById('app-principal').classList.add('flex');
-            
+            document.getElementById('app-principal').classList.remove('hidden'); document.getElementById('app-principal').classList.add('flex');
             const primeiroNome = clienteLogado.nome.split(' ')[0];
             document.getElementById('display-nome-cliente').innerText = `Olá, ${primeiroNome}`;
             document.getElementById('display-regiao').innerHTML = `<i class="fas fa-map-pin"></i> ${nomesRegioes[clienteLogado.regiao]}`;
-            
-            document.getElementById('cliente-nome').value = clienteLogado.nome;
-            document.getElementById('cliente-telefone').value = clienteLogado.telefone;
         }
 
-        // ==============================================================
-        // LÓGICA DO CARRINHO (Atualizada com Frete Matemático)
-        // ==============================================================
+        async function buscarCEP_RTK(cep) {
+            cep = cep.replace(/\D/g, ''); 
+            if(cep.length > 5) document.getElementById('cliente-cep').value = cep.replace(/^(\d{5})(\d)/, "$1-$2");
+
+            if (cep.length === 8) {
+                document.getElementById('cliente-rua').value = "Triangulando via satélite...";
+                document.getElementById('status-gps').innerHTML = `<i class="fas fa-circle-notch fa-spin text-yellow-500"></i> Capturando RTK...`;
+                
+                try {
+                    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                    const dados = await resposta.json();
+                    if (dados.erro) throw new Error();
+
+                    document.getElementById('cliente-rua').value = dados.logradouro;
+                    document.getElementById('cliente-bairro').value = dados.bairro;
+                    document.getElementById('cliente-numero').focus();
+                    
+                    const mockLat = (Math.random() * 0.05 - 15.80).toFixed(6);
+                    const mockLng = (Math.random() * 0.05 - 47.90).toFixed(6);
+                    coordenadasRTK = { lat: mockLat, lng: mockLng };
+
+                    const kmSimulado = (Math.random() * 8 + 1).toFixed(1); 
+                    valorFreteGlobal = parseFloat((kmSimulado * 1.80).toFixed(2));
+
+                    document.getElementById('status-gps').innerHTML = `<span class="text-green-400 font-mono"><i class="fas fa-check-circle"></i> Sincronizado | Lat: ${mockLat}, Lng: ${mockLng}</span>`;
+                    atualizarInterfaceCarrinho(); 
+                } catch (erro) {
+                    document.getElementById('status-gps').innerHTML = `<span class="text-red-400"><i class="fas fa-times-circle"></i> Falha de Sinal GPS</span>`;
+                }
+            } else {
+                valorFreteGlobal = 0.00; document.getElementById('status-gps').innerText = "Aguardando CEP..."; atualizarInterfaceCarrinho();
+            }
+        }
+
         function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
         function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
         document.getElementById("produto").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { 
-                event.preventDefault(); 
-                ativarIA(); 
-                document.getElementById("produto").blur();
-            }
+            if (event.key === "Enter") { event.preventDefault(); ativarIA(); document.getElementById("produto").blur(); }
         });
 
         function adicionarAoCarrinho(nome, loja, preco) {
-            sacola.push({ nome, loja, preco: parseFloat(preco) });
+            const pesoItem = parseFloat((Math.random() * 1.7 + 0.3).toFixed(2));
+            sacola.push({ nome, loja, preco: parseFloat(preco), peso: pesoItem });
             atualizarInterfaceCarrinho();
             const painel = document.getElementById('painel-carrinho');
             painel.classList.remove('translate-x-full');
             if (timerSacola) clearTimeout(timerSacola);
-            timerSacola = setTimeout(() => { painel.classList.add('translate-x-full'); }, 2500);
+            timerSacola = setTimeout(() => { painel.classList.add('translate-x-full'); }, 2000);
         }
 
-        function removerDoCarrinho(index) {
-            sacola.splice(index, 1);
-            atualizarInterfaceCarrinho();
-        }
+        function removerDoCarrinho(index) { sacola.splice(index, 1); atualizarInterfaceCarrinho(); }
 
         function atualizarInterfaceCarrinho() {
             const container = document.getElementById('itens-carrinho');
-            const totalEl = document.getElementById('total-carrinho');
-            const subtotalEl = document.getElementById('subtotal-carrinho');
-            const freteEl = document.getElementById('frete-carrinho');
-            const contador = document.getElementById('contador-sacola');
             const btn = document.getElementById('btn-finalizar');
             const form = document.getElementById('form-checkout');
-
-            let subtotal = sacola.reduce((acc, item) => acc + item.preco, 0);
+            
+            let subtotal = 0; pesoSacolaGlobal = 0;
+            sacola.forEach(item => { subtotal += item.preco; pesoSacolaGlobal += item.peso; });
             let totalGeral = subtotal + valorFreteGlobal;
 
-            if (sacola.length > 0) {
-                contador.textContent = sacola.length;
-                contador.classList.remove('hidden');
-            } else {
-                contador.classList.add('hidden');
-            }
+            document.getElementById('contador-sacola').textContent = sacola.length;
+            document.getElementById('contador-sacola').classList.toggle('hidden', sacola.length === 0);
 
             container.innerHTML = '';
             if (sacola.length === 0) {
                 container.innerHTML = '<div class="text-gray-500 text-center mt-10 text-sm">Sua sacola está vazia.</div>';
-                totalEl.textContent = 'R$ 0,00';
-                subtotalEl.textContent = 'R$ 0,00';
-                freteEl.textContent = 'A Calcular';
+                document.getElementById('subtotal-carrinho').textContent = 'R$ 0,00';
+                document.getElementById('frete-carrinho').textContent = 'A Calcular';
+                document.getElementById('total-carrinho').textContent = 'R$ 0,00';
                 btn.disabled = true;
                 btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-3 md:py-4 rounded-xl uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 text-sm md:text-base";
                 btn.innerHTML = 'Adicione itens para comprar';
-                form.style.display = 'none';
-                return;
+                form.style.display = 'none'; return;
             }
 
             form.style.display = 'block';
             btn.disabled = false;
-            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm md:text-base shadow-[0_0_15px_rgba(8,145,178,0.4)]";
-            btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Pedidos';
+            btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm md:text-base shadow-[0_0_15px_rgba(34,197,94,0.4)]";
+            btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
@@ -354,160 +322,172 @@
                         <div class="flex-1 min-w-0 pl-2 md:pl-3">
                             <p class="text-[10px] md:text-xs text-cyan-400 font-mono mb-1">${item.loja}</p>
                             <h4 class="text-xs md:text-sm font-medium text-white truncate pr-2">${item.nome}</h4>
-                            <p class="text-white font-bold mt-1 text-sm md:text-base">${formatarMoeda(item.preco)}</p>
+                            <p class="text-gray-500 text-[9px] mb-1">Peso: ${item.peso}kg</p>
+                            <p class="text-white font-bold text-sm md:text-base">${formatarMoeda(item.preco)}</p>
                         </div>
-                        <button onclick="removerDoCarrinho(${i})" class="text-red-400 hover:text-red-300 w-8 h-8 flex items-center justify-center rounded-full bg-red-400/10 ml-1">
-                            <i class="fas fa-trash-alt text-sm"></i>
-                        </button>
+                        <button onclick="removerDoCarrinho(${i})" class="text-red-400 hover:text-red-300 w-8 h-8 flex items-center justify-center rounded-full bg-red-400/10 ml-1"><i class="fas fa-trash-alt text-sm"></i></button>
                     </div>`;
             });
             
-            // Exibição Dinâmica Financeira
-            subtotalEl.textContent = formatarMoeda(subtotal);
-            freteEl.textContent = valorFreteGlobal > 0 ? formatarMoeda(valorFreteGlobal) : 'A Calcular';
-            totalEl.textContent = formatarMoeda(totalGeral);
+            document.getElementById('subtotal-carrinho').textContent = formatarMoeda(subtotal);
+            document.getElementById('frete-carrinho').textContent = valorFreteGlobal > 0 ? formatarMoeda(valorFreteGlobal) : 'A Calcular';
+            document.getElementById('total-carrinho').textContent = formatarMoeda(totalGeral);
         }
 
-        // ==============================================================
-        // CENTRAL DE ROTEAMENTO TELEGRAM
-        // ==============================================================
         const franquiasTelegram = {
-            "brasilia": {
-                "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-                "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-                "Tatico": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
-            },
-            "aguas_lindas": {
-                "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-                "Dia a Dia": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
-            },
-            "maracai": {
-                "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" },
-                "Mercado Avenida": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }
-            }
+            "brasilia": { "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } },
+            "aguas_lindas": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } },
+            "maracai": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } }
         };
 
-        async function iniciarCheckoutMarketplace() {
+        async function processarPagamentoECheckout() {
             const cep = document.getElementById('cliente-cep').value.trim();
             const rua = document.getElementById('cliente-rua').value.trim();
             const numero = document.getElementById('cliente-numero').value.trim();
-            const bairro = document.getElementById('cliente-bairro').value.trim();
             const pag = document.getElementById('cliente-pagamento').value;
-            const btn = document.getElementById('btn-finalizar');
 
-            if (!cep || !rua || !numero || !pag) {
-                alert("Preencha todos os dados do endereço de entrega.");
-                return;
+            if (!cep || !rua || !numero || !pag) { alert("Preencha o endereço de entrega e a forma de pagamento in-app."); return; }
+            if (valorFreteGlobal === 0) { alert("Aguarde a triangulação do GPS via CEP."); return; }
+
+            // 1. INICIA O MODAL DE RASTREAMENTO
+            document.getElementById('painel-carrinho').classList.add('translate-x-full');
+            const modal = document.getElementById('modal-tracking');
+            const log = document.getElementById('track-log');
+            const icon = document.getElementById('track-icon');
+            const statusTxt = document.getElementById('track-status-text');
+            const progressBar = document.getElementById('track-progress-bar');
+            const driverCard = document.getElementById('driver-card');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Simula Pagamento
+            await new Promise(r => setTimeout(r, 2000));
+            log.innerHTML += `<li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> Pagamento Aprovado: ${pag}</li>`;
+            progressBar.style.width = "20%";
+            icon.className = "fas fa-satellite-dish text-4xl text-cyan-400 animate-pulse";
+            statusTxt.innerText = "Sincronizando com a Loja...";
+
+            // Match do Entregador/Robô SandxCDD
+            let dName, dVehicle, dDoc, dIcon;
+            if (pesoSacolaGlobal < 2.5 && (valorFreteGlobal/1.8) < 5) {
+                dName = "Drone Prime Air V4"; dVehicle = "Voo Autônomo RTK"; dDoc = "FROTA: AZ-992X"; dIcon = "fa-helicopter";
+            } else {
+                const nomesMEI = ["Carlos Silva (MEI)", "Roberto Alves (MEI)", "Fernanda Lima (MEI)"];
+                dName = nomesMEI[Math.floor(Math.random() * nomesMEI.length)];
+                dVehicle = "Honda CG 160 • Placa XYZ-9876"; 
+                dDoc = "CNPJ: ***." + Math.floor(100+Math.random()*899) + ".***/0001-**"; dIcon = "fa-motorcycle";
             }
-
-            if (valorFreteGlobal === 0) {
-                alert("Aguarde o cálculo da taxa de entrega via GPS preenchendo seu CEP corretamente.");
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Despachando...';
 
             const pedidosPorLoja = {};
-            sacola.forEach(item => {
-                if (!pedidosPorLoja[item.loja]) pedidosPorLoja[item.loja] = [];
-                pedidosPorLoja[item.loja].push(item);
-            });
+            sacola.forEach(item => { if (!pedidosPorLoja[item.loja]) pedidosPorLoja[item.loja] = []; pedidosPorLoja[item.loja].push(item); });
 
-            const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Praça:* ${nomesRegioes[clienteLogado.regiao]}\n📍 *Entrega:* ${rua}, Nº ${numero}\n🏘️ *Bairro:* ${bairro}\n📮 *CEP:* ${cep}\n💳 *Forma de Pagto:* ${pag}\n\n`;
+            const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Destino:* ${rua}, Nº ${numero}\n🛰️ *GPS RTK:* Lat: ${coordenadasRTK.lat} | Lng: ${coordenadasRTK.lng}\n💳 *Status Financeiro:* PAGO NA PLATAFORMA (${pag})\n\n`;
 
             try {
+                // 2. DISPARO PARA O TELEGRAM (A Loja recebe a Ordem já Paga e o Entregador)
                 const promessasDeEnvio = Object.keys(pedidosPorLoja).map(async (nomeDaLoja) => {
                     const itensDestaLoja = pedidosPorLoja[nomeDaLoja];
                     let subtotalDestaLoja = 0;
                     
-                    let resumoLoja = `🚨 *NOVA SOLICITAÇÃO DE DELIVERY - ${nomeDaLoja.toUpperCase()}* 🚨\n\n`;
-                    resumoLoja += cabecalhoEndereco;
-                    resumoLoja += `🛒 *PRODUTOS SOLICITADOS (SACOLA ${nomeDaLoja}):*\n`;
-
-                    itensDestaLoja.forEach(produto => {
-                        resumoLoja += `• ${produto.nome} - R$ ${produto.preco.toFixed(2)}\n`;
-                        subtotalDestaLoja += produto.preco;
-                    });
+                    let resumoLoja = `🚨 *SANDXCDD ÔMNI-LOGÍSTICA: ${nomeDaLoja.toUpperCase()}* 🚨\n\n${cabecalhoEndereco}🛒 *ITENS PARA SEPARAÇÃO (PICKING):*\n`;
+                    itensDestaLoja.forEach(produto => { resumoLoja += `• ${produto.nome} - R$ ${produto.preco.toFixed(2)}\n`; subtotalDestaLoja += produto.preco; });
                     
-                    // O entregador deste mercado receberá a taxa de frete cobrada no painel
+                    resumoLoja += `\n🚚 *PARCEIRO ALOCADO PARA RETIRADA:*\n• Entregador: ${dName}\n• Documento: ${dDoc}\n• Veículo: ${dVehicle}\n`;
+                    
                     const totalComFrete = subtotalDestaLoja + valorFreteGlobal;
+                    resumoLoja += `\n💰 *VALOR TOTAL DA NOTA:* R$ ${totalComFrete.toFixed(2)}\n⚠️ *ATENÇÃO:* NÃO cobrar do cliente. Pagamento 100% digitalizado no SandxCDD.\n`;
 
-                    resumoLoja += `\n📦 Subtotal Produtos: R$ ${subtotalDestaLoja.toFixed(2)}\n`;
-                    resumoLoja += `🚚 Taxa de Entrega (Rota): R$ ${valorFreteGlobal.toFixed(2)}\n`;
-                    resumoLoja += `💰 *VALOR TOTAL A COBRAR DO CLIENTE:* R$ ${totalComFrete.toFixed(2)}\n`;
-
-                    let credenciais = franquiasTelegram[clienteLogado.regiao][nomeDaLoja];
-                    if (!credenciais) credenciais = { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" };
-
-                    const urlTelegram = `https://api.telegram.org/bot${credenciais.botToken}/sendMessage`;
-
-                    return fetch(urlTelegram, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                    let credenciais = franquiasTelegram[clienteLogado.regiao]?.[nomeDaLoja] || { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" };
+                    return fetch(`https://api.telegram.org/bot${credenciais.botToken}/sendMessage`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ chat_id: credenciais.chatId, text: resumoLoja, parse_mode: "Markdown" })
                     });
                 });
 
                 await Promise.all(promessasDeEnvio);
 
-                alert("✅ Pedidos enviados! Os atacadistas e entregadores da sua região já receberam a ordem.");
+                // 3. ANIMAÇÃO DE RASTREAMENTO AO VIVO E EXIBIÇÃO DO MOTORISTA
+                await new Promise(r => setTimeout(r, 1500));
+                log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-boxes"></i> Ordem aceita. Separando itens...</li>`;
+                progressBar.style.width = "40%";
+                statusTxt.innerText = "Preparando Pedido";
 
-                // Limpeza completa
-                sacola = [];
-                valorFreteGlobal = 0.00;
-                document.getElementById('cliente-cep').value = '';
-                document.getElementById('cliente-rua').value = '';
-                document.getElementById('cliente-numero').value = '';
-                document.getElementById('cliente-bairro').value = '';
-                document.getElementById('cliente-pagamento').value = '';
-                document.getElementById('status-gps').classList.add('hidden');
+                await new Promise(r => setTimeout(r, 2000));
+                log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-id-badge"></i> Parceiro SandxCDD alocado.</li>`;
+                progressBar.style.width = "60%";
+                icon.className = `fas ${dIcon} text-4xl text-cyan-400`;
+                statusTxt.innerText = "Veículo a Caminho";
                 
-                atualizarInterfaceCarrinho();
-                document.getElementById('painel-carrinho').classList.add('translate-x-full');
+                // Mágica: Aparece o Cartão do Entregador
+                document.getElementById('driver-name').innerHTML = `${dName} <i class="fas fa-check-circle text-green-500 text-xs ml-1"></i>`;
+                document.getElementById('driver-vehicle').innerText = dVehicle;
+                document.getElementById('driver-doc').innerText = dDoc;
+                document.getElementById('driver-avatar').innerHTML = `<i class="fas ${dIcon} text-2xl text-cyan-400"></i>`;
+                driverCard.classList.remove('hidden');
+                setTimeout(() => { driverCard.classList.remove('translate-y-4', 'opacity-0'); }, 100);
+
+                await new Promise(r => setTimeout(r, 3000));
+                log.innerHTML += `<li class="flex items-center gap-2 text-yellow-400"><i class="fas fa-route"></i> Em trânsito. Deslocamento: ${valorFreteGlobal > 0 ? (valorFreteGlobal/1.8).toFixed(1) : 4.5} km.</li>`;
+                progressBar.style.width = "80%";
+                document.getElementById('radar-pulse').classList.add('animate-radar');
+
+                await new Promise(r => setTimeout(r, 4000));
+                log.innerHTML += `<li class="flex items-center gap-2 text-green-400 font-bold"><i class="fas fa-map-marker-alt"></i> Chegando na coordenada final!</li>`;
+                progressBar.style.width = "100%";
+                icon.className = "fas fa-check-circle text-4xl text-green-400";
+                statusTxt.innerText = "Entregue!";
+                document.getElementById('btn-fechar-track').classList.remove('hidden');
 
             } catch (error) {
-                alert("❌ Ocorreu um erro na rede. Tente finalizar novamente.");
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fab fa-telegram-plane text-xl"></i> Finalizar Pedidos';
+                modal.classList.add('hidden'); modal.classList.remove('flex');
+                alert("❌ Erro ao despachar via satélite. Tente novamente.");
+                document.getElementById('btn-finalizar').disabled = false; 
+                document.getElementById('btn-finalizar').innerHTML = '<i class="fas fa-lock text-xl"></i> Pagar na Plataforma';
             }
         }
 
-        // ==============================================================
-        // INTEGRAÇÃO CLOUDFLARE
-        // ==============================================================
+        function fecharRastreamento() {
+            document.getElementById('modal-tracking').classList.add('hidden');
+            document.getElementById('modal-tracking').classList.remove('flex');
+            document.getElementById('track-log').innerHTML = '<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway antifraude...</li>';
+            document.getElementById('track-progress-bar').style.width = "5%";
+            document.getElementById('btn-fechar-track').classList.add('hidden');
+            document.getElementById('radar-pulse').classList.remove('animate-radar');
+            document.getElementById('driver-card').classList.add('hidden', 'translate-y-4', 'opacity-0');
+            
+            // Limpa a tela de trás
+            sacola = []; valorFreteGlobal = 0.00; pesoSacolaGlobal = 0.0;
+            document.getElementById('cliente-cep').value = ''; document.getElementById('cliente-rua').value = '';
+            document.getElementById('cliente-numero').value = ''; document.getElementById('cliente-bairro').value = '';
+            document.getElementById('status-gps').innerHTML = "Aguardando CEP...";
+            atualizarInterfaceCarrinho();
+        }
+
         async function ativarIA() {
             const query = document.getElementById('produto').value.trim();
             if (!query) return;
-            
             document.getElementById('produto').blur();
 
             const feed = document.getElementById('feed-ofertas');
             const status = document.getElementById('status-container');
             const btn = document.getElementById('btn-buscar');
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i> Buscando...';
-            feed.innerHTML = '';
-            status.classList.remove('hidden');
-            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-xs md:text-sm"><i class="fas fa-radar fa-spin text-lg"></i> Varrendo mercados em ${nomesRegioes[clienteLogado.regiao]}...</div>`;
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i> Buscando...';
+            feed.innerHTML = ''; status.classList.remove('hidden');
+            status.innerHTML = `<div class="inline-flex items-center gap-3 text-cyan-400 font-mono text-xs md:text-sm"><i class="fas fa-radar fa-spin text-lg"></i> Varrendo estoques locais...</div>`;
 
             try {
                 const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}&regiao=${encodeURIComponent(clienteLogado.regiao)}`;
-                
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 18000);
-
                 const res = await fetch(urlDoRobo, { signal: controller.signal });
                 clearTimeout(timeoutId);
 
-                if (!res.ok) throw new Error(`Falha na API (Status HTTP: ${res.status})`);
+                if (!res.ok) throw new Error(`Falha API`);
                 const data = await res.json();
 
-                btn.disabled = false;
-                btn.innerHTML = 'Buscar';
-                status.classList.add('hidden');
-
+                btn.disabled = false; btn.innerHTML = 'Buscar'; status.classList.add('hidden');
                 if (data.erro) throw new Error(data.erro);
                 if (!Array.isArray(data) || data.length === 0) throw new Error('Sem estoque.');
 
@@ -516,13 +496,9 @@
                     if(oferta.loja === "⚠️ ALERTA") throw new Error(oferta.nome);
                     else desenharCard(oferta.loja, oferta.nome, precoNum, i === 0);
                 });
-
             } catch (err) {
-                btn.disabled = false;
-                btn.innerHTML = 'Buscar';
-                let msg = err.message;
-                if (err.name === 'AbortError') msg = "A busca demorou muito. Tente novamente.";
-                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 bg-red-900/20 text-red-300 px-4 md:px-6 py-3 md:py-5 rounded-xl text-xs md:text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> ${msg}</div>`;
+                btn.disabled = false; btn.innerHTML = 'Buscar';
+                status.innerHTML = `<div class="inline-block glass-panel border-red-500/30 bg-red-900/20 text-red-300 px-4 py-3 rounded-xl text-xs md:text-sm font-mono"><i class="fas fa-exclamation-triangle mr-2"></i> Erro na busca.</div>`;
             }
         }
 
@@ -555,7 +531,6 @@
             feed.insertAdjacentHTML('beforeend', cardHTML);
         }
 
-        // ESCUDO B2B
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.onkeydown = function(e) {
             if (e.keyCode === 123) return false;
