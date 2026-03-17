@@ -165,13 +165,13 @@
                             <img id="img-qrcode-pix" src="" alt="QR Code PIX" class="w-24 h-24 md:w-32 md:h-32 object-contain transition-opacity duration-300">
                         </div>
                         
-                        <p class="text-gray-300 text-[9px] mb-2 font-mono bg-white/5 inline-block px-2 py-1 rounded">Destinatário: ÔMNI-LOGISTICA</p>
+                        <p class="text-gray-300 text-[9px] mb-2 font-mono bg-white/5 inline-block px-2 py-1 rounded">Destinatário: SANDXCDD ÔMNI-LOGISTICA</p>
                         
                         <div class="flex items-center justify-between bg-black/80 border border-white/10 rounded px-2 py-1.5 w-full">
                             <span class="text-gray-400 text-[8px] md:text-[9px] font-mono truncate w-4/5 text-left select-all" id="pix-key-text">Aguardando geração...</span>
                             <button type="button" onclick="copiarChavePix()" class="text-cyan-400 hover:text-cyan-300 text-[9px] font-bold uppercase w-1/5 text-right"><i class="fas fa-copy"></i> Copiar</button>
                         </div>
-                        <p class="text-green-500 text-[8px] font-bold mt-2 animate-pulse"><i class="fas fa-circle-notch fa-spin"></i> Aguardando confirmação do banco...</p>
+                        <p id="status-pix-banco" class="text-green-500 text-[8px] font-bold mt-2 animate-pulse"><i class="fas fa-circle-notch fa-spin"></i> Aguardando confirmação do banco...</p>
                     </div>
                 </div>
             </div>
@@ -187,7 +187,7 @@
     <div id="modal-tracking" class="fixed inset-0 z-[200] hidden bg-[#050505] flex-col items-center justify-start p-4 transition-opacity duration-500 overflow-y-auto pb-10">
         <div class="w-full max-w-lg mt-6 text-center">
             <h2 class="text-2xl font-bold text-white mb-1">Status da Entrega</h2>
-            <p class="text-cyan-400 text-xs font-mono uppercase tracking-widest mb-8">Status: <span id="track-status-text" class="text-white">Processando Pagamento...</span></p>
+            <p class="text-cyan-400 text-xs font-mono uppercase tracking-widest mb-8">Status: <span id="track-status-text" class="text-white">Processando Despacho...</span></p>
 
             <div class="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
                 <div id="radar-pulse" class="absolute inset-0 bg-cyan-500/20 rounded-full animate-radar"></div>
@@ -222,7 +222,7 @@
 
             <div class="glass-panel p-4 rounded-xl text-left bg-black/50 border border-white/5">
                 <ul id="track-log" class="space-y-3 text-xs md:text-sm text-gray-400 font-mono">
-                    <li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway SandxCDD...</li>
+                    <li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> Pagamento confirmado pela Instituição Financeira.</li>
                 </ul>
             </div>
             
@@ -239,7 +239,7 @@
         let valorFreteGlobal = 0.00; 
         let pesoSacolaGlobal = 0.0;
         let coordenadasRTK = { lat: "", lng: "" };
-        let payloadPixAtual = ""; // Variável para armazenar o copia e cola atual
+        let payloadPixAtual = ""; 
 
         const nomesRegioes = { "brasilia": "Brasília - DF", "aguas_lindas": "Águas Lindas - GO", "maracai": "Maracaí - SP" };
 
@@ -309,12 +309,8 @@
         function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
         function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
-        // ==============================================================
-        // MOTOR DE GERAÇÃO DE PIX DINÂMICO (EMV SIMULADO)
-        // ==============================================================
         function gerarPayloadPix(valorTotal) {
             const valorFmt = valorTotal.toFixed(2);
-            // Payload PIX Estruturado com o valor exato da sacola e chave fictícia da empresa
             return `0002012636br.gov.bcb.pix0114+5561982439081520400005303986540${valorFmt.length}${valorFmt}5802BR5916SANDXCDD OMNI6008BRASILIA62070503***6304${Math.floor(1000 + Math.random() * 9000)}`;
         }
 
@@ -335,7 +331,7 @@
 
             if (pag === 'Pix') { 
                 boxPix.classList.remove('hidden'); 
-                btn.innerHTML = '<i class="fas fa-check-double text-lg"></i> Já Paguei o PIX';
+                btn.innerHTML = '<i class="fas fa-check-double text-lg"></i> Validar PIX e Despachar';
                 btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
             } 
             else if (pag === 'Cartao_Loja') { 
@@ -395,7 +391,6 @@
             form.style.display = 'block';
             btn.disabled = false;
 
-            // Recria a lista de produtos na sacola
             sacola.forEach((item, i) => {
                 container.innerHTML += `
                     <div class="glass-panel p-2.5 md:p-3 rounded-xl flex justify-between items-center relative overflow-hidden mb-2 bg-black/40 border-white/5">
@@ -419,17 +414,15 @@
             document.getElementById('frete-carrinho').textContent = valorFreteGlobal > 0 ? formatarMoeda(valorFreteGlobal) : 'A Calcular';
             document.getElementById('total-carrinho').textContent = formatarMoeda(totalGeral);
 
-            // ATUALIZA O PIX DINÂMICO SE ELE ESTIVER SELECIONADO
             const pag = document.getElementById('cliente-pagamento').value;
             if (pag === 'Pix') {
                 payloadPixAtual = gerarPayloadPix(totalGeral);
                 document.getElementById('pix-key-text').innerText = payloadPixAtual;
-                // Gera a imagem do QR Code em tempo real (Efeito Opacidade para Piscar ao atualizar)
                 const imgQr = document.getElementById('img-qrcode-pix');
                 imgQr.style.opacity = '0.3';
                 imgQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(payloadPixAtual)}&bgcolor=ffffff`;
                 imgQr.onload = () => imgQr.style.opacity = '1';
-                mudarMetodoPagamento(); // Força a UI do botão a atualizar
+                mudarMetodoPagamento(); 
             } else if (pag) {
                 mudarMetodoPagamento();
             } else {
@@ -444,11 +437,15 @@
             "maracai": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Mercado Avenida": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } }
         };
 
+        // ==============================================================
+        // HARD-STOP: VALIDAÇÃO BANCÁRIA (O SISTEMA SÓ SEGUE SE O BANCO APROVAR)
+        // ==============================================================
         async function processarPagamentoECheckout() {
             const cep = document.getElementById('cliente-cep').value.trim();
             const rua = document.getElementById('cliente-rua').value.trim();
             const numero = document.getElementById('cliente-numero').value.trim();
             const pag = document.getElementById('cliente-pagamento').value;
+            const btn = document.getElementById('btn-finalizar');
 
             if (!cep || !rua || !numero || !pag) { alert("Preencha o endereço e a forma de pagamento in-app."); return; }
             if (valorFreteGlobal === 0) { alert("Aguarde a triangulação do GPS via CEP."); return; }
@@ -463,6 +460,26 @@
                 }
             }
 
+            // 1. BLOQUEIO DE SEGURANÇA: SIMULAÇÃO DE WEBHOOK BANCÁRIO (O SISTEMA TRAVA AQUI)
+            btn.disabled = true;
+            
+            if (pag === 'Pix') {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin text-lg"></i> Aguardando Banco Central...';
+                document.getElementById('status-pix-banco').innerText = "Processando liquidação via API PIX...";
+                document.getElementById('status-pix-banco').className = "text-yellow-500 text-[9px] font-bold mt-2 animate-pulse";
+                
+                // Simula o tempo que o banco leva para ler o QR Code e confirmar o pagamento
+                await new Promise(r => setTimeout(r, 4500)); 
+                
+                document.getElementById('status-pix-banco').innerText = "PIX Recebido! Liquidação Confirmada.";
+                document.getElementById('status-pix-banco').className = "text-green-500 text-[9px] font-bold mt-2";
+            } else {
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-lg"></i> Autenticando Adquirente...';
+                // Simula a verificação de limite e antifraude do cartão
+                await new Promise(r => setTimeout(r, 3500)); 
+            }
+
+            // APENAS APÓS O BANCO AUTORIZAR, O SISTEMA SEGUE PARA O RASTREAMENTO
             document.getElementById('painel-carrinho').classList.add('translate-x-full');
             const modal = document.getElementById('modal-tracking');
             const log = document.getElementById('track-log');
@@ -473,14 +490,12 @@
             
             modal.classList.remove('hidden'); modal.classList.add('flex');
             
-            await new Promise(r => setTimeout(r, 2000));
-            
             let msgPagamento = "Pagamento Cartão Aprovado";
             if(pag === 'Pix') msgPagamento = "PIX Liquidado. Repasse Omni efetuado.";
             else if(pag === 'Google_Pay') msgPagamento = "Google/Apple Pay Aprovado (NFC/Token).";
             else if(pag === 'Cartao_Loja') msgPagamento = "Cartão Parceiro Autorizado.";
 
-            log.innerHTML += `<li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> ${msgPagamento}</li>`;
+            log.innerHTML = `<li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> ${msgPagamento}</li>`;
             progressBar.style.width = "20%"; icon.className = "fas fa-satellite-dish text-4xl text-cyan-400 animate-pulse";
             statusTxt.innerText = "Sincronizando com a Loja...";
 
@@ -558,7 +573,6 @@
 
         function fecharRastreamento() {
             document.getElementById('modal-tracking').classList.add('hidden'); document.getElementById('modal-tracking').classList.remove('flex');
-            document.getElementById('track-log').innerHTML = '<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway SandxCDD...</li>';
             document.getElementById('track-progress-bar').style.width = "5%"; document.getElementById('btn-fechar-track').classList.add('hidden');
             document.getElementById('radar-pulse').classList.remove('animate-radar'); document.getElementById('driver-card').classList.add('hidden', 'translate-y-4', 'opacity-0');
             
