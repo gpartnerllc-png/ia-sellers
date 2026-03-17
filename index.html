@@ -93,75 +93,82 @@
     </div>
 
     <div id="painel-carrinho" class="fixed top-0 right-0 w-full sm:w-[450px] h-full glass-panel bg-[#050505]/98 z-50 transform translate-x-full transition-transform duration-300 flex flex-col border-l border-white/10 shadow-2xl">
-        <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/50">
-            <h2 class="text-xl font-bold text-white"><i class="fas fa-shopping-bag mr-2 text-cyan-400"></i> Sua Sacola</h2>
-            <button onclick="toggleCarrinho()" class="text-gray-400 hover:text-white transition p-2 bg-white/5 rounded-full h-10 w-10 flex items-center justify-center"><i class="fas fa-times text-xl"></i></button>
-        </div>
-        <div id="itens-carrinho" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 no-scrollbar"></div>
         
-        <div class="p-4 md:p-6 border-t border-white/10 bg-black/80">
-            <div class="space-y-1 mb-4 border-b border-white/5 pb-4">
-                <div class="flex justify-between items-center text-gray-400 text-xs md:text-sm">
-                    <span>Subtotal</span>
-                    <span id="subtotal-carrinho">R$ 0,00</span>
-                </div>
-                <div class="flex justify-between items-center text-gray-400 text-xs md:text-sm">
-                    <span class="flex items-center gap-1"><i class="fas fa-robot text-cyan-500"></i> Despacho Ômni-Logística</span>
-                    <span id="frete-carrinho" class="text-yellow-500 font-bold">A Calcular</span>
-                </div>
-                <div class="flex justify-between items-center mt-2 pt-2 border-t border-white/5">
-                    <span class="text-gray-300 uppercase tracking-widest text-sm font-bold">Total Final</span>
-                    <span id="total-carrinho" class="text-2xl md:text-3xl font-bold text-cyan-400 drop-shadow-[0_0_10px_rgba(8,145,178,0.5)]">R$ 0,00</span>
-                </div>
-            </div>
+        <div class="p-4 md:p-6 border-b border-white/10 flex justify-between items-center bg-black/50 shrink-0">
+            <h2 class="text-xl font-bold text-white"><i class="fas fa-shopping-bag mr-2 text-cyan-400"></i> Sua Sacola</h2>
+            <button onclick="toggleCarrinho()" class="text-gray-400 hover:text-white transition p-2 bg-white/5 rounded-full h-8 w-8 md:h-10 md:w-10 flex items-center justify-center"><i class="fas fa-times text-lg md:text-xl"></i></button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col">
             
-            <div class="space-y-2 md:space-y-3 mb-4 md:mb-6" id="form-checkout" style="display: none;">
-                <div class="flex justify-between items-center mt-1 mb-1 bg-black/50 p-2 rounded border border-cyan-500/30">
-                    <p class="text-cyan-400 text-[10px] md:text-xs uppercase tracking-widest font-bold flex items-center gap-2"><i class="fas fa-satellite"></i> Geo-Posicionamento</p>
-                    <span id="status-gps" class="text-[9px] text-gray-500">Aguardando CEP...</span>
-                </div>
-
-                <div class="flex gap-2">
-                    <input type="text" id="cliente-cep" placeholder="CEP" onkeyup="buscarCEP_RTK(this.value)" maxlength="9" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition text-sm">
-                    <input type="text" id="cliente-rua" placeholder="Rua / Av." class="w-2/3 bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-300 outline-none focus:border-cyan-500 transition text-sm">
-                </div>
-                <div class="flex gap-2">
-                    <input type="text" id="cliente-numero" placeholder="Nº (Lote)" class="w-1/3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition text-sm">
-                    <input type="text" id="cliente-bairro" placeholder="Bairro / Compl." class="w-2/3 bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-300 outline-none focus:border-cyan-500 transition text-sm">
-                </div>
-
-                <p class="text-gray-400 text-[10px] uppercase tracking-widest mt-3 mb-1 ml-1"><i class="fas fa-lock text-green-400"></i> Pagamento Seguro In-App</p>
-                <select id="cliente-pagamento" onchange="mudarMetodoPagamento()" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-500 transition appearance-none text-sm">
-                    <option value="" disabled selected class="text-gray-400">Selecione a Forma de Pagamento</option>
-                    <option value="Pix" class="text-green-400 font-bold">PIX (Direto Omni-Logística)</option>
-                    <option value="Google_Pay" class="text-gray-900">Google Pay / Apple Pay</option>
-                    <option value="Cartao_Credito" class="text-gray-900">Cartão de Crédito</option>
-                    <option value="Cartao_Debito" class="text-gray-900">Cartão de Débito</option>
-                    <option value="Cartao_Loja" class="text-gray-900">Cartão da Loja Parceira</option>
-                </select>
-
-                <div id="box-cartao" class="hidden mt-2 space-y-2 p-3 bg-black/40 rounded-lg border border-cyan-500/30 transition-all">
-                    <select id="bandeira-loja" class="hidden w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-sm outline-none focus:border-cyan-500 mb-2">
-                        <option value="" disabled selected>Selecione o Cartão da Loja</option>
-                        <option value="Passai">Cartão Passaí</option>
-                        <option value="Carrefour">Cartão Carrefour</option>
-                        <option value="Atacadao">Cartão Atacadão</option>
-                    </select>
-                    <input type="text" id="num-cartao" placeholder="Número do Cartão (0000 0000 0000 0000)" maxlength="19" class="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-sm outline-none focus:border-cyan-500">
-                    <div class="flex gap-2">
-                        <input type="text" id="val-cartao" placeholder="MM/AA" maxlength="5" class="w-1/2 bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-sm outline-none focus:border-cyan-500">
-                        <input type="text" id="cvv-cartao" placeholder="CVV" maxlength="4" class="w-1/2 bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-sm outline-none focus:border-cyan-500">
+            <div id="itens-carrinho" class="p-4 md:p-6 space-y-3"></div>
+            
+            <div class="p-4 md:p-6 border-t border-white/10 bg-black/80 mt-auto">
+                <div class="space-y-1 mb-4 border-b border-white/5 pb-3">
+                    <div class="flex justify-between items-center text-gray-400 text-xs">
+                        <span>Subtotal</span>
+                        <span id="subtotal-carrinho">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-gray-400 text-xs">
+                        <span class="flex items-center gap-1"><i class="fas fa-robot text-cyan-500"></i> Despacho Ômni-Logística</span>
+                        <span id="frete-carrinho" class="text-yellow-500 font-bold">A Calcular</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-white/5">
+                        <span class="text-gray-300 uppercase tracking-widest text-xs font-bold">Total Final</span>
+                        <span id="total-carrinho" class="text-xl md:text-2xl font-bold text-cyan-400 drop-shadow-[0_0_10px_rgba(8,145,178,0.5)]">R$ 0,00</span>
                     </div>
                 </div>
+                
+                <div class="space-y-2 mb-2" id="form-checkout" style="display: none;">
+                    <div class="flex justify-between items-center mt-1 mb-1 bg-black/50 p-2 rounded border border-cyan-500/30">
+                        <p class="text-cyan-400 text-[9px] uppercase tracking-widest font-bold flex items-center gap-1.5"><i class="fas fa-satellite"></i> Geo-Posicionamento</p>
+                        <span id="status-gps" class="text-[9px] text-gray-500">Aguardando CEP...</span>
+                    </div>
 
-                <div id="box-pix" class="hidden mt-2 p-3 bg-green-900/20 rounded-lg border border-green-500/30 text-center transition-all">
-                    <p class="text-green-400 text-xs font-bold uppercase tracking-widest"><i class="fas fa-qrcode"></i> Liquidação Instantânea</p>
-                    <p class="text-gray-400 text-[10px] mt-1">O valor será creditado diretamente na conta da Plataforma Omni-Logística. Zero contato com o entregador.</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="cliente-cep" placeholder="CEP" onkeyup="buscarCEP_RTK(this.value)" maxlength="9" class="w-1/3 bg-white/5 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-cyan-500 transition text-xs">
+                        <input type="text" id="cliente-rua" placeholder="Rua / Av." class="w-2/3 bg-black/30 border border-white/10 rounded px-3 py-2 text-gray-300 outline-none focus:border-cyan-500 transition text-xs">
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="cliente-numero" placeholder="Nº/Lote" class="w-1/3 bg-white/5 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-cyan-500 transition text-xs">
+                        <input type="text" id="cliente-bairro" placeholder="Bairro / Compl." class="w-2/3 bg-black/30 border border-white/10 rounded px-3 py-2 text-gray-300 outline-none focus:border-cyan-500 transition text-xs">
+                    </div>
+
+                    <p class="text-gray-400 text-[9px] uppercase tracking-widest mt-3 mb-1 ml-1"><i class="fas fa-lock text-green-400"></i> Pagamento Seguro In-App</p>
+                    <select id="cliente-pagamento" onchange="mudarMetodoPagamento()" class="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-cyan-500 transition appearance-none text-xs">
+                        <option value="" disabled selected class="text-gray-400">Selecione a Forma de Pagamento</option>
+                        <option value="Pix" class="text-green-400 font-bold">PIX (Direto Omni-Logística)</option>
+                        <option value="Google_Pay" class="text-gray-900">Google Pay / Apple Pay</option>
+                        <option value="Cartao_Credito" class="text-gray-900">Cartão de Crédito</option>
+                        <option value="Cartao_Debito" class="text-gray-900">Cartão de Débito</option>
+                        <option value="Cartao_Loja" class="text-gray-900">Cartão da Loja Parceira</option>
+                    </select>
+
+                    <div id="box-cartao" class="hidden mt-1 space-y-1.5 p-2 bg-black/40 rounded border border-cyan-500/30 transition-all">
+                        <select id="bandeira-loja" class="hidden w-full bg-white/5 border border-white/10 rounded px-2 py-1.5 text-white text-[11px] outline-none focus:border-cyan-500 mb-1">
+                            <option value="" disabled selected>Selecione o Cartão da Loja</option>
+                            <option value="Passai">Cartão Passaí</option>
+                            <option value="Carrefour">Cartão Carrefour</option>
+                            <option value="Atacadao">Cartão Atacadão</option>
+                        </select>
+                        <input type="text" id="num-cartao" placeholder="Número do Cartão" maxlength="19" class="w-full bg-white/5 border border-white/10 rounded px-2 py-1.5 text-white text-[11px] outline-none focus:border-cyan-500">
+                        <div class="flex gap-2">
+                            <input type="text" id="val-cartao" placeholder="MM/AA" maxlength="5" class="w-1/2 bg-white/5 border border-white/10 rounded px-2 py-1.5 text-white text-[11px] outline-none focus:border-cyan-500">
+                            <input type="text" id="cvv-cartao" placeholder="CVV" maxlength="4" class="w-1/2 bg-white/5 border border-white/10 rounded px-2 py-1.5 text-white text-[11px] outline-none focus:border-cyan-500">
+                        </div>
+                    </div>
+
+                    <div id="box-pix" class="hidden mt-1 p-2 bg-green-900/20 rounded border border-green-500/30 text-center transition-all">
+                        <p class="text-green-400 text-[10px] font-bold uppercase tracking-widest"><i class="fas fa-qrcode"></i> Liquidação Instantânea</p>
+                        <p class="text-gray-400 text-[9px] mt-0.5">O valor será creditado diretamente na conta da Plataforma. Zero contato financeiro com entregador.</p>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <button id="btn-finalizar" onclick="processarPagamentoECheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-3 md:py-4 rounded-xl transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)] text-sm md:text-base">
-                Adicione itens para comprar
+        <div class="p-4 bg-[#050505] border-t border-white/10 shrink-0">
+            <button id="btn-finalizar" onclick="processarPagamentoECheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)] text-sm md:text-base">
+                Adicione itens à sacola
             </button>
         </div>
     </div>
@@ -290,32 +297,23 @@
         function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
         function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
-        // GERENCIADOR DE UI DE PAGAMENTO
         function mudarMetodoPagamento() {
             const pag = document.getElementById('cliente-pagamento').value;
             const boxCartao = document.getElementById('box-cartao');
             const boxPix = document.getElementById('box-pix');
             const selBandeira = document.getElementById('bandeira-loja');
 
-            boxCartao.classList.add('hidden');
-            boxPix.classList.add('hidden');
-            selBandeira.classList.add('hidden');
+            boxCartao.classList.add('hidden'); boxPix.classList.add('hidden'); selBandeira.classList.add('hidden');
 
-            if (pag === 'Pix') {
-                boxPix.classList.remove('hidden');
-            } else if (pag === 'Cartao_Loja') {
-                boxCartao.classList.remove('hidden');
-                selBandeira.classList.remove('hidden');
-            } else if (pag === 'Cartao_Credito' || pag === 'Cartao_Debito') {
-                boxCartao.classList.remove('hidden');
-            }
+            if (pag === 'Pix') { boxPix.classList.remove('hidden'); } 
+            else if (pag === 'Cartao_Loja') { boxCartao.classList.remove('hidden'); selBandeira.classList.remove('hidden'); } 
+            else if (pag === 'Cartao_Credito' || pag === 'Cartao_Debito') { boxCartao.classList.remove('hidden'); }
         }
 
         document.getElementById("produto").addEventListener("keypress", function(event) {
             if (event.key === "Enter") { event.preventDefault(); ativarIA(); document.getElementById("produto").blur(); }
         });
 
-        // ADICIONADO: EAN, Foto e Calculo Kg
         function adicionarAoCarrinho(nome, loja, preco, imgUrl, ean) {
             const pesoItem = parseFloat((Math.random() * 1.7 + 0.3).toFixed(2));
             sacola.push({ nome, loja, preco: parseFloat(preco), peso: pesoItem, img: imgUrl, ean: ean });
@@ -323,7 +321,7 @@
             const painel = document.getElementById('painel-carrinho');
             painel.classList.remove('translate-x-full');
             if (timerSacola) clearTimeout(timerSacola);
-            timerSacola = setTimeout(() => { painel.classList.add('translate-x-full'); }, 2500);
+            timerSacola = setTimeout(() => { painel.classList.add('translate-x-full'); }, 2000);
         }
 
         function removerDoCarrinho(index) { sacola.splice(index, 1); atualizarInterfaceCarrinho(); }
@@ -347,32 +345,32 @@
                 document.getElementById('frete-carrinho').textContent = 'A Calcular';
                 document.getElementById('total-carrinho').textContent = 'R$ 0,00';
                 btn.disabled = true;
-                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-3 md:py-4 rounded-xl uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 text-sm md:text-base";
-                btn.innerHTML = 'Adicione itens para comprar';
+                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 text-sm";
+                btn.innerHTML = 'Adicione itens à sacola';
                 form.style.display = 'none'; return;
             }
 
             form.style.display = 'block';
             btn.disabled = false;
-            btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm md:text-base shadow-[0_0_15px_rgba(34,197,94,0.4)]";
+            btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
             btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
-                    <div class="glass-panel p-3 md:p-4 rounded-xl flex justify-between items-center relative overflow-hidden mb-2 bg-black/40 border-white/5">
+                    <div class="glass-panel p-2.5 md:p-3 rounded-xl flex justify-between items-center relative overflow-hidden mb-2 bg-black/40 border-white/5">
                         <div class="absolute left-0 top-0 h-full w-1 bg-cyan-500"></div>
-                        
-                        <div class="w-10 h-10 md:w-12 md:h-12 bg-black/50 rounded overflow-hidden mr-3 border border-white/10 flex-shrink-0">
+                        <div class="w-10 h-10 bg-black/50 rounded overflow-hidden mr-2 md:mr-3 border border-white/10 flex-shrink-0">
                             <img src="${item.img}" alt="${item.nome}" class="w-full h-full object-cover">
                         </div>
-
                         <div class="flex-1 min-w-0 pr-2">
-                            <p class="text-[9px] md:text-[10px] text-cyan-400 font-mono mb-0.5">${item.loja} | EAN: ${item.ean}</p>
-                            <h4 class="text-xs md:text-sm font-medium text-white truncate">${item.nome}</h4>
-                            <p class="text-gray-500 text-[9px] mb-1">Vol: ${item.peso}kg | UN/Varejo</p>
-                            <p class="text-white font-bold text-sm md:text-base">${formatarMoeda(item.preco)}</p>
+                            <p class="text-[9px] text-cyan-400 font-mono mb-0.5">${item.loja} | EAN: ${item.ean}</p>
+                            <h4 class="text-xs md:text-sm font-medium text-white truncate leading-tight">${item.nome}</h4>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-white font-bold text-sm">${formatarMoeda(item.preco)}</span>
+                                <span class="text-gray-500 text-[9px] bg-white/5 px-1.5 py-0.5 rounded">Vol: ${item.peso}kg</span>
+                            </div>
                         </div>
-                        <button onclick="removerDoCarrinho(${i})" class="text-red-400 hover:text-red-300 w-8 h-8 flex items-center justify-center rounded-full bg-red-400/10 ml-1 flex-shrink-0"><i class="fas fa-trash-alt text-sm"></i></button>
+                        <button onclick="removerDoCarrinho(${i})" class="text-red-400 hover:text-red-300 w-7 h-7 flex items-center justify-center rounded-full bg-red-400/10 flex-shrink-0"><i class="fas fa-trash-alt text-xs"></i></button>
                     </div>`;
             });
             
@@ -393,10 +391,9 @@
             const numero = document.getElementById('cliente-numero').value.trim();
             const pag = document.getElementById('cliente-pagamento').value;
 
-            if (!cep || !rua || !numero || !pag) { alert("Preencha o endereço de entrega e a forma de pagamento in-app."); return; }
+            if (!cep || !rua || !numero || !pag) { alert("Preencha o endereço e a forma de pagamento in-app."); return; }
             if (valorFreteGlobal === 0) { alert("Aguarde a triangulação do GPS via CEP."); return; }
 
-            // VALIDAÇÃO DE SEGURANÇA SE FOR CARTÃO
             if (pag.includes('Cartao')) {
                 const numCard = document.getElementById('num-cartao').value;
                 const valCard = document.getElementById('val-cartao').value;
@@ -407,7 +404,6 @@
                 }
             }
 
-            // 1. INICIA O MODAL DE RASTREAMENTO E PAGAMENTO
             document.getElementById('painel-carrinho').classList.add('translate-x-full');
             const modal = document.getElementById('modal-tracking');
             const log = document.getElementById('track-log');
@@ -416,10 +412,8 @@
             const progressBar = document.getElementById('track-progress-bar');
             const driverCard = document.getElementById('driver-card');
             
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             
-            // Simulação de Gateway de Pagamento
             await new Promise(r => setTimeout(r, 2000));
             
             let msgPagamento = "Pagamento Cartão Aprovado";
@@ -428,18 +422,15 @@
             else if(pag === 'Cartao_Loja') msgPagamento = "Cartão Parceiro Autorizado.";
 
             log.innerHTML += `<li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> ${msgPagamento}</li>`;
-            progressBar.style.width = "20%";
-            icon.className = "fas fa-satellite-dish text-4xl text-cyan-400 animate-pulse";
+            progressBar.style.width = "20%"; icon.className = "fas fa-satellite-dish text-4xl text-cyan-400 animate-pulse";
             statusTxt.innerText = "Sincronizando com a Loja...";
 
-            // Match do Entregador/Robô SandxCDD
             let dName, dVehicle, dDoc, dIcon;
             if (pesoSacolaGlobal < 2.5 && (valorFreteGlobal/1.8) < 5) {
                 dName = "Drone Prime Air V4"; dVehicle = "Voo Autônomo RTK"; dDoc = "FROTA: AZ-992X"; dIcon = "fa-helicopter";
             } else {
                 const nomesMEI = ["Carlos Silva (MEI)", "Roberto Alves (MEI)", "Fernanda Lima (MEI)"];
-                dName = nomesMEI[Math.floor(Math.random() * nomesMEI.length)];
-                dVehicle = "Honda CG 160 • Placa XYZ-9876"; 
+                dName = nomesMEI[Math.floor(Math.random() * nomesMEI.length)]; dVehicle = "Honda CG 160 • Placa XYZ-9876"; 
                 dDoc = "CNPJ: ***." + Math.floor(100+Math.random()*899) + ".***/0001-**"; dIcon = "fa-motorcycle";
             }
 
@@ -453,7 +444,6 @@
             const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Destino:* ${rua}, Nº ${numero}\n🛰️ *GPS RTK:* Lat: ${coordenadasRTK.lat} | Lng: ${coordenadasRTK.lng}\n💳 *Status Financeiro:* PAGO NA PLATAFORMA (${formaPagamentoFormatada})\n\n`;
 
             try {
-                // 2. DISPARO PARA O TELEGRAM (A Loja recebe a Ordem Paga com Imagens e EAN Simulados)
                 const promessasDeEnvio = Object.keys(pedidosPorLoja).map(async (nomeDaLoja) => {
                     const itensDestaLoja = pedidosPorLoja[nomeDaLoja];
                     let subtotalDestaLoja = 0;
@@ -465,9 +455,8 @@
                     });
                     
                     resumoLoja += `\n🚚 *PARCEIRO ALOCADO PARA RETIRADA:*\n• Entregador: ${dName}\n• Documento: ${dDoc}\n• Veículo: ${dVehicle}\n`;
-                    
                     const totalComFrete = subtotalDestaLoja + valorFreteGlobal;
-                    resumoLoja += `\n💰 *VALOR TOTAL DA NOTA:* R$ ${totalComFrete.toFixed(2)}\n⚠️ *ATENÇÃO:* NÃO cobrar do cliente. Repasse PIX/Cartão garantido pelo Gateway SandxCDD.\n`;
+                    resumoLoja += `\n💰 *VALOR TOTAL DA NOTA:* R$ ${totalComFrete.toFixed(2)}\n⚠️ *ATENÇÃO:* NÃO cobrar do cliente. Repasse garantido pelo Gateway SandxCDD.\n`;
 
                     let credenciais = franquiasTelegram[clienteLogado.regiao]?.[nomeDaLoja] || { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" };
                     return fetch(`https://api.telegram.org/bot${credenciais.botToken}/sendMessage`, {
@@ -478,53 +467,41 @@
 
                 await Promise.all(promessasDeEnvio);
 
-                // 3. ANIMAÇÃO DE RASTREAMENTO AO VIVO
                 await new Promise(r => setTimeout(r, 1500));
                 log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-boxes"></i> Ordem aceita. Separando itens...</li>`;
-                progressBar.style.width = "40%";
-                statusTxt.innerText = "Preparando Pedido";
+                progressBar.style.width = "40%"; statusTxt.innerText = "Preparando Pedido";
 
                 await new Promise(r => setTimeout(r, 2000));
                 log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-id-badge"></i> Parceiro SandxCDD alocado.</li>`;
-                progressBar.style.width = "60%";
-                icon.className = `fas ${dIcon} text-4xl text-cyan-400`;
-                statusTxt.innerText = "Veículo a Caminho";
+                progressBar.style.width = "60%"; icon.className = `fas ${dIcon} text-4xl text-cyan-400`; statusTxt.innerText = "Veículo a Caminho";
                 
                 document.getElementById('driver-name').innerHTML = `${dName} <i class="fas fa-check-circle text-green-500 text-xs ml-1"></i>`;
-                document.getElementById('driver-vehicle').innerText = dVehicle;
-                document.getElementById('driver-doc').innerText = dDoc;
+                document.getElementById('driver-vehicle').innerText = dVehicle; document.getElementById('driver-doc').innerText = dDoc;
                 document.getElementById('driver-avatar').innerHTML = `<i class="fas ${dIcon} text-2xl text-cyan-400"></i>`;
-                driverCard.classList.remove('hidden');
-                setTimeout(() => { driverCard.classList.remove('translate-y-4', 'opacity-0'); }, 100);
+                driverCard.classList.remove('hidden'); setTimeout(() => { driverCard.classList.remove('translate-y-4', 'opacity-0'); }, 100);
 
                 await new Promise(r => setTimeout(r, 3000));
                 log.innerHTML += `<li class="flex items-center gap-2 text-yellow-400"><i class="fas fa-route"></i> Em trânsito. Deslocamento: ${valorFreteGlobal > 0 ? (valorFreteGlobal/1.8).toFixed(1) : 4.5} km.</li>`;
-                progressBar.style.width = "80%";
-                document.getElementById('radar-pulse').classList.add('animate-radar');
+                progressBar.style.width = "80%"; document.getElementById('radar-pulse').classList.add('animate-radar');
 
                 await new Promise(r => setTimeout(r, 4000));
                 log.innerHTML += `<li class="flex items-center gap-2 text-green-400 font-bold"><i class="fas fa-map-marker-alt"></i> Chegando na coordenada final!</li>`;
-                progressBar.style.width = "100%";
-                icon.className = "fas fa-check-circle text-4xl text-green-400";
-                statusTxt.innerText = "Entregue!";
-                document.getElementById('btn-fechar-track').classList.remove('hidden');
+                progressBar.style.width = "100%"; icon.className = "fas fa-check-circle text-4xl text-green-400";
+                statusTxt.innerText = "Entregue!"; document.getElementById('btn-fechar-track').classList.remove('hidden');
 
             } catch (error) {
                 modal.classList.add('hidden'); modal.classList.remove('flex');
                 alert("❌ Erro ao despachar via satélite. Tente novamente.");
                 document.getElementById('btn-finalizar').disabled = false; 
-                document.getElementById('btn-finalizar').innerHTML = '<i class="fas fa-lock text-xl"></i> Pagar na Plataforma';
+                document.getElementById('btn-finalizar').innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
             }
         }
 
         function fecharRastreamento() {
-            document.getElementById('modal-tracking').classList.add('hidden');
-            document.getElementById('modal-tracking').classList.remove('flex');
+            document.getElementById('modal-tracking').classList.add('hidden'); document.getElementById('modal-tracking').classList.remove('flex');
             document.getElementById('track-log').innerHTML = '<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway SandxCDD...</li>';
-            document.getElementById('track-progress-bar').style.width = "5%";
-            document.getElementById('btn-fechar-track').classList.add('hidden');
-            document.getElementById('radar-pulse').classList.remove('animate-radar');
-            document.getElementById('driver-card').classList.add('hidden', 'translate-y-4', 'opacity-0');
+            document.getElementById('track-progress-bar').style.width = "5%"; document.getElementById('btn-fechar-track').classList.add('hidden');
+            document.getElementById('radar-pulse').classList.remove('animate-radar'); document.getElementById('driver-card').classList.add('hidden', 'translate-y-4', 'opacity-0');
             
             sacola = []; valorFreteGlobal = 0.00; pesoSacolaGlobal = 0.0;
             document.getElementById('cliente-cep').value = ''; document.getElementById('cliente-rua').value = '';
@@ -537,12 +514,9 @@
 
         async function ativarIA() {
             const query = document.getElementById('produto').value.trim();
-            if (!query) return;
-            document.getElementById('produto').blur();
+            if (!query) return; document.getElementById('produto').blur();
 
-            const feed = document.getElementById('feed-ofertas');
-            const status = document.getElementById('status-container');
-            const btn = document.getElementById('btn-buscar');
+            const feed = document.getElementById('feed-ofertas'); const status = document.getElementById('status-container'); const btn = document.getElementById('btn-buscar');
 
             btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i> Buscando...';
             feed.innerHTML = ''; status.classList.remove('hidden');
@@ -550,13 +524,10 @@
 
             try {
                 const urlDoRobo = `https://mercado.gpartnerllc.workers.dev/?produto=${encodeURIComponent(query)}&regiao=${encodeURIComponent(clienteLogado.regiao)}`;
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 18000);
-                const res = await fetch(urlDoRobo, { signal: controller.signal });
-                clearTimeout(timeoutId);
+                const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 18000);
+                const res = await fetch(urlDoRobo, { signal: controller.signal }); clearTimeout(timeoutId);
 
-                if (!res.ok) throw new Error(`Falha API`);
-                const data = await res.json();
+                if (!res.ok) throw new Error(`Falha API`); const data = await res.json();
 
                 btn.disabled = false; btn.innerHTML = 'Buscar'; status.classList.add('hidden');
                 if (data.erro) throw new Error(data.erro);
@@ -574,42 +545,37 @@
         }
 
         function desenharCard(loja, produto, preco, isMelhorPreco) {
-            const feed = document.getElementById('feed-ofertas');
-            const precoFormatado = formatarMoeda(preco);
-            const nomeEsc = produto.replace(/'/g, "").replace(/"/g, "");
-            const lojaEsc = loja.replace(/'/g, "").replace(/"/g, "");
+            const feed = document.getElementById('feed-ofertas'); const precoFormatado = formatarMoeda(preco);
+            const nomeEsc = produto.replace(/'/g, "").replace(/"/g, ""); const lojaEsc = loja.replace(/'/g, "").replace(/"/g, "");
 
-            // GERAÇÃO DE DADOS DE VAREJO (MOCK): EAN Único, Preço/Kg e Imagem
             const mockEan = "789" + Math.floor(100000000 + Math.random() * 900000000);
             const precoKg = (preco * (Math.random() * 0.5 + 0.8)).toFixed(2);
-            
-            // Simula a Imagem Real do Produto baseada no nome (API Externa de Avatares/Placeholder para visual B2B)
             const imagemUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nomeEsc.substring(0,3))}&background=0a0a0a&color=06b6d4&size=200&font-size=0.4&rounded=true&bold=true`;
 
-            const botaoAcao = `<button onclick="adicionarAoCarrinho('${nomeEsc}', '${lojaEsc}', ${preco}, '${imagemUrl}', '${mockEan}')" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-xs md:text-sm font-bold py-3 rounded-lg transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)] mt-2"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
+            const botaoAcao = `<button onclick="adicionarAoCarrinho('${nomeEsc}', '${lojaEsc}', ${preco}, '${imagemUrl}', '${mockEan}')" class="w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white text-xs md:text-sm font-bold py-2 md:py-3 rounded-lg transition-colors uppercase tracking-wider shadow-[0_0_10px_rgba(8,145,178,0.4)] mt-2"><i class="fas fa-cart-plus mr-2"></i> Por na Sacola</button>`;
             
             const cardHTML = `
-                <div class="glass-panel bg-[#0a0a0a]/80 p-5 md:p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_25px_rgba(8,145,178,0.2)] scale-[1.02]' : 'border-white/5'}">
+                <div class="glass-panel bg-[#0a0a0a]/80 p-4 md:p-6 rounded-2xl relative flex flex-col justify-between animate-slide-up ${isMelhorPreco ? 'border-cyan-500/50 shadow-[0_0_25px_rgba(8,145,178,0.2)] scale-[1.02]' : 'border-white/5'}">
                     ${isMelhorPreco ? `<div class="absolute -top-3 left-4 md:left-6 bg-cyan-500 text-black text-[9px] md:text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md z-10">Melhor Preço Local</div>` : ''}
                     
-                    <div class="w-full h-32 md:h-40 bg-[#050505] rounded-xl mb-4 flex items-center justify-center overflow-hidden border border-white/5 relative shadow-inner">
+                    <div class="w-full h-28 md:h-40 bg-[#050505] rounded-xl mb-3 md:mb-4 flex items-center justify-center overflow-hidden border border-white/5 relative shadow-inner">
                         <div class="absolute top-2 right-2 bg-green-500/20 text-green-400 text-[8px] font-bold px-2 py-0.5 rounded border border-green-500/30 uppercase z-10 backdrop-blur-sm">Atacado/Varejo</div>
                         <img src="${imagemUrl}" alt="${produto}" class="object-cover h-full opacity-80 hover:opacity-100 transition-opacity transform hover:scale-105 duration-300">
                     </div>
 
                     <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[10px] md:text-xs font-semibold text-gray-400 uppercase tracking-widest">${loja}</span>
-                            <span class="text-green-400 text-[9px] md:text-[10px] bg-green-400/10 border border-green-400/20 px-2 py-0.5 rounded backdrop-blur-sm uppercase tracking-wider font-bold"><i class="fas fa-check mr-1"></i> Estoque</span>
+                        <div class="flex justify-between items-center mb-1.5 md:mb-2">
+                            <span class="text-[9px] md:text-xs font-semibold text-gray-400 uppercase tracking-widest">${loja}</span>
+                            <span class="text-green-400 text-[8px] md:text-[10px] bg-green-400/10 border border-green-400/20 px-2 py-0.5 rounded backdrop-blur-sm uppercase tracking-wider font-bold"><i class="fas fa-check mr-1"></i> Estoque</span>
                         </div>
-                        <h3 class="text-sm md:text-lg font-medium text-white mb-1 line-clamp-2 leading-snug">${produto}</h3>
-                        <p class="text-[9px] md:text-[10px] text-gray-500 font-mono mb-4">EAN: ${mockEan} | Aprox. R$ ${precoKg}/kg</p>
+                        <h3 class="text-xs md:text-lg font-medium text-white mb-1 line-clamp-2 leading-snug">${produto}</h3>
+                        <p class="text-[8px] md:text-[10px] text-gray-500 font-mono mb-2 md:mb-4">EAN: ${mockEan} | Aprox. R$ ${precoKg}/kg</p>
                     </div>
                     
-                    <div class="flex flex-col mt-auto border-t border-white/10 pt-3 md:pt-4 gap-2 md:gap-3">
+                    <div class="flex flex-col mt-auto border-t border-white/10 pt-2 md:pt-4 gap-2 md:gap-3">
                         <div class="flex flex-col">
-                            <span class="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-widest mb-1">Preço Unidade</span>
-                            <span class="text-2xl md:text-3xl font-extrabold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'} drop-shadow-md">${precoFormatado}</span>
+                            <span class="text-[8px] md:text-[10px] text-gray-400 uppercase tracking-widest mb-1">Preço Unidade</span>
+                            <span class="text-xl md:text-3xl font-extrabold ${isMelhorPreco ? 'text-cyan-400' : 'text-white'} drop-shadow-md">${precoFormatado}</span>
                         </div>
                         ${botaoAcao}
                     </div>
