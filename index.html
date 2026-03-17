@@ -100,7 +100,6 @@
         </div>
         
         <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col">
-            
             <div id="itens-carrinho" class="p-4 md:p-6 space-y-3"></div>
             
             <div class="p-4 md:p-6 border-t border-white/10 bg-black/80 mt-auto">
@@ -137,7 +136,7 @@
                     <p class="text-gray-400 text-[9px] uppercase tracking-widest mt-3 mb-1 ml-1"><i class="fas fa-lock text-green-400"></i> Pagamento Seguro In-App</p>
                     <select id="cliente-pagamento" onchange="mudarMetodoPagamento()" class="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-cyan-500 transition appearance-none text-xs">
                         <option value="" disabled selected class="text-gray-400">Selecione a Forma de Pagamento</option>
-                        <option value="Pix" class="text-green-400 font-bold">PIX (Direto Omni-Logística)</option>
+                        <option value="Pix" class="text-green-400 font-bold">PIX (Direto SandxCDD Ômni)</option>
                         <option value="Google_Pay" class="text-gray-900">Google Pay / Apple Pay</option>
                         <option value="Cartao_Credito" class="text-gray-900">Cartão de Crédito</option>
                         <option value="Cartao_Debito" class="text-gray-900">Cartão de Débito</option>
@@ -158,9 +157,21 @@
                         </div>
                     </div>
 
-                    <div id="box-pix" class="hidden mt-1 p-2 bg-green-900/20 rounded border border-green-500/30 text-center transition-all">
-                        <p class="text-green-400 text-[10px] font-bold uppercase tracking-widest"><i class="fas fa-qrcode"></i> Liquidação Instantânea</p>
-                        <p class="text-gray-400 text-[9px] mt-0.5">O valor será creditado diretamente na conta da Plataforma. Zero contato financeiro com entregador.</p>
+                    <div id="box-pix" class="hidden mt-1 p-3 bg-[#0a0a0a] rounded-lg border border-green-500/50 text-center transition-all relative overflow-hidden shadow-inner">
+                        <div class="absolute top-0 left-0 w-full h-0.5 bg-green-500 animate-pulse"></div>
+                        <p class="text-green-400 text-[10px] font-bold uppercase tracking-widest mb-2"><i class="fab fa-pix"></i> Pague via PIX</p>
+                        
+                        <div class="bg-white p-2 rounded-xl inline-block mb-2 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                            <img id="img-qrcode-pix" src="" alt="QR Code PIX" class="w-24 h-24 md:w-32 md:h-32 object-contain transition-opacity duration-300">
+                        </div>
+                        
+                        <p class="text-gray-300 text-[9px] mb-2 font-mono bg-white/5 inline-block px-2 py-1 rounded">Destinatário: ÔMNI-LOGISTICA</p>
+                        
+                        <div class="flex items-center justify-between bg-black/80 border border-white/10 rounded px-2 py-1.5 w-full">
+                            <span class="text-gray-400 text-[8px] md:text-[9px] font-mono truncate w-4/5 text-left select-all" id="pix-key-text">Aguardando geração...</span>
+                            <button type="button" onclick="copiarChavePix()" class="text-cyan-400 hover:text-cyan-300 text-[9px] font-bold uppercase w-1/5 text-right"><i class="fas fa-copy"></i> Copiar</button>
+                        </div>
+                        <p class="text-green-500 text-[8px] font-bold mt-2 animate-pulse"><i class="fas fa-circle-notch fa-spin"></i> Aguardando confirmação do banco...</p>
                     </div>
                 </div>
             </div>
@@ -191,7 +202,7 @@
             </div>
 
             <div id="driver-card" class="hidden w-full bg-[#0a0a0a] border border-cyan-500/30 rounded-xl p-4 mt-2 mb-6 text-left transform transition-all duration-500 translate-y-4 opacity-0 shadow-[0_0_20px_rgba(8,145,178,0.15)]">
-                <p class="text-[10px] text-cyan-500 uppercase tracking-widest font-bold mb-3 border-b border-white/10 pb-2"><i class="fas fa-id-card"></i> Identificação</p>
+                <p class="text-[10px] text-cyan-500 uppercase tracking-widest font-bold mb-3 border-b border-white/10 pb-2"><i class="fas fa-id-card"></i> Identificação SandxCDD</p>
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-full bg-cyan-900/30 flex items-center justify-center border border-cyan-500/50 shadow-inner" id="driver-avatar">
                         <i class="fas fa-motorcycle text-2xl text-cyan-400"></i>
@@ -211,7 +222,7 @@
 
             <div class="glass-panel p-4 rounded-xl text-left bg-black/50 border border-white/5">
                 <ul id="track-log" class="space-y-3 text-xs md:text-sm text-gray-400 font-mono">
-                    <li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway</li>
+                    <li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-check-circle"></i> Iniciando gateway SandxCDD...</li>
                 </ul>
             </div>
             
@@ -228,6 +239,7 @@
         let valorFreteGlobal = 0.00; 
         let pesoSacolaGlobal = 0.0;
         let coordenadasRTK = { lat: "", lng: "" };
+        let payloadPixAtual = ""; // Variável para armazenar o copia e cola atual
 
         const nomesRegioes = { "brasilia": "Brasília - DF", "aguas_lindas": "Águas Lindas - GO", "maracai": "Maracaí - SP" };
 
@@ -297,17 +309,46 @@
         function formatarMoeda(valor) { return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
         function toggleCarrinho() { document.getElementById('painel-carrinho').classList.toggle('translate-x-full'); }
 
+        // ==============================================================
+        // MOTOR DE GERAÇÃO DE PIX DINÂMICO (EMV SIMULADO)
+        // ==============================================================
+        function gerarPayloadPix(valorTotal) {
+            const valorFmt = valorTotal.toFixed(2);
+            // Payload PIX Estruturado com o valor exato da sacola e chave fictícia da empresa
+            return `0002012636br.gov.bcb.pix0114+5561982439081520400005303986540${valorFmt.length}${valorFmt}5802BR5916SANDXCDD OMNI6008BRASILIA62070503***6304${Math.floor(1000 + Math.random() * 9000)}`;
+        }
+
+        function copiarChavePix() {
+            navigator.clipboard.writeText(payloadPixAtual).then(() => {
+                alert("Chave PIX copiada! Abra o app do seu banco e cole para liquidar a fatura.");
+            });
+        }
+
         function mudarMetodoPagamento() {
             const pag = document.getElementById('cliente-pagamento').value;
             const boxCartao = document.getElementById('box-cartao');
             const boxPix = document.getElementById('box-pix');
             const selBandeira = document.getElementById('bandeira-loja');
+            const btn = document.getElementById('btn-finalizar');
 
             boxCartao.classList.add('hidden'); boxPix.classList.add('hidden'); selBandeira.classList.add('hidden');
 
-            if (pag === 'Pix') { boxPix.classList.remove('hidden'); } 
-            else if (pag === 'Cartao_Loja') { boxCartao.classList.remove('hidden'); selBandeira.classList.remove('hidden'); } 
-            else if (pag === 'Cartao_Credito' || pag === 'Cartao_Debito') { boxCartao.classList.remove('hidden'); }
+            if (pag === 'Pix') { 
+                boxPix.classList.remove('hidden'); 
+                btn.innerHTML = '<i class="fas fa-check-double text-lg"></i> Já Paguei o PIX';
+                btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
+            } 
+            else if (pag === 'Cartao_Loja') { 
+                boxCartao.classList.remove('hidden'); selBandeira.classList.remove('hidden'); 
+                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+            } 
+            else if (pag === 'Cartao_Credito' || pag === 'Cartao_Debito') { 
+                boxCartao.classList.remove('hidden'); 
+                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+            }
+            else {
+                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+            }
         }
 
         document.getElementById("produto").addEventListener("keypress", function(event) {
@@ -347,14 +388,14 @@
                 btn.disabled = true;
                 btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 text-sm";
                 btn.innerHTML = 'Adicione itens à sacola';
-                form.style.display = 'none'; return;
+                form.style.display = 'none'; 
+                return;
             }
 
             form.style.display = 'block';
             btn.disabled = false;
-            btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
-            btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
 
+            // Recria a lista de produtos na sacola
             sacola.forEach((item, i) => {
                 container.innerHTML += `
                     <div class="glass-panel p-2.5 md:p-3 rounded-xl flex justify-between items-center relative overflow-hidden mb-2 bg-black/40 border-white/5">
@@ -377,12 +418,30 @@
             document.getElementById('subtotal-carrinho').textContent = formatarMoeda(subtotal);
             document.getElementById('frete-carrinho').textContent = valorFreteGlobal > 0 ? formatarMoeda(valorFreteGlobal) : 'A Calcular';
             document.getElementById('total-carrinho').textContent = formatarMoeda(totalGeral);
+
+            // ATUALIZA O PIX DINÂMICO SE ELE ESTIVER SELECIONADO
+            const pag = document.getElementById('cliente-pagamento').value;
+            if (pag === 'Pix') {
+                payloadPixAtual = gerarPayloadPix(totalGeral);
+                document.getElementById('pix-key-text').innerText = payloadPixAtual;
+                // Gera a imagem do QR Code em tempo real (Efeito Opacidade para Piscar ao atualizar)
+                const imgQr = document.getElementById('img-qrcode-pix');
+                imgQr.style.opacity = '0.3';
+                imgQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(payloadPixAtual)}&bgcolor=ffffff`;
+                imgQr.onload = () => imgQr.style.opacity = '1';
+                mudarMetodoPagamento(); // Força a UI do botão a atualizar
+            } else if (pag) {
+                mudarMetodoPagamento();
+            } else {
+                btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
+                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+            }
         }
 
         const franquiasTelegram = {
-            "brasilia": { "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } },
-            "aguas_lindas": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } },
-            "maracai": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } }
+            "brasilia": { "Carrefour": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Tatico": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } },
+            "aguas_lindas": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Dia a Dia": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } },
+            "maracai": { "Atacadão": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" }, "Mercado Avenida": { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" } }
         };
 
         async function processarPagamentoECheckout() {
@@ -503,7 +562,7 @@
             document.getElementById('track-progress-bar').style.width = "5%"; document.getElementById('btn-fechar-track').classList.add('hidden');
             document.getElementById('radar-pulse').classList.remove('animate-radar'); document.getElementById('driver-card').classList.add('hidden', 'translate-y-4', 'opacity-0');
             
-            sacola = []; valorFreteGlobal = 0.00; pesoSacolaGlobal = 0.0;
+            sacola = []; valorFreteGlobal = 0.00; pesoSacolaGlobal = 0.0; payloadPixAtual = "";
             document.getElementById('cliente-cep').value = ''; document.getElementById('cliente-rua').value = '';
             document.getElementById('cliente-numero').value = ''; document.getElementById('cliente-bairro').value = '';
             document.getElementById('num-cartao').value = ''; document.getElementById('val-cartao').value = ''; document.getElementById('cvv-cartao').value = '';
