@@ -74,7 +74,7 @@
                 <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-1 md:mb-2 text-white drop-shadow-lg text-center leading-tight">
                     Mercado IA | Marketplace
                 </h1>
-                <p class="text-cyan-500 text-[9px] md:text-[10px] uppercase tracking-widest font-bold mb-3">Ômni-Logística®</p>
+                <p class="text-cyan-500 text-[9px] md:text-[10px] uppercase tracking-widest font-bold mb-3">Powered by SandxCDD Ômni-Logística®</p>
 
                 <div class="w-full glass-panel p-1.5 md:p-2 rounded-xl flex items-center bg-[#0a0a0a]/90 border border-cyan-500/40 shadow-inner">
                     <i class="fas fa-search text-gray-400 ml-3 text-base md:text-lg"></i>
@@ -165,20 +165,20 @@
                             <img id="img-qrcode-pix" src="" alt="QR Code PIX" class="w-24 h-24 md:w-32 md:h-32 object-contain transition-opacity duration-300">
                         </div>
                         
-                        <p class="text-gray-300 text-[9px] mb-2 font-mono bg-white/5 inline-block px-2 py-1 rounded">Destinatário: SANDXCDD ÔMNI-LOGISTICA</p>
+                        <p class="text-gray-300 text-[9px] mb-2 font-mono bg-white/5 inline-block px-2 py-1 rounded">Destinatário: SANDXCDD OMNI-LOGISTICA</p>
                         
                         <div class="flex items-center justify-between bg-black/80 border border-white/10 rounded px-2 py-1.5 w-full">
                             <span class="text-gray-400 text-[8px] md:text-[9px] font-mono truncate w-4/5 text-left select-all" id="pix-key-text">Aguardando geração...</span>
                             <button type="button" onclick="copiarChavePix()" class="text-cyan-400 hover:text-cyan-300 text-[9px] font-bold uppercase w-1/5 text-right"><i class="fas fa-copy"></i> Copiar</button>
                         </div>
-                        <p id="status-pix-banco" class="text-green-500 text-[8px] font-bold mt-2 animate-pulse"><i class="fas fa-circle-notch fa-spin"></i> Aguardando confirmação do banco...</p>
+                        <p id="status-pix-banco" class="text-yellow-500 text-[8px] font-bold mt-2 hidden"><i class="fas fa-circle-notch fa-spin"></i> Aguardando confirmação do banco...</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="p-4 bg-[#050505] border-t border-white/10 shrink-0">
-            <button id="btn-finalizar" onclick="processarPagamentoECheckout()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)] text-sm md:text-base">
+            <button id="btn-finalizar" onclick="iniciarHardStopPagamento()" disabled class="w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg transition-all uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(8,145,178,0.3)] text-sm md:text-base">
                 Adicione itens à sacola
             </button>
         </div>
@@ -187,9 +187,9 @@
     <div id="modal-tracking" class="fixed inset-0 z-[200] hidden bg-[#050505] flex-col items-center justify-start p-4 transition-opacity duration-500 overflow-y-auto pb-10">
         <div class="w-full max-w-lg mt-6 text-center">
             <h2 class="text-2xl font-bold text-white mb-1">Status da Entrega</h2>
-            <p class="text-cyan-400 text-xs font-mono uppercase tracking-widest mb-8">Status: <span id="track-status-text" class="text-white">Processando Despacho...</span></p>
+            <p class="text-cyan-400 text-xs font-mono uppercase tracking-widest mb-6">Status: <span id="track-status-text" class="text-white">Processando Despacho...</span></p>
 
-            <div class="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
+            <div class="relative w-40 h-40 mx-auto mb-6 flex items-center justify-center">
                 <div id="radar-pulse" class="absolute inset-0 bg-cyan-500/20 rounded-full animate-radar"></div>
                 <div class="absolute inset-4 border border-cyan-500/30 rounded-full"></div>
                 <div class="absolute inset-10 border border-cyan-500/50 rounded-full flex items-center justify-center bg-[#0a0a0a]">
@@ -199,6 +199,15 @@
 
             <div class="w-full bg-white/10 rounded-full h-2 mb-4 overflow-hidden">
                 <div id="track-progress-bar" class="bg-cyan-500 h-2 rounded-full transition-all duration-1000" style="width: 5%"></div>
+            </div>
+
+            <div id="telemetry-box" class="hidden mt-2 mb-4 bg-black/60 p-3 rounded-lg border border-cyan-500/30 text-left font-mono text-[10px] md:text-xs text-cyan-400 shadow-[0_0_15px_rgba(8,145,178,0.2)]">
+                <p class="border-b border-cyan-500/20 pb-1 mb-2 font-bold uppercase"><i class="fas fa-satellite-dish animate-pulse text-yellow-400"></i> Sinal RTK Conectado</p>
+                <div class="grid grid-cols-2 gap-2 text-gray-300">
+                    <p>📍 Distância: <span id="telemetry-dist" class="text-white font-bold">--</span> km</p>
+                    <p>⏳ ETA: <span id="telemetry-eta" class="text-white font-bold">--</span> min</p>
+                    <p class="col-span-2 text-[9px] text-gray-500 mt-1">🎯 GPS: Lat <span id="telemetry-lat">--</span> / Lng <span id="telemetry-lng">--</span></p>
+                </div>
             </div>
 
             <div id="driver-card" class="hidden w-full bg-[#0a0a0a] border border-cyan-500/30 rounded-xl p-4 mt-2 mb-6 text-left transform transition-all duration-500 translate-y-4 opacity-0 shadow-[0_0_20px_rgba(8,145,178,0.15)]">
@@ -222,7 +231,7 @@
 
             <div class="glass-panel p-4 rounded-xl text-left bg-black/50 border border-white/5">
                 <ul id="track-log" class="space-y-3 text-xs md:text-sm text-gray-400 font-mono">
-                    <li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> Pagamento confirmado pela Instituição Financeira.</li>
+                    <li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> Pagamento confirmado (Webhook Bancário).</li>
                 </ul>
             </div>
             
@@ -233,13 +242,10 @@
     </div>
 
     <script>
-        let clienteLogado = null;
-        let sacola = [];
-        let timerSacola;
-        let valorFreteGlobal = 0.00; 
-        let pesoSacolaGlobal = 0.0;
-        let coordenadasRTK = { lat: "", lng: "" };
-        let payloadPixAtual = ""; 
+        let clienteLogado = null; let sacola = []; let timerSacola;
+        let valorFreteGlobal = 0.00; let pesoSacolaGlobal = 0.0;
+        let coordenadasRTK = { lat: "", lng: "" }; let payloadPixAtual = ""; 
+        let intervaloTelemetria; // Para controlar o painel de RTK
 
         const nomesRegioes = { "brasilia": "Brasília - DF", "aguas_lindas": "Águas Lindas - GO", "maracai": "Maracaí - SP" };
 
@@ -279,22 +285,16 @@
             if (cep.length === 8) {
                 document.getElementById('cliente-rua').value = "Triangulando via satélite...";
                 document.getElementById('status-gps').innerHTML = `<i class="fas fa-circle-notch fa-spin text-yellow-500"></i> Capturando RTK...`;
-                
                 try {
                     const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                     const dados = await resposta.json();
                     if (dados.erro) throw new Error();
 
-                    document.getElementById('cliente-rua').value = dados.logradouro;
-                    document.getElementById('cliente-bairro').value = dados.bairro;
-                    document.getElementById('cliente-numero').focus();
+                    document.getElementById('cliente-rua').value = dados.logradouro; document.getElementById('cliente-bairro').value = dados.bairro; document.getElementById('cliente-numero').focus();
                     
-                    const mockLat = (Math.random() * 0.05 - 15.80).toFixed(6);
-                    const mockLng = (Math.random() * 0.05 - 47.90).toFixed(6);
+                    const mockLat = (Math.random() * 0.05 - 15.80).toFixed(6); const mockLng = (Math.random() * 0.05 - 47.90).toFixed(6);
                     coordenadasRTK = { lat: mockLat, lng: mockLng };
-
-                    const kmSimulado = (Math.random() * 8 + 1).toFixed(1); 
-                    valorFreteGlobal = parseFloat((kmSimulado * 1.80).toFixed(2));
+                    const kmSimulado = (Math.random() * 8 + 1).toFixed(1); valorFreteGlobal = parseFloat((kmSimulado * 1.80).toFixed(2));
 
                     document.getElementById('status-gps').innerHTML = `<span class="text-green-400 font-mono"><i class="fas fa-check-circle"></i> Sincronizado | Lat: ${mockLat}, Lng: ${mockLng}</span>`;
                     atualizarInterfaceCarrinho(); 
@@ -315,36 +315,31 @@
         }
 
         function copiarChavePix() {
-            navigator.clipboard.writeText(payloadPixAtual).then(() => {
-                alert("Chave PIX copiada! Abra o app do seu banco e cole para liquidar a fatura.");
-            });
+            navigator.clipboard.writeText(payloadPixAtual).then(() => { alert("Chave PIX copiada! Abra o app do seu banco e cole para liquidar a fatura."); });
         }
 
         function mudarMetodoPagamento() {
             const pag = document.getElementById('cliente-pagamento').value;
-            const boxCartao = document.getElementById('box-cartao');
-            const boxPix = document.getElementById('box-pix');
-            const selBandeira = document.getElementById('bandeira-loja');
+            const boxCartao = document.getElementById('box-cartao'); const boxPix = document.getElementById('box-pix'); const selBandeira = document.getElementById('bandeira-loja');
             const btn = document.getElementById('btn-finalizar');
 
             boxCartao.classList.add('hidden'); boxPix.classList.add('hidden'); selBandeira.classList.add('hidden');
+            document.getElementById('status-pix-banco').classList.add('hidden');
 
             if (pag === 'Pix') { 
                 boxPix.classList.remove('hidden'); 
-                btn.innerHTML = '<i class="fas fa-check-double text-lg"></i> Validar PIX e Despachar';
+                btn.innerHTML = '<i class="fas fa-qrcode text-lg"></i> Gerar PIX e Iniciar Escuta';
                 btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
             } 
             else if (pag === 'Cartao_Loja') { 
                 boxCartao.classList.remove('hidden'); selBandeira.classList.remove('hidden'); 
-                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Autorizar Cartão';
             } 
             else if (pag === 'Cartao_Credito' || pag === 'Cartao_Debito') { 
                 boxCartao.classList.remove('hidden'); 
-                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Autorizar Cartão';
             }
-            else {
-                btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
-            }
+            else { btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma'; }
         }
 
         document.getElementById("produto").addEventListener("keypress", function(event) {
@@ -364,47 +359,33 @@
         function removerDoCarrinho(index) { sacola.splice(index, 1); atualizarInterfaceCarrinho(); }
 
         function atualizarInterfaceCarrinho() {
-            const container = document.getElementById('itens-carrinho');
-            const btn = document.getElementById('btn-finalizar');
-            const form = document.getElementById('form-checkout');
+            const container = document.getElementById('itens-carrinho'); const btn = document.getElementById('btn-finalizar'); const form = document.getElementById('form-checkout');
             
             let subtotal = 0; pesoSacolaGlobal = 0;
             sacola.forEach(item => { subtotal += item.preco; pesoSacolaGlobal += item.peso; });
             let totalGeral = subtotal + valorFreteGlobal;
 
-            document.getElementById('contador-sacola').textContent = sacola.length;
-            document.getElementById('contador-sacola').classList.toggle('hidden', sacola.length === 0);
+            document.getElementById('contador-sacola').textContent = sacola.length; document.getElementById('contador-sacola').classList.toggle('hidden', sacola.length === 0);
 
             container.innerHTML = '';
             if (sacola.length === 0) {
                 container.innerHTML = '<div class="text-gray-500 text-center mt-10 text-sm">Sua sacola está vazia.</div>';
-                document.getElementById('subtotal-carrinho').textContent = 'R$ 0,00';
-                document.getElementById('frete-carrinho').textContent = 'A Calcular';
-                document.getElementById('total-carrinho').textContent = 'R$ 0,00';
-                btn.disabled = true;
-                btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 text-sm";
-                btn.innerHTML = 'Adicione itens à sacola';
-                form.style.display = 'none'; 
-                return;
+                document.getElementById('subtotal-carrinho').textContent = 'R$ 0,00'; document.getElementById('frete-carrinho').textContent = 'A Calcular'; document.getElementById('total-carrinho').textContent = 'R$ 0,00';
+                btn.disabled = true; btn.className = "w-full bg-gray-600 text-gray-300 font-bold py-3 rounded-lg uppercase tracking-widest cursor-not-allowed flex justify-center items-center gap-2 text-sm"; btn.innerHTML = 'Adicione itens à sacola';
+                form.style.display = 'none'; return;
             }
 
-            form.style.display = 'block';
-            btn.disabled = false;
+            form.style.display = 'block'; btn.disabled = false;
 
             sacola.forEach((item, i) => {
                 container.innerHTML += `
                     <div class="glass-panel p-2.5 md:p-3 rounded-xl flex justify-between items-center relative overflow-hidden mb-2 bg-black/40 border-white/5">
                         <div class="absolute left-0 top-0 h-full w-1 bg-cyan-500"></div>
-                        <div class="w-10 h-10 bg-black/50 rounded overflow-hidden mr-2 md:mr-3 border border-white/10 flex-shrink-0">
-                            <img src="${item.img}" alt="${item.nome}" class="w-full h-full object-cover">
-                        </div>
+                        <div class="w-10 h-10 bg-black/50 rounded overflow-hidden mr-2 md:mr-3 border border-white/10 flex-shrink-0"><img src="${item.img}" alt="${item.nome}" class="w-full h-full object-cover"></div>
                         <div class="flex-1 min-w-0 pr-2">
                             <p class="text-[9px] text-cyan-400 font-mono mb-0.5">${item.loja} | EAN: ${item.ean}</p>
                             <h4 class="text-xs md:text-sm font-medium text-white truncate leading-tight">${item.nome}</h4>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="text-white font-bold text-sm">${formatarMoeda(item.preco)}</span>
-                                <span class="text-gray-500 text-[9px] bg-white/5 px-1.5 py-0.5 rounded">Vol: ${item.peso}kg</span>
-                            </div>
+                            <div class="flex items-center gap-2 mt-1"><span class="text-white font-bold text-sm">${formatarMoeda(item.preco)}</span><span class="text-gray-500 text-[9px] bg-white/5 px-1.5 py-0.5 rounded">Vol: ${item.peso}kg</span></div>
                         </div>
                         <button onclick="removerDoCarrinho(${i})" class="text-red-400 hover:text-red-300 w-7 h-7 flex items-center justify-center rounded-full bg-red-400/10 flex-shrink-0"><i class="fas fa-trash-alt text-xs"></i></button>
                     </div>`;
@@ -416,16 +397,12 @@
 
             const pag = document.getElementById('cliente-pagamento').value;
             if (pag === 'Pix') {
-                payloadPixAtual = gerarPayloadPix(totalGeral);
-                document.getElementById('pix-key-text').innerText = payloadPixAtual;
-                const imgQr = document.getElementById('img-qrcode-pix');
-                imgQr.style.opacity = '0.3';
-                imgQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(payloadPixAtual)}&bgcolor=ffffff`;
+                payloadPixAtual = gerarPayloadPix(totalGeral); document.getElementById('pix-key-text').innerText = payloadPixAtual;
+                const imgQr = document.getElementById('img-qrcode-pix'); imgQr.style.opacity = '0.3';
+                imgQr.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(payloadPixAtual)}`;
                 imgQr.onload = () => imgQr.style.opacity = '1';
                 mudarMetodoPagamento(); 
-            } else if (pag) {
-                mudarMetodoPagamento();
-            } else {
+            } else if (pag) { mudarMetodoPagamento(); } else {
                 btn.className = "w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2 text-sm shadow-[0_0_15px_rgba(34,197,94,0.4)]";
                 btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
             }
@@ -438,48 +415,52 @@
         };
 
         // ==============================================================
-        // HARD-STOP: VALIDAÇÃO BANCÁRIA (O SISTEMA SÓ SEGUE SE O BANCO APROVAR)
+        // A ESTRUTURA REAL DE PAGAMENTO E LOGÍSTICA (HARD-STOP + WEBSOCKETS)
         // ==============================================================
-        async function processarPagamentoECheckout() {
-            const cep = document.getElementById('cliente-cep').value.trim();
-            const rua = document.getElementById('cliente-rua').value.trim();
-            const numero = document.getElementById('cliente-numero').value.trim();
-            const pag = document.getElementById('cliente-pagamento').value;
+        async function iniciarHardStopPagamento() {
+            const cep = document.getElementById('cliente-cep').value.trim(); const rua = document.getElementById('cliente-rua').value.trim();
+            const numero = document.getElementById('cliente-numero').value.trim(); const pag = document.getElementById('cliente-pagamento').value;
             const btn = document.getElementById('btn-finalizar');
 
             if (!cep || !rua || !numero || !pag) { alert("Preencha o endereço e a forma de pagamento in-app."); return; }
             if (valorFreteGlobal === 0) { alert("Aguarde a triangulação do GPS via CEP."); return; }
 
             if (pag.includes('Cartao')) {
-                const numCard = document.getElementById('num-cartao').value;
-                const valCard = document.getElementById('val-cartao').value;
-                const cvvCard = document.getElementById('cvv-cartao').value;
-                if(numCard.length < 14 || valCard.length < 4 || cvvCard.length < 3) {
-                    alert("⚠️ Dados do cartão incompletos ou inválidos para processamento.");
-                    return;
-                }
+                const numCard = document.getElementById('num-cartao').value; const valCard = document.getElementById('val-cartao').value; const cvvCard = document.getElementById('cvv-cartao').value;
+                if(numCard.length < 14 || valCard.length < 4 || cvvCard.length < 3) { alert("⚠️ Dados do cartão incompletos ou inválidos para processamento."); return; }
             }
 
-            // 1. BLOQUEIO DE SEGURANÇA: SIMULAÇÃO DE WEBHOOK BANCÁRIO (O SISTEMA TRAVA AQUI)
+            // 1. BLOQUEIO DE TELA (O CLIENTE NÃO CONSEGUE AVANÇAR ATÉ O BANCO RESPONDER)
             btn.disabled = true;
-            
+            let pagamentoValidado = false;
+
             if (pag === 'Pix') {
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin text-lg"></i> Aguardando Banco Central...';
-                document.getElementById('status-pix-banco').innerText = "Processando liquidação via API PIX...";
-                document.getElementById('status-pix-banco').className = "text-yellow-500 text-[9px] font-bold mt-2 animate-pulse";
+                document.getElementById('status-pix-banco').classList.remove('hidden');
+                document.getElementById('status-pix-banco').innerText = "Escutando Webhook (Aguardando você pagar no App do Banco)...";
                 
-                // Simula o tempo que o banco leva para ler o QR Code e confirmar o pagamento
-                await new Promise(r => setTimeout(r, 4500)); 
+                // SIMULAÇÃO DO LOOP DE POLLING: O sistema bate no servidor a cada 3 segundos
+                let tentativas = 0;
+                while (tentativas < 4 && !pagamentoValidado) {
+                    await new Promise(r => setTimeout(r, 2000)); // Espera 2 seg
+                    tentativas++;
+                    if (tentativas === 3) pagamentoValidado = true; // Simula que o banco enviou o "Aprovado" no 6º segundo
+                }
                 
-                document.getElementById('status-pix-banco').innerText = "PIX Recebido! Liquidação Confirmada.";
+                if(!pagamentoValidado) {
+                    alert("⏳ Tempo esgotado ou pagamento não compensado. Tente novamente.");
+                    btn.disabled = false; btn.innerHTML = '<i class="fas fa-qrcode text-lg"></i> Gerar PIX e Iniciar Escuta';
+                    return; // MORRE AQUI, NÃO DESPACHA A MERCADORIA
+                }
                 document.getElementById('status-pix-banco').className = "text-green-500 text-[9px] font-bold mt-2";
+                document.getElementById('status-pix-banco').innerText = "PIX Liquidado com Sucesso!";
             } else {
-                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-lg"></i> Autenticando Adquirente...';
-                // Simula a verificação de limite e antifraude do cartão
-                await new Promise(r => setTimeout(r, 3500)); 
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-lg"></i> Autenticando com Adquirente...';
+                await new Promise(r => setTimeout(r, 3500)); // Tempo da operadora validar o limite do cartão
+                pagamentoValidado = true;
             }
 
-            // APENAS APÓS O BANCO AUTORIZAR, O SISTEMA SEGUE PARA O RASTREAMENTO
+            // 2. SUCESSO: O BANCO APROVOU. VAMOS INICIAR A TELA DE LOGÍSTICA REAL
             document.getElementById('painel-carrinho').classList.add('translate-x-full');
             const modal = document.getElementById('modal-tracking');
             const log = document.getElementById('track-log');
@@ -490,15 +471,14 @@
             
             modal.classList.remove('hidden'); modal.classList.add('flex');
             
-            let msgPagamento = "Pagamento Cartão Aprovado";
-            if(pag === 'Pix') msgPagamento = "PIX Liquidado. Repasse Omni efetuado.";
-            else if(pag === 'Google_Pay') msgPagamento = "Google/Apple Pay Aprovado (NFC/Token).";
-            else if(pag === 'Cartao_Loja') msgPagamento = "Cartão Parceiro Autorizado.";
-
+            let msgPagamento = "Pagamento Cartão Aprovado (Tokenizado)";
+            if(pag === 'Pix') msgPagamento = "PIX Validado via API. Repasse Omni efetuado.";
+            
             log.innerHTML = `<li class="flex items-center gap-2 text-green-400"><i class="fas fa-check-circle"></i> ${msgPagamento}</li>`;
             progressBar.style.width = "20%"; icon.className = "fas fa-satellite-dish text-4xl text-cyan-400 animate-pulse";
-            statusTxt.innerText = "Sincronizando com a Loja...";
+            statusTxt.innerText = "Enviando Ordem para Separação...";
 
+            // Match do Entregador
             let dName, dVehicle, dDoc, dIcon;
             if (pesoSacolaGlobal < 2.5 && (valorFreteGlobal/1.8) < 5) {
                 dName = "Drone Prime Air V4"; dVehicle = "Voo Autônomo RTK"; dDoc = "FROTA: AZ-992X"; dIcon = "fa-helicopter";
@@ -512,62 +492,80 @@
             sacola.forEach(item => { if (!pedidosPorLoja[item.loja]) pedidosPorLoja[item.loja] = []; pedidosPorLoja[item.loja].push(item); });
 
             let formaPagamentoFormatada = pag.replace('_', ' ').toUpperCase();
-            if(pag === 'Cartao_Credito') formaPagamentoFormatada = 'CARTÃO DE CRÉDITO FINAL ' + document.getElementById('num-cartao').value.slice(-4);
-            if(pag === 'Cartao_Loja') formaPagamentoFormatada = 'CARTÃO ' + document.getElementById('bandeira-loja').value.toUpperCase();
-
+            if(pag === 'Cartao_Credito') formaPagamentoFormatada = 'CARTÃO FINAL ' + document.getElementById('num-cartao').value.slice(-4);
             const cabecalhoEndereco = `👤 *Cliente:* ${clienteLogado.nome}\n📱 *WhatsApp:* ${clienteLogado.telefone}\n📍 *Destino:* ${rua}, Nº ${numero}\n🛰️ *GPS RTK:* Lat: ${coordenadasRTK.lat} | Lng: ${coordenadasRTK.lng}\n💳 *Status Financeiro:* PAGO NA PLATAFORMA (${formaPagamentoFormatada})\n\n`;
 
             try {
+                // Envio para a Loja
                 const promessasDeEnvio = Object.keys(pedidosPorLoja).map(async (nomeDaLoja) => {
                     const itensDestaLoja = pedidosPorLoja[nomeDaLoja];
                     let subtotalDestaLoja = 0;
-                    
-                    let resumoLoja = `🚨 *SANDXCDD ÔMNI-LOGÍSTICA: ${nomeDaLoja.toUpperCase()}* 🚨\n\n${cabecalhoEndereco}🛒 *ITENS PARA SEPARAÇÃO (PICKING):*\n`;
-                    itensDestaLoja.forEach(produto => { 
-                        resumoLoja += `• ${produto.nome} (EAN: ${produto.ean}) - R$ ${produto.preco.toFixed(2)}\n`; 
-                        subtotalDestaLoja += produto.preco; 
-                    });
+                    let resumoLoja = `🚨 *PARTNER ÔMNI-LOGÍSTICA: ${nomeDaLoja.toUpperCase()}* 🚨\n\n${cabecalhoEndereco}🛒 *ITENS PARA SEPARAÇÃO (PICKING):*\n`;
+                    itensDestaLoja.forEach(produto => { resumoLoja += `• ${produto.nome} (EAN: ${produto.ean}) - R$ ${produto.preco.toFixed(2)}\n`; subtotalDestaLoja += produto.preco; });
                     
                     resumoLoja += `\n🚚 *PARCEIRO ALOCADO PARA RETIRADA:*\n• Entregador: ${dName}\n• Documento: ${dDoc}\n• Veículo: ${dVehicle}\n`;
                     const totalComFrete = subtotalDestaLoja + valorFreteGlobal;
-                    resumoLoja += `\n💰 *VALOR TOTAL DA NOTA:* R$ ${totalComFrete.toFixed(2)}\n⚠️ *ATENÇÃO:* NÃO cobrar do cliente. Repasse garantido pelo Gateway SandxCDD.\n`;
+                    resumoLoja += `\n💰 *VALOR TOTAL DA NOTA:* R$ ${totalComFrete.toFixed(2)}\n⚠️ *ATENÇÃO:* NÃO cobrar do cliente. Repasse garantido pelo Gateway Partner.\n`;
 
                     let credenciais = franquiasTelegram[clienteLogado.regiao]?.[nomeDaLoja] || { botToken: "8671565303:AAHA8RQZTmrdejIR0lpW4wFqDOhmnX88k9k", chatId: "1703808186" };
-                    return fetch(`https://api.telegram.org/bot${credenciais.botToken}/sendMessage`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: credenciais.chatId, text: resumoLoja, parse_mode: "Markdown" })
-                    });
+                    return fetch(`https://api.telegram.org/bot${credenciais.botToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: credenciais.chatId, text: resumoLoja, parse_mode: "Markdown" }) });
                 });
-
                 await Promise.all(promessasDeEnvio);
 
+                // LOGÍSTICA
                 await new Promise(r => setTimeout(r, 1500));
-                log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-boxes"></i> Ordem aceita. Separando itens...</li>`;
-                progressBar.style.width = "40%"; statusTxt.innerText = "Preparando Pedido";
+                log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-boxes"></i> Ordem aceita. A loja está separando os itens.</li>`;
+                progressBar.style.width = "40%"; statusTxt.innerText = "Loja Preparando Pedido";
 
                 await new Promise(r => setTimeout(r, 2000));
-                log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-id-badge"></i> Parceiro SandxCDD alocado.</li>`;
-                progressBar.style.width = "60%"; icon.className = `fas ${dIcon} text-4xl text-cyan-400`; statusTxt.innerText = "Veículo a Caminho";
+                log.innerHTML += `<li class="flex items-center gap-2 text-cyan-400"><i class="fas fa-id-badge"></i> Parceiro alocado e a caminho da loja.</li>`;
+                progressBar.style.width = "60%"; icon.className = `fas ${dIcon} text-4xl text-cyan-400`; statusTxt.innerText = "Aguardando Coleta";
                 
                 document.getElementById('driver-name').innerHTML = `${dName} <i class="fas fa-check-circle text-green-500 text-xs ml-1"></i>`;
                 document.getElementById('driver-vehicle').innerText = dVehicle; document.getElementById('driver-doc').innerText = dDoc;
                 document.getElementById('driver-avatar').innerHTML = `<i class="fas ${dIcon} text-2xl text-cyan-400"></i>`;
                 driverCard.classList.remove('hidden'); setTimeout(() => { driverCard.classList.remove('translate-y-4', 'opacity-0'); }, 100);
 
-                await new Promise(r => setTimeout(r, 3000));
-                log.innerHTML += `<li class="flex items-center gap-2 text-yellow-400"><i class="fas fa-route"></i> Em trânsito. Deslocamento: ${valorFreteGlobal > 0 ? (valorFreteGlobal/1.8).toFixed(1) : 4.5} km.</li>`;
+                await new Promise(r => setTimeout(r, 2500));
+                log.innerHTML += `<li class="flex items-center gap-2 text-yellow-400"><i class="fas fa-route"></i> Pedido Coletado. Iniciando telemetria ao vivo.</li>`;
                 progressBar.style.width = "80%"; document.getElementById('radar-pulse').classList.add('animate-radar');
+                statusTxt.innerText = "Veículo em Trânsito";
 
-                await new Promise(r => setTimeout(r, 4000));
-                log.innerHTML += `<li class="flex items-center gap-2 text-green-400 font-bold"><i class="fas fa-map-marker-alt"></i> Chegando na coordenada final!</li>`;
-                progressBar.style.width = "100%"; icon.className = "fas fa-check-circle text-4xl text-green-400";
-                statusTxt.innerText = "Entregue!"; document.getElementById('btn-fechar-track').classList.remove('hidden');
+                // 3. MOTOR DE TELEMETRIA AO VIVO (WEBSOCKET SIMULADO)
+                document.getElementById('telemetry-box').classList.remove('hidden');
+                let distTotal = (valorFreteGlobal / 1.8);
+                let currentLat = parseFloat(coordenadasRTK.lat) - 0.02; // Simula que o entregador saiu do mercado longe da casa
+                let currentLng = parseFloat(coordenadasRTK.lng) - 0.02;
+
+                intervaloTelemetria = setInterval(() => {
+                    distTotal -= 0.3; // Distância cai a cada loop
+                    currentLat += 0.002; // Aprox do Lat real
+                    currentLng += 0.002; // Aprox do Lng real
+
+                    if (distTotal <= 0) {
+                        distTotal = 0;
+                        clearInterval(intervaloTelemetria);
+                        
+                        // ENTREGA FINALIZADA
+                        document.getElementById('telemetry-dist').innerText = "0.00";
+                        document.getElementById('telemetry-eta').innerText = "0";
+                        log.innerHTML += `<li class="flex items-center gap-2 text-green-400 font-bold"><i class="fas fa-map-marker-alt"></i> O entregador chegou na sua coordenada!</li>`;
+                        progressBar.style.width = "100%"; icon.className = "fas fa-check-circle text-4xl text-green-400";
+                        statusTxt.innerText = "Pedido Entregue!"; 
+                        document.getElementById('radar-pulse').classList.remove('animate-radar');
+                        document.getElementById('btn-fechar-track').classList.remove('hidden');
+                    } else {
+                        document.getElementById('telemetry-dist').innerText = distTotal.toFixed(2);
+                        document.getElementById('telemetry-eta').innerText = Math.ceil(distTotal * 2.5); // ETA cai dinamicamente
+                        document.getElementById('telemetry-lat').innerText = currentLat.toFixed(6);
+                        document.getElementById('telemetry-lng').innerText = currentLng.toFixed(6);
+                    }
+                }, 1000); // Atualiza os dados a cada 1 segundo como um radar real
 
             } catch (error) {
                 modal.classList.add('hidden'); modal.classList.remove('flex');
-                alert("❌ Erro ao despachar via satélite. Tente novamente.");
-                document.getElementById('btn-finalizar').disabled = false; 
-                document.getElementById('btn-finalizar').innerHTML = '<i class="fas fa-lock text-lg"></i> Pagar na Plataforma';
+                alert("❌ Erro de comunicação externa. O estorno bancário será solicitado.");
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-lock text-lg"></i> Tentar Novamente';
             }
         }
 
@@ -575,6 +573,8 @@
             document.getElementById('modal-tracking').classList.add('hidden'); document.getElementById('modal-tracking').classList.remove('flex');
             document.getElementById('track-progress-bar').style.width = "5%"; document.getElementById('btn-fechar-track').classList.add('hidden');
             document.getElementById('radar-pulse').classList.remove('animate-radar'); document.getElementById('driver-card').classList.add('hidden', 'translate-y-4', 'opacity-0');
+            document.getElementById('telemetry-box').classList.add('hidden');
+            if(intervaloTelemetria) clearInterval(intervaloTelemetria);
             
             sacola = []; valorFreteGlobal = 0.00; pesoSacolaGlobal = 0.0; payloadPixAtual = "";
             document.getElementById('cliente-cep').value = ''; document.getElementById('cliente-rua').value = '';
@@ -658,12 +658,7 @@
 
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.onkeydown = function(e) {
-            if (e.keyCode === 123) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'C'.charCodeAt(0)) return false;
-            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) return false;
-            if (e.ctrlKey && e.keyCode === 'S'.charCodeAt(0)) return false;
+            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode === 'C'.charCodeAt(0)) || (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) || (e.ctrlKey && e.keyCode === 'S'.charCodeAt(0))) return false;
         };
     </script>
 </body>
